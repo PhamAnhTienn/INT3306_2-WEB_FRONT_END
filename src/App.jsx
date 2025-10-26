@@ -6,6 +6,8 @@ import Events from './pages/Events';
 import Gallery from './pages/Gallery';
 import News from './pages/News';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import './App.css';
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Layout>
     </Router>

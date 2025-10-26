@@ -109,6 +109,10 @@
   position: relative;
 }
 
+.nav-item-dropdown {
+  position: relative;
+}
+
 .nav-link {
   display: flex;
   align-items: center;
@@ -136,7 +140,8 @@
   padding: 15px 0;
   min-width: 200px;
   list-style: none;
-  margin-top: 10px;
+  margin-top: 3px;
+  z-index: 1000;
   animation: fadeInDown 0.3s;
 }
 

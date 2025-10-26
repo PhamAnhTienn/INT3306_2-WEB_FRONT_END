@@ -28,8 +28,8 @@ const Footer = () => {
           <div className="footer-grid">
             <div className="footer-col">
               <div className="logo">
-                <img src="/logo.svg" alt="Jago Welfare" className="logo-img" />
-                <span className="logo-text">Jago welfare</span>
+                <img src="/logo.svg" alt="Voluntarius" className="logo-img" />
+                <span className="logo-text">Voluntarius</span>
               </div>
               <p className="footer-desc">
                 Lorem ipsum dolor sit amet consectetur elit sed eiusmod tempor incididunt ut labore et dolore magna aliqua.

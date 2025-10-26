@@ -1,11 +1,43 @@
 import { FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
+
+  const handleMouseEnter = (index) => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setActiveDropdown(index);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150); // 150ms delay before hiding
+    setDropdownTimeout(timeout);
+  };
+
+  const handleDropdownMouseEnter = () => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (dropdownTimeout) {
+        clearTimeout(dropdownTimeout);
+      }
+    };
+  }, [dropdownTimeout]);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -28,7 +60,14 @@ const Header = () => {
     { 
       name: 'Pages', 
       path: '/pages',
-      dropdown: ['About Us', 'Our Team', 'FAQ', 'Testimonials']
+      dropdown: [
+        { name: 'About Us', path: '/about' },
+        { name: 'Our Team', path: '/team' },
+        { name: 'FAQ', path: '/faq' },
+        { name: 'Testimonials', path: '/testimonials' },
+        { name: 'Login', path: '/login' },
+        { name: 'Register', path: '/register' }
+      ]
     },
     { name: 'Contact', path: '/contact' }
   ];
@@ -60,8 +99,8 @@ const Header = () => {
         <div className="container">
           <div className="header-main-content">
             <Link to="/" className="logo">
-              <img src="/logo.svg" alt="Jago Welfare" className="logo-img" />
-              <span className="logo-text">Jago welfare</span>
+              <img src="/logo.svg" alt="Voluntarius" className="logo-img" />
+              <span className="logo-text">Voluntarius</span>
             </Link>
 
             <button 
@@ -76,19 +115,27 @@ const Header = () => {
                 {navItems.map((item, index) => (
                   <li 
                     key={index}
-                    className="nav-item"
-                    onMouseEnter={() => item.dropdown && setActiveDropdown(index)}
-                    onMouseLeave={() => setActiveDropdown(null)}
+                    className={`nav-item ${item.dropdown ? 'nav-item-dropdown' : ''}`}
+                    onMouseEnter={() => item.dropdown && handleMouseEnter(index)}
+                    onMouseLeave={() => item.dropdown && handleMouseLeave()}
                   >
                     <Link to={item.path} className="nav-link">
                       {item.name}
                       {item.dropdown && <FaChevronDown className="dropdown-icon" />}
                     </Link>
                     {item.dropdown && activeDropdown === index && (
-                      <ul className="dropdown-menu">
+                      <ul 
+                        className="dropdown-menu"
+                        onMouseEnter={handleDropdownMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         {item.dropdown.map((subItem, subIndex) => (
                           <li key={subIndex} className="dropdown-item">
-                            <a href="#" className="dropdown-link">{subItem}</a>
+                            {typeof subItem === 'object' ? (
+                              <Link to={subItem.path} className="dropdown-link">{subItem.name}</Link>
+                            ) : (
+                              <a href="#" className="dropdown-link">{subItem}</a>
+                            )}
                           </li>
                         ))}
                       </ul>
