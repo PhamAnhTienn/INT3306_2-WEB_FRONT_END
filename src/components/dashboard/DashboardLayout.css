@@ -1,0 +1,43 @@
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.dashboard-main {
+  flex: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 1199px) {
+  .dashboard-main {
+    margin-left: 220px;
+  }
+}
+
+@media (max-width: 991px) {
+  .dashboard-main {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-content {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+}

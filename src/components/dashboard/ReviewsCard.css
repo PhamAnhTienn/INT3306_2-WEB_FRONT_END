@@ -1,0 +1,78 @@
+.reviews-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.reviews-header {
+  margin-bottom: 1.5rem;
+}
+
+.reviews-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #252f40;
+}
+
+.reviews-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.review-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-label {
+  font-size: 0.875rem;
+  color: #67748e;
+  font-weight: 600;
+}
+
+.review-percentage {
+  font-size: 0.875rem;
+  color: #252f40;
+  font-weight: 700;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.progress-bar-success {
+  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+}
+
+.progress-bar-info {
+  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+}
+
+.progress-bar-warning {
+  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+}
+
+.progress-bar-danger {
+  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+}

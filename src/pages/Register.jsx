@@ -1,33 +1,79 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/auth/authService';
 import '../styles/index.css';
 import './Register.css';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     mobile: '',
+    username: '',
     password: ''
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log('Registration data:', formData);
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await authAPI.register(formData);
+      
+      // Check if registration was successful
+      if (response.userResponse) {
+        const user = response.userResponse;
+
+        console.log('Logged in user:', user);
+        console.log('User role:', user.user_role);
+        
+        // Navigate based on user role
+        if (user.user_role === 'EVENT_MANAGER') {
+          navigate('/dashboard/manager');
+        } else if (user.user_role === 'VOLUNTEER') {
+          navigate('/dashboard/volunteer');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setError('Registration failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Registration error:', err);
+      
+      // Handle different error types
+      if (err.response?.userResponse?.message) {
+        setError(err.response.userResponse.message);
+      } else if (err.response?.status === 400) {
+        setError('Invalid registration data. Please check all fields.');
+      } else if (err.response?.status === 409) {
+        setError('Username or email already exists');
+      } else if (err.response?.status === 500) {
+        setError('Server error. Please try again later.');
+      } else {
+        setError('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleSignIn = () => {
-    // Handle Google sign-in logic here
-    console.log('Google sign-in clicked');
-    // This is where you would integrate with Google OAuth
+    // Redirect to Google OAuth2 authorization endpoint
+    authAPI.googleSignIn();
   };
 
   return (
@@ -55,6 +101,20 @@ const Register = () => {
               </div>
 
               <form className="register-form" onSubmit={handleSubmit}>
+                {error && (
+                  <div className="form-error" style={{
+                    color: '#dc3545',
+                    backgroundColor: '#f8d7da',
+                    border: '1px solid #f5c6cb',
+                    borderRadius: '4px',
+                    padding: '12px',
+                    marginBottom: '20px',
+                    fontSize: '14px'
+                  }}>
+                    {error}
+                  </div>
+                )}
+
                 <div className="form-group">
                   <input
                     type="text"
@@ -63,6 +123,7 @@ const Register = () => {
                     className="form-input"
                     value={formData.fullName}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -75,6 +136,20 @@ const Register = () => {
                     className="form-input"
                     value={formData.email}
                     onChange={handleChange}
+                    disabled={loading}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter username"
+                    className="form-input"
+                    value={formData.username}
+                    onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -87,6 +162,7 @@ const Register = () => {
                     className="form-input"
                     value={formData.mobile}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -99,12 +175,13 @@ const Register = () => {
                     className="form-input"
                     value={formData.password}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
 
-                <button type="submit" className="register-btn">
-                  Register
+                <button type="submit" className="register-btn" disabled={loading}>
+                  {loading ? 'Registering...' : 'Register'}
                 </button>
               </form>
 

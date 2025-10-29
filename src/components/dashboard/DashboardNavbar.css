@@ -1,0 +1,156 @@
+.dashboard-navbar {
+  background: #fff;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.navbar-left {
+  flex: 1;
+}
+
+.breadcrumb-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.breadcrumb {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-item {
+  color: #67748e;
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item a {
+  color: #67748e;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb-item a:hover {
+  color: #252f40;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: '/';
+  margin-left: 0.5rem;
+  color: #67748e;
+}
+
+.breadcrumb-item.active {
+  color: #252f40;
+}
+
+.navbar-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #252f40;
+  text-transform: capitalize;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: #67748e;
+  font-size: 0.875rem;
+}
+
+.search-box input {
+  padding: 0.625rem 1rem 0.625rem 2.5rem;
+  border: 1px solid #d2d6da;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.15s ease;
+  min-width: 250px;
+}
+
+.search-box input:focus {
+  border-color: #7928ca;
+  box-shadow: 0 0 0 2px rgba(121, 40, 202, 0.1);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-action-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #67748e;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.navbar-action-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #252f40;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .navbar-content {
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    order: 3;
+    flex: 1 0 100%;
+    margin-top: 1rem;
+  }
+
+  .search-box input {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 575px) {
+  .navbar-actions {
+    gap: 0.25rem;
+  }
+
+  .navbar-action-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

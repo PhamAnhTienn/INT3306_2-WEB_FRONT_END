@@ -1,0 +1,117 @@
+.stat-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.gradient-primary {
+  background: linear-gradient(310deg, #7928ca 0%, #ff0080 100%);
+  color: #fff;
+}
+
+.stat-card.gradient-info {
+  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+  color: #fff;
+}
+
+.stat-card.gradient-success {
+  background: linear-gradient(310deg, #17ad37 0%, #c1f53c 100%);
+  color: #fff;
+}
+
+.stat-card.gradient-warning {
+  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+  color: #fff;
+}
+
+.stat-card.gradient-dark {
+  background: linear-gradient(310deg, #141727 0%, #3a416f 100%);
+  color: #fff;
+}
+
+.stat-card.gradient-orange {
+  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  color: #fff;
+}
+
+.stat-card-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.stat-card:not([class*="gradient-"]) .stat-icon {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0.8;
+  text-transform: capitalize;
+}
+
+.stat-value {
+  margin: 0.25rem 0 0 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.stat-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stat-card[class*="gradient-"] .stat-footer {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+.percentage {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.percentage.positive {
+  color: #17ad37;
+}
+
+.stat-card[class*="gradient-"] .percentage.positive {
+  color: #c1f53c;
+}
+
+.percentage.negative {
+  color: #f53939;
+}
+
+.stat-card[class*="gradient-"] .percentage.negative {
+  color: #fbcf33;
+}
