@@ -51,6 +51,7 @@
   height: 100%;
   border: 1px solid var(--border-light);
   transition: all 0.3s ease;
+  overflow: visible;
 }
 
 .dashboard-card:hover {
@@ -62,6 +63,8 @@
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--neutral-100);
+  position: relative;
+  z-index: 0;
 }
 
 .card-title {
@@ -84,7 +87,10 @@
   flex-direction: column;
   max-height: 500px;
   overflow-y: auto;
-  padding-right: 0.5rem;
+  overflow-x: visible;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  padding-right: 1rem;
 }
 
 /* Custom scrollbar for activities timeline */
@@ -114,7 +120,10 @@
   gap: 1.5rem;
   max-height: 500px;
   overflow-y: auto;
-  padding-right: 0.5rem;
+  overflow-x: visible;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  padding-right: 1rem;
 }
 
 /* Custom scrollbar for events grid */
@@ -144,7 +153,10 @@
   gap: 1rem;
   max-height: 500px;
   overflow-y: auto;
-  padding-right: 0.5rem;
+  overflow-x: visible;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  padding-right: 1rem;
 }
 
 /* Custom scrollbar for history list */
@@ -176,6 +188,8 @@
   border-radius: 0.75rem;
   transition: all 0.2s ease;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 
 .history-item:hover {
@@ -183,6 +197,7 @@
   background: var(--primary-50);
   box-shadow: var(--shadow-sm);
   transform: translateY(-2px);
+  z-index: 10;
 }
 
 .history-icon {

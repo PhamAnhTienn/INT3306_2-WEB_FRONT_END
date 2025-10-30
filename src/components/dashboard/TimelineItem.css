@@ -4,10 +4,12 @@
   padding: 1rem 0;
   position: relative;
   transition: all 0.2s ease;
+  z-index: 1;
 }
 
 .timeline-item:hover {
   transform: translateX(4px);
+  z-index: 10;
 }
 
 .timeline-item:not(:last-child)::after {
