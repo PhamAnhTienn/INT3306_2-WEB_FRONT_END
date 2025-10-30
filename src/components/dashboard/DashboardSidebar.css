@@ -1,8 +1,8 @@
 .dashboard-sidebar {
   width: 250px;
   height: 100vh;
-  background: #fff;
-  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  background: var(--bg-white);
+  box-shadow: var(--shadow);
   position: fixed;
   left: 0;
   top: 0;
@@ -22,7 +22,7 @@
   gap: 0.75rem;
   font-size: 1.125rem;
   font-weight: 700;
-  color: #252f40;
+  color: var(--text-dark);
 }
 
 .sidebar-logo img {
@@ -56,7 +56,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  color: #67748e;
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 600;
@@ -66,14 +66,14 @@
 }
 
 .sidebar-menu li a:hover {
-  background: rgba(0, 0, 0, 0.03);
-  color: #252f40;
+  background: var(--neutral-100);
+  color: var(--text-dark);
 }
 
 .sidebar-menu li.active a {
-  background: linear-gradient(310deg, #7928ca 0%, #ff0080 100%);
-  color: #fff;
-  box-shadow: 0 4px 7px -1px rgba(0, 0, 0, 0.11), 0 2px 4px -1px rgba(0, 0, 0, 0.07);
+  background: var(--gradient-primary);
+  color: var(--white);
+  box-shadow: var(--shadow);
 }
 
 .menu-icon {
@@ -100,9 +100,9 @@
   width: 100%;
   padding: 0.75rem 1rem;
   background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-medium);
   border-radius: 0.5rem;
-  color: #67748e;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -110,9 +110,9 @@
 }
 
 .logout-btn:hover {
-  background: rgba(0, 0, 0, 0.03);
-  color: #252f40;
-  border-color: rgba(0, 0, 0, 0.2);
+  background: var(--neutral-100);
+  color: var(--text-dark);
+  border-color: var(--border-dark);
 }
 
 /* Responsive */

@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import StatCard from '../components/dashboard/StatCard';
 import TimelineItem from '../components/dashboard/TimelineItem';
 import EventCard from '../components/dashboard/EventCard';
 import { dashboardAPI } from '../services/dashboard/dashboardService';
 import './VolunteerDashboard.css';
-import { FaCalendarCheck, FaClock, FaHistory, FaStar, FaComment, FaThumbsUp, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
+import { 
+  FaCalendarCheck, 
+  FaClock, 
+  FaHistory, 
+  FaStar, 
+  FaComment, 
+  FaThumbsUp, 
+  FaCheckCircle, 
+  FaHourglassHalf,
+  FaCalendarPlus,
+  FaSearch,
+  FaInfoCircle
+} from 'react-icons/fa';
 
 const VolunteerDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -19,150 +32,25 @@ const VolunteerDashboard = () => {
     try {
       // Fetch from API
       const response = await dashboardAPI.getVolunteerDashboard();
-      if (response.success) {
+      
+      if (response.success && response.data) {
         setDashboardData(response.data);
         setLoading(false);
         return;
       }
     } catch (error) {
-      console.error('Error fetching dashboard data, using mock data:', error);
+      console.error('Error fetching dashboard data:', error);
+      // Set empty data structure if API fails
+      setDashboardData({
+        recentActivityDTOS: [],
+        registeredEventDTOS: [],
+        upcomingEventDTOS: [],
+        eventParticipationHistoryDTOS: [],
+        recommendEventDTOS: []
+      });
+    } finally {
+      setLoading(false);
     }
-    
-    // Fallback to mock data if API fails
-    setDashboardData({
-      recentActivityDTOS: [
-        {
-          activityType: 'APPROVED_REGISTRATION',
-          eventId: 1,
-          eventTitle: 'Community Clean-up Drive',
-          activityDescription: 'new approved registration',
-          createdAt: '2025-10-27T14:30:00'
-        },
-        {
-          activityType: 'POST',
-          eventId: 2,
-          eventTitle: 'Food Bank Assistance',
-          activityDescription: 'new post',
-          createdAt: '2025-10-26T10:15:00'
-        },
-        {
-          activityType: 'COMMENT',
-          eventId: 1,
-          eventTitle: 'Community Clean-up Drive',
-          activityDescription: 'new comment',
-          createdAt: '2025-10-25T16:20:00'
-        },
-        {
-          activityType: 'LIKE_POST',
-          eventId: 3,
-          eventTitle: 'Tree Planting Event',
-          activityDescription: 'new like on post',
-          createdAt: '2025-10-25T09:10:00'
-        }
-      ],
-      registeredEventDTOS: [
-        {
-          id: 1,
-          title: 'Community Clean-up Drive',
-          description: 'Join us for a community clean-up to make our neighborhood cleaner',
-          startTime: '2025-11-05T09:00:00',
-          endTime: '2025-11-05T15:00:00',
-          location: 'Central Park',
-          currentVolunteers: 25,
-          maxVolunteers: 50,
-          status: 'ONGOING'
-        },
-        {
-          id: 2,
-          title: 'Food Bank Assistance',
-          description: 'Help distribute food to families in need',
-          startTime: '2025-11-10T10:00:00',
-          endTime: '2025-11-10T16:00:00',
-          location: 'City Food Bank',
-          currentVolunteers: 15,
-          maxVolunteers: 30,
-          status: 'ONGOING'
-        }
-      ],
-      upcomingEventDTOS: [
-        {
-          id: 3,
-          title: 'Tree Planting Event',
-          description: 'Help plant trees to make our city greener',
-          startTime: '2025-11-15T08:00:00',
-          endTime: '2025-11-15T14:00:00',
-          location: 'Riverside Park',
-          currentVolunteers: 10,
-          maxVolunteers: 40
-        },
-        {
-          id: 4,
-          title: 'Senior Care Visit',
-          description: 'Visit and spend time with seniors at the care home',
-          startTime: '2025-11-20T14:00:00',
-          endTime: '2025-11-20T17:00:00',
-          location: 'Sunny Vale Senior Care',
-          currentVolunteers: 8,
-          maxVolunteers: 20
-        }
-      ],
-      eventParticipationHistoryDTOS: [
-        {
-          id: 5,
-          title: 'Beach Cleanup',
-          startTime: '2025-10-15T09:00:00',
-          endTime: '2025-10-15T13:00:00',
-          location: 'Ocean Beach',
-          status: 'COMPLETED'
-        },
-        {
-          id: 6,
-          title: 'Charity Marathon',
-          startTime: '2025-09-20T07:00:00',
-          endTime: '2025-09-20T12:00:00',
-          location: 'City Stadium',
-          status: 'COMPLETED'
-        }
-        ,
-        {
-          id: 7,
-          title: 'Charity Marathon',
-          startTime: '2025-09-20T07:00:00',
-          endTime: '2025-09-20T12:00:00',
-          location: 'City Stadium',
-          status: 'COMPLETED'
-        },
-        {
-          id: 8,
-          title: 'Charity Marathon',
-          startTime: '2025-09-20T07:00:00',
-          endTime: '2025-09-20T12:00:00',
-          location: 'City Stadium',
-          status: 'COMPLETED'
-        },
-        {
-          id: 9,
-          title: 'Charity Marathon',
-          startTime: '2025-09-20T07:00:00',
-          endTime: '2025-09-20T12:00:00',
-          location: 'City Stadium',
-          status: 'COMPLETED'
-        }    
-      ],
-      recommendEventDTOS: [
-        {
-          id: 7,
-          title: 'Library Reading Program',
-          description: 'Read stories to children at the local library',
-          startTime: '2025-11-25T15:00:00',
-          endTime: '2025-11-25T17:00:00',
-          location: 'Central Library',
-          currentVolunteers: 5,
-          maxVolunteers: 15
-        }
-      ]
-    });
-    setLoading(false);
   };
 
   const getActivityIcon = (activityType) => {
@@ -227,7 +115,7 @@ const VolunteerDashboard = () => {
             <StatCard
               icon={<FaCalendarCheck />}
               title="Registered Events"
-              value={dashboardData.registeredEventDTOS.length}
+              value={dashboardData.registeredEventDTOS?.length || 0}
               gradient="primary"
             />
           </div>
@@ -236,7 +124,7 @@ const VolunteerDashboard = () => {
             <StatCard
               icon={<FaClock />}
               title="Upcoming Events"
-              value={dashboardData.upcomingEventDTOS.length}
+              value={dashboardData.upcomingEventDTOS?.length || 0}
               gradient="info"
             />
           </div>
@@ -245,7 +133,7 @@ const VolunteerDashboard = () => {
             <StatCard
               icon={<FaHistory />}
               title="Events Completed"
-              value={dashboardData.eventParticipationHistoryDTOS.length}
+              value={dashboardData.eventParticipationHistoryDTOS?.length || 0}
               gradient="success"
             />
           </div>
@@ -254,7 +142,7 @@ const VolunteerDashboard = () => {
             <StatCard
               icon={<FaStar />}
               title="Recommended"
-              value={dashboardData.recommendEventDTOS.length}
+              value={dashboardData.recommendEventDTOS?.length || 0}
               gradient="warning"
             />
           </div>
@@ -271,16 +159,29 @@ const VolunteerDashboard = () => {
               </div>
               
               <div className="activities-timeline">
-                {dashboardData.recentActivityDTOS.map((activity, index) => (
-                  <TimelineItem
-                    key={index}
-                    icon={getActivityIcon(activity.activityType)}
-                    title={activity.eventTitle}
-                    description={activity.activityDescription}
-                    timestamp={formatTimestamp(activity.createdAt)}
-                    color={getActivityColor(activity.activityType)}
-                  />
-                ))}
+                {dashboardData.recentActivityDTOS && dashboardData.recentActivityDTOS.length > 0 ? (
+                  dashboardData.recentActivityDTOS.map((activity, index) => (
+                    <TimelineItem
+                      key={index}
+                      icon={getActivityIcon(activity.activityType)}
+                      title={activity.eventTitle}
+                      description={activity.activityDescription}
+                      timestamp={formatTimestamp(activity.createdAt)}
+                      color={getActivityColor(activity.activityType)}
+                    />
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <FaInfoCircle />
+                    </div>
+                    <h3 className="empty-state-title">No Recent Activities</h3>
+                    <p>Your activities will appear here once you start engaging with events.</p>
+                    <Link to="/volunteer/events" className="empty-state-action">
+                      <FaSearch /> Browse Events
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -294,9 +195,22 @@ const VolunteerDashboard = () => {
               </div>
               
               <div className="events-grid">
-                {dashboardData.registeredEventDTOS.map(event => (
-                  <EventCard key={event.id} event={event} />
-                ))}
+                {dashboardData.registeredEventDTOS && dashboardData.registeredEventDTOS.length > 0 ? (
+                  dashboardData.registeredEventDTOS.map(event => (
+                    <EventCard key={event.eventId} event={event} />
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <FaCalendarPlus />
+                    </div>
+                    <h3 className="empty-state-title">No Registered Events</h3>
+                    <p>You haven't registered for any events yet. Start making a difference today!</p>
+                    <Link to="/volunteer/events" className="empty-state-action">
+                      <FaCalendarPlus /> Register for Events
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -308,13 +222,26 @@ const VolunteerDashboard = () => {
             <div className="dashboard-card">
               <div className="card-header">
                 <h6 className="card-title">Upcoming Events</h6>
-                <p className="card-subtitle">Events happening in the next 7 days</p>
+                <p className="card-subtitle">Events happening soon</p>
               </div>
               
               <div className="events-grid">
-                {dashboardData.upcomingEventDTOS.map(event => (
-                  <EventCard key={event.id} event={event} />
-                ))}
+                {dashboardData.upcomingEventDTOS && dashboardData.upcomingEventDTOS.length > 0 ? (
+                  dashboardData.upcomingEventDTOS.map(event => (
+                    <EventCard key={event.eventId} event={event} />
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <FaClock />
+                    </div>
+                    <h3 className="empty-state-title">No Upcoming Events</h3>
+                    <p>Check back soon for new volunteer opportunities in your area.</p>
+                    <Link to="/volunteer/events" className="empty-state-action">
+                      <FaSearch /> Explore All Events
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -330,20 +257,31 @@ const VolunteerDashboard = () => {
               </div>
               
               <div className="history-list">
-                {dashboardData.eventParticipationHistoryDTOS.map(event => (
-                  <div key={event.id} className="history-item">
-                    <div className="history-icon">
-                      <FaCheckCircle />
+                {dashboardData.eventParticipationHistoryDTOS && dashboardData.eventParticipationHistoryDTOS.length > 0 ? (
+                  dashboardData.eventParticipationHistoryDTOS.map(event => (
+                    <div key={event.eventId || event.id} className="history-item">
+                      <div className="history-icon">
+                        <FaCheckCircle />
+                      </div>
+                      <div className="history-info">
+                        <h6 className="history-title">{event.eventTitle || event.title}</h6>
+                        <p className="history-meta">
+                          <FaClock size={12} />
+                          {new Date(event.date || event.startTime).toLocaleDateString()} • {event.location}
+                        </p>
+                      </div>
+                      <span className="history-status">Completed</span>
                     </div>
-                    <div className="history-info">
-                      <h6 className="history-title">{event.title}</h6>
-                      <p className="history-meta">
-                        {new Date(event.startTime).toLocaleDateString()} • {event.location}
-                      </p>
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <FaHistory />
                     </div>
-                    <span className="history-status">Completed</span>
+                    <h3 className="empty-state-title">No Completed Events</h3>
+                    <p>Your event participation history will appear here after completing events.</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
@@ -356,9 +294,22 @@ const VolunteerDashboard = () => {
               </div>
               
               <div className="events-grid">
-                {dashboardData.recommendEventDTOS.map(event => (
-                  <EventCard key={event.id} event={event} />
-                ))}
+                {dashboardData.recommendEventDTOS && dashboardData.recommendEventDTOS.length > 0 ? (
+                  dashboardData.recommendEventDTOS.map(event => (
+                    <EventCard key={event.eventId} event={event} />
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <FaStar />
+                    </div>
+                    <h3 className="empty-state-title">No Recommendations Yet</h3>
+                    <p>We'll recommend events based on your interests and activity.</p>
+                    <Link to="/volunteer/events" className="empty-state-action">
+                      <FaSearch /> Discover Events
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

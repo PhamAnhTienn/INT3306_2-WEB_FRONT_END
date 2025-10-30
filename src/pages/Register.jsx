@@ -72,8 +72,10 @@ const Register = () => {
   };
 
   const handleGoogleSignIn = () => {
-    // Redirect to Google OAuth2 authorization endpoint
-    authAPI.googleSignIn();
+    // Handle Google sign-in logic here
+    console.log('Google sign-in clicked');
+    // This is where you would integrate with Google OAuth
+    setError('Google sign-in is not yet implemented');
   };
 
   return (

@@ -47,6 +47,15 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Don't retry if the request was to the refresh endpoint itself
+    if (originalRequest.url?.includes('/auth/refresh')) {
+      // Clear tokens and redirect to login if refresh fails
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+      return Promise.reject(error);
+    }
+
     // If error is 401 and we haven't tried to refresh the token yet
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -75,8 +84,9 @@ api.interceptors.response.use(
           localStorage.setItem('accessToken', newAccessToken);
           
           // Update user data if provided
-          if (response.data.data?.user) {
-            localStorage.setItem('user', JSON.stringify(response.data.data.user));
+          if (response.data.data?.user || response.data.data?.userResponse) {
+            const userData = response.data.data?.user || response.data.data?.userResponse;
+            localStorage.setItem('user', JSON.stringify(userData));
           }
 
           // Update the failed request's authorization header
@@ -90,10 +100,19 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         // If refresh fails, clear tokens and redirect to login
+        console.error('Token refresh failed:', refreshError);
         processQueue(refreshError, null);
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        
+        // Only redirect if not already on login/register pages
+        const currentPath = window.location.pathname;
+        if (!currentPath.includes('/login') && 
+            !currentPath.includes('/register') && 
+            !currentPath.includes('/auth/')) {
+          window.location.href = '/login';
+        }
+        
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

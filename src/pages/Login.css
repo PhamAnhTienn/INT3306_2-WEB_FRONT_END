@@ -118,12 +118,12 @@
 .form-input {
   width: 100%;
   padding: 18px 25px;
-  border: 2px solid #e8ecef;
+  border: 2px solid var(--border-light);
   border-radius: 6px;
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.3s ease;
-  background-color: #fafbfc;
+  background-color: var(--neutral-50);
   color: var(--text-dark);
 }
 
@@ -131,7 +131,7 @@
   outline: none;
   border-color: var(--primary-color);
   background-color: white;
-  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
 }
 
 .form-input::placeholder {
@@ -156,9 +156,9 @@
 }
 
 .login-btn:hover {
-  background: #d12d3a;
+  background: var(--primary-600);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(230, 57, 70, 0.3);
+  box-shadow: 0 8px 25px rgba(255, 138, 0, 0.3);
 }
 
 .login-btn:active {
@@ -176,7 +176,7 @@
 .divider-line {
   flex: 1;
   height: 1px;
-  background-color: #e8ecef;
+  background-color: var(--border-light);
 }
 
 .divider-text {
@@ -197,33 +197,33 @@
   gap: 12px;
   padding: 16px 20px;
   background: white;
-  border: 2px solid #dadce0;
+  border: 2px solid var(--border-medium);
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
-  color: #3c4043;
+  color: var(--neutral-700);
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 2rem;
 }
 
 .google-signin-btn:hover {
-  background-color: #f8f9fa;
-  border-color: #c8ced6;
+  background-color: var(--neutral-50);
+  border-color: var(--border-dark);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .google-signin-btn:active {
-  background-color: #f1f3f4;
-  border-color: #9aa0a6;
+  background-color: var(--neutral-100);
+  border-color: var(--neutral-400);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .google-signin-btn:focus {
   outline: none;
-  border-color: #4285f4;
-  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+  border-color: var(--info);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .google-icon {
@@ -231,7 +231,7 @@
 }
 
 .google-text {
-  color: #3c4043;
+  color: var(--neutral-700);
   font-weight: 500;
   letter-spacing: 0.25px;
 }
@@ -256,7 +256,7 @@
 }
 
 .register-link a:hover {
-  color: #d12d3a;
+  color: var(--primary-600);
   text-decoration: underline;
 }
 

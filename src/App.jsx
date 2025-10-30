@@ -10,15 +10,17 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ManagerDashboard from './pages/ManagerDashboard';
 import VolunteerDashboard from './pages/VolunteerDashboard';
-import OAuth2Callback from './pages/OAuth2Callback';
+import OAuth2Success from './pages/OAuth2Success';
+import OAuth2Failure from './pages/OAuth2Failure';
 import './App.css';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* OAuth2 callback route (without layout) */}
-        <Route path="/oauth2/callback" element={<OAuth2Callback />} />
+        {/* OAuth2 callback routes (without layout) */}
+        <Route path="/auth/success" element={<OAuth2Success />} />
+        <Route path="/auth/failure" element={<OAuth2Failure />} />
         
         {/* Dashboard routes (without main layout) */}
         <Route path="/dashboard/manager" element={<ManagerDashboard />} />

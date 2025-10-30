@@ -1,0 +1,238 @@
+{
+  "name": "Volunteer Community Color System",
+  "version": "1.0.0",
+  "description": "A warm, optimistic, and accessible color system designed for volunteer and community-focused websites",
+  "colors": {
+    "primary": {
+      "50": "#FFF4E6",
+      "100": "#FFE8CC",
+      "200": "#FFD199",
+      "300": "#FFB966",
+      "400": "#FFA133",
+      "500": "#FF8A00",
+      "600": "#CC6E00",
+      "700": "#995200",
+      "800": "#663700",
+      "900": "#331B00"
+    },
+    "secondary": {
+      "50": "#E6F7F5",
+      "100": "#CCEFEB",
+      "200": "#99DED7",
+      "300": "#66CEC3",
+      "400": "#33BDAF",
+      "500": "#00AD9B",
+      "600": "#008A7C",
+      "700": "#00685D",
+      "800": "#00453E",
+      "900": "#00231F"
+    },
+    "neutral": {
+      "50": "#F9FAFB",
+      "100": "#F3F4F6",
+      "200": "#E5E7EB",
+      "300": "#D1D5DB",
+      "400": "#9CA3AF",
+      "500": "#6B7280",
+      "600": "#4B5563",
+      "700": "#374151",
+      "800": "#1F2937",
+      "900": "#111827"
+    },
+    "semantic": {
+      "success": {
+        "light": "#D1FAE5",
+        "main": "#10B981",
+        "dark": "#059669"
+      },
+      "warning": {
+        "light": "#FEF3C7",
+        "main": "#F59E0B",
+        "dark": "#D97706"
+      },
+      "info": {
+        "light": "#DBEAFE",
+        "main": "#3B82F6",
+        "dark": "#2563EB"
+      },
+      "error": {
+        "light": "#FEE2E2",
+        "main": "#EF4444",
+        "dark": "#DC2626"
+      }
+    },
+    "accent": {
+      "purple": "#8B5CF6",
+      "pink": "#EC4899"
+    },
+    "base": {
+      "white": "#FFFFFF",
+      "black": "#000000"
+    }
+  },
+  "semanticTokens": {
+    "text": {
+      "dark": {
+        "value": "{colors.neutral.800}",
+        "description": "Main headings and strong emphasis"
+      },
+      "primary": {
+        "value": "{colors.neutral.700}",
+        "description": "Primary body text"
+      },
+      "secondary": {
+        "value": "{colors.neutral.500}",
+        "description": "Secondary text, labels, captions"
+      },
+      "light": {
+        "value": "{colors.neutral.400}",
+        "description": "Disabled and placeholder text"
+      },
+      "disabled": {
+        "value": "{colors.neutral.300}",
+        "description": "Fully disabled text"
+      }
+    },
+    "background": {
+      "white": {
+        "value": "{colors.base.white}",
+        "description": "Pure white background"
+      },
+      "light": {
+        "value": "{colors.neutral.50}",
+        "description": "Light gray background for pages"
+      },
+      "gray": {
+        "value": "{colors.neutral.100}",
+        "description": "Medium gray background for sections"
+      },
+      "dark": {
+        "value": "{colors.neutral.800}",
+        "description": "Dark background for headers/footers"
+      }
+    },
+    "border": {
+      "light": {
+        "value": "{colors.neutral.200}",
+        "description": "Light borders and dividers"
+      },
+      "medium": {
+        "value": "{colors.neutral.300}",
+        "description": "Standard borders"
+      },
+      "dark": {
+        "value": "{colors.neutral.400}",
+        "description": "Emphasized borders"
+      }
+    }
+  },
+  "shadows": {
+    "sm": {
+      "value": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "description": "Subtle shadow for small elements"
+    },
+    "default": {
+      "value": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "description": "Standard shadow for cards"
+    },
+    "md": {
+      "value": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "description": "Medium shadow for elevated elements"
+    },
+    "lg": {
+      "value": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      "description": "Large shadow for modals and dropdowns"
+    },
+    "xl": {
+      "value": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+      "description": "Extra large shadow for floating elements"
+    },
+    "hover": {
+      "value": "{shadows.md}",
+      "description": "Shadow for hover states"
+    }
+  },
+  "gradients": {
+    "primary": {
+      "value": "linear-gradient(135deg, {colors.primary.400} 0%, {colors.primary.600} 100%)",
+      "description": "Primary gradient for buttons and CTAs"
+    },
+    "secondary": {
+      "value": "linear-gradient(135deg, {colors.secondary.400} 0%, {colors.secondary.600} 100%)",
+      "description": "Secondary gradient for accents"
+    },
+    "warm": {
+      "value": "linear-gradient(135deg, {colors.primary.500} 0%, {colors.accent.pink} 100%)",
+      "description": "Warm gradient for special features"
+    },
+    "cool": {
+      "value": "linear-gradient(135deg, {colors.secondary.500} 0%, {colors.semantic.info.main} 100%)",
+      "description": "Cool gradient for info elements"
+    },
+    "success": {
+      "value": "linear-gradient(135deg, {colors.semantic.success.main} 0%, {colors.secondary.500} 100%)",
+      "description": "Success gradient for achievements"
+    }
+  },
+  "usage": {
+    "primary": {
+      "description": "Warm orange representing energy, community, and optimism",
+      "useCases": [
+        "Primary buttons and CTAs",
+        "Links and active navigation states",
+        "Progress bars and sliders",
+        "Selection controls and radio buttons",
+        "Icon accents and highlights"
+      ]
+    },
+    "secondary": {
+      "description": "Turquoise/teal representing trust, growth, and sustainability",
+      "useCases": [
+        "Secondary buttons",
+        "Header and footer backgrounds",
+        "Special feature highlights",
+        "New/featured content badges",
+        "Alternative navigation states"
+      ]
+    },
+    "neutral": {
+      "description": "Carefully balanced grays for text, backgrounds, and structure",
+      "useCases": [
+        "Text hierarchy (50-900 scale)",
+        "Page backgrounds (50-100)",
+        "Borders and dividers (200-400)",
+        "Form controls and inputs",
+        "Disabled states"
+      ]
+    },
+    "semantic": {
+      "description": "Standard semantic colors following universal conventions",
+      "success": "Achievements, completed tasks, positive feedback",
+      "warning": "Caution messages, pending states, important notices",
+      "info": "Information messages, tooltips, help text",
+      "error": "Error messages, validation failures, destructive actions"
+    }
+  },
+  "accessibility": {
+    "wcag": "AA compliant",
+    "contrastRatios": {
+      "normalText": "4.5:1",
+      "largeText": "3:1",
+      "uiComponents": "3:1"
+    },
+    "colorBlindness": "Colors are distinguishable for common types of color blindness",
+    "notes": [
+      "Primary and secondary colors provide sufficient contrast",
+      "Semantic colors follow universal conventions",
+      "All interactive states have accessible contrast ratios",
+      "Never rely on color alone - use icons or text labels as well"
+    ]
+  },
+  "metadata": {
+    "author": "Volunteer Community Design System",
+    "created": "2025",
+    "lastUpdated": "2025",
+    "theme": "volunteer",
+    "targetAudience": "Community organizations, volunteer groups, non-profits"
+  }
+}

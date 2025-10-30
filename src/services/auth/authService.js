@@ -17,7 +17,6 @@ export const authAPI = {
 
             if (authData?.accessToken) {
             localStorage.setItem('accessToken', authData.accessToken);
-            localStorage.setItem('refreshToken', authData.refreshToken);
             localStorage.setItem('user', JSON.stringify(authData.userResponse));
             }
 
@@ -35,15 +34,11 @@ export const authAPI = {
     initiateGoogleSignIn: () => {
         // Redirect to your backend's OAuth2 Google authorization endpoint
         // Spring Security will handle the OAuth2 flow
-        window.location.href = `${api.defaults.baseURL}/oauth2/authorization/google`;
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
     },
 
-  /**
-   * Handle OAuth2 callback and exchange for tokens
-   * This is called after user is redirected back from Google
-   * @returns {Promise} Response with JWT token and user data
-   */
-    handleOAuth2Callback: async () => {
+
+    handleOAuth2Success: async () => {
         try {
             // Call your backend endpoint to get the JWT tokens
             const response = await api.get('/auth/oauth2/token');
@@ -52,7 +47,6 @@ export const authAPI = {
 
             if (authData?.accessToken) {
                 localStorage.setItem('accessToken', authData.accessToken);
-                localStorage.setItem('refreshToken', authData.refreshToken);
                 localStorage.setItem('user', JSON.stringify(authData.userResponse));
             }
 
