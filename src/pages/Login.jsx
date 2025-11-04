@@ -35,12 +35,12 @@ const Login = () => {
         const user = response.userResponse;
 
         console.log('Logged in user:', user);
-        console.log('User role:', user.user_role);
+        console.log('User role:', user.role);
         
         // Navigate based on user role
-        if (user.user_role === 'EVENT_MANAGER') {
+        if (user.role === 'EVENT_MANAGER') {
           navigate('/dashboard/manager');
-        } else if (user.user_role === 'VOLUNTEER') {
+        } else if (user.role === 'VOLUNTEER') {
           navigate('/dashboard/volunteer');
         } else {
           navigate('/');

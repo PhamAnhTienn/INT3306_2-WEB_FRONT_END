@@ -1,0 +1,480 @@
+/* Events Page - Inspired by Feane Menu Section */
+
+.events-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, var(--neutral-50) 0%, var(--white) 100%);
+  padding: 4rem 0;
+}
+
+.events-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Header Section */
+.events-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.events-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: 1rem;
+  font-family: 'Dancing Script', cursive;
+}
+
+.events-subtitle {
+  font-size: 1.125rem;
+  color: var(--neutral-600);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Search Bar */
+.events-search {
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neutral-400);
+  font-size: 1.125rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 1.25rem 1rem 3.5rem;
+  border: 2px solid var(--neutral-200);
+  border-radius: 50px;
+  font-size: 1rem;
+  color: var(--neutral-900);
+  background: var(--white);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 4px var(--primary-50);
+}
+
+.search-input::placeholder {
+  color: var(--neutral-400);
+}
+
+/* Filter Tabs - Inspired by Feane's category pills */
+.events-filters {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--neutral-700);
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.filter-button:hover {
+  background: var(--primary-50);
+  color: var(--primary-600);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-button.active {
+  background: var(--neutral-900);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Results Count */
+.events-results-count {
+  text-align: center;
+  color: var(--neutral-600);
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+/* Loading State */
+.events-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: var(--neutral-600);
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--neutral-200);
+  border-top-color: var(--primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error State */
+.events-error {
+  text-align: center;
+  padding: 2rem;
+  background: var(--error-50);
+  border: 1px solid var(--error-200);
+  border-radius: 1rem;
+  color: var(--error-700);
+  margin: 2rem 0;
+}
+
+/* Events Grid - Inspired by Feane's card layout */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Event Card - Similar to Feane's menu card structure */
+.event-card-item {
+  background: var(--white);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.event-card-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Event Image */
+.event-image {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-200) 100%);
+  overflow: hidden;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 4rem;
+  color: var(--neutral-300);
+}
+
+.event-status-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+}
+
+.status-planned {
+  background: var(--info-100);
+  color: var(--info-700);
+  border: 1px solid var(--info-300);
+}
+
+.status-ongoing {
+  background: var(--success-100);
+  color: var(--success-700);
+  border: 1px solid var(--success-300);
+}
+
+.status-completed {
+  background: var(--neutral-100);
+  color: var(--neutral-700);
+  border: 1px solid var(--neutral-300);
+}
+
+.status-cancelled {
+  background: var(--error-100);
+  color: var(--error-700);
+  border: 1px solid var(--error-300);
+}
+
+/* Event Content - Dark footer like Feane */
+.event-content {
+  padding: 1.5rem;
+  background: var(--neutral-900);
+  color: var(--white);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.event-description {
+  font-size: 0.875rem;
+  color: var(--neutral-300);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+/* Event Details */
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.event-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--neutral-300);
+}
+
+.detail-icon {
+  color: var(--primary-400);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* View Details Button - Inspired by Feane's cart button */
+.event-view-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: var(--primary-500);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-view-button:hover {
+  background: var(--primary-600);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(255, 138, 0, 0.3);
+}
+
+.event-view-button:active {
+  transform: scale(0.98);
+}
+
+/* Empty State */
+.events-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--neutral-600);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: var(--neutral-300);
+  margin-bottom: 1.5rem;
+}
+
+.events-empty h3 {
+  font-size: 1.5rem;
+  color: var(--neutral-700);
+  margin-bottom: 0.75rem;
+}
+
+.events-empty p {
+  font-size: 1rem;
+  color: var(--neutral-500);
+}
+
+/* Pagination */
+.events-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.pagination-button {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--neutral-300);
+  border-radius: 50px;
+  background: var(--white);
+  color: var(--neutral-700);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-pages {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination-page {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--neutral-300);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--neutral-700);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-page:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-400);
+  color: var(--primary-600);
+}
+
+.pagination-page.active {
+  background: var(--neutral-900);
+  border-color: var(--neutral-900);
+  color: var(--white);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .events-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .events-page {
+    padding: 2rem 0;
+  }
+
+  .events-container {
+    padding: 0 1rem;
+  }
+
+  .events-title {
+    font-size: 2.25rem;
+  }
+
+  .events-subtitle {
+    font-size: 1rem;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .event-image {
+    height: 200px;
+  }
+
+  .pagination-pages {
+    flex-wrap: wrap;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .events-title {
+    font-size: 2rem;
+  }
+
+  .events-filters {
+    gap: 0.5rem;
+  }
+
+  .filter-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .event-image {
+    height: 180px;
+  }
+
+  .event-content {
+    padding: 1.25rem;
+  }
+
+  .pagination-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .pagination-page {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+}

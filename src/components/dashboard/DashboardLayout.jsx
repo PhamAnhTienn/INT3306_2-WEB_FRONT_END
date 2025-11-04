@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardNavbar from './DashboardNavbar';
 import './DashboardLayout.css';
 
 const DashboardLayout = ({ children, userRole, title, breadcrumbs }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
+  const navigate = useNavigate(); 
 
-  const handleNavigate = (itemId) => {
+  const handleNavigate = (itemId, path) => {
     setActiveItem(itemId);
+    navigate(path);
     // Handle navigation here (use React Router navigate)
   };
 

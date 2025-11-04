@@ -25,6 +25,7 @@ function App() {
         {/* Dashboard routes (without main layout) */}
         <Route path="/dashboard/manager" element={<ManagerDashboard />} />
         <Route path="/dashboard/volunteer" element={<VolunteerDashboard />} />
+        <Route path="/events" element={<Events />} />
         
         {/* Main site routes (with main layout) */}
         <Route path="/*" element={
