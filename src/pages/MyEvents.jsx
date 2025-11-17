@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt } from 'react-icons/fa';
-import { getAllEvents } from '../services/events/eventsService';
+import { getMyEvents } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
-const Events = () => {
+const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,19 +29,45 @@ const Events = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await getAllEvents({
-        page: currentPage,
-        size: 12, // Show 12 events per page
-        sortBy: 'date',
-        sortDirection: 'desc',
-        status: selectedStatus,
-        search: searchQuery,
-      });
+      const response = await getMyEvents();
 
       if (response.success) {
-        setEvents(response.data.content);
-        setTotalPages(response.data.totalPages);
-        setTotalElements(response.data.totalElements);
+        // Filter events based on search query and status
+        let filteredEvents = response.data.content;
+
+        // Apply search filter
+        if (searchQuery) {
+          const query = searchQuery.toLowerCase();
+          filteredEvents = filteredEvents.filter(
+            (event) =>
+              event.title.toLowerCase().includes(query) ||
+              event.description.toLowerCase().includes(query)
+          );
+        }
+
+        // Apply status filter
+        if (selectedStatus) {
+          filteredEvents = filteredEvents.filter(
+            (event) => event.status === selectedStatus
+          );
+        }
+
+        // Calculate pagination for filtered results
+        const pageSize = 12;
+        const totalFiltered = filteredEvents.length;
+        const totalPagesCalculated = Math.ceil(totalFiltered / pageSize);
+        const startIndex = currentPage * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedEvents = filteredEvents.slice(startIndex, endIndex);
+
+        setEvents(paginatedEvents);
+        setTotalPages(totalPagesCalculated);
+        setTotalElements(totalFiltered);
+
+        // Reset to first page if current page exceeds total pages
+        if (currentPage >= totalPagesCalculated && totalPagesCalculated > 0) {
+          setCurrentPage(0);
+        }
       } else {
         setError('Failed to fetch events');
       }
@@ -164,7 +190,7 @@ const Events = () => {
         <div className="events-container">
           {/* Header Section */}
           <div className="events-header">
-            <h1 className="events-title">Browse Events</h1>
+            <h1 className="events-title">My Events</h1>
             <p className="events-subtitle">
               Discover meaningful volunteer opportunities and make a difference
             </p>
@@ -418,4 +444,4 @@ const Events = () => {
   );
 };
 
-export default Events;
+export default MyEvents;

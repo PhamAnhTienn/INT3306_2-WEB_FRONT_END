@@ -45,21 +45,53 @@
   
   /* ===== SEMANTIC COLORS ===== */
   /* Success (Green) */
+  --success-50: #ECFDF5;
+  --success-100: #D1FAE5;
+  --success-200: #A7F3D0;
+  --success-300: #6EE7B7;
+  --success-400: #34D399;
+  --success-500: #10B981;
+  --success-600: #059669;
+  --success-700: #047857;
   --success-light: #D1FAE5;
   --success: #10B981;
   --success-dark: #059669;
   
   /* Warning (Amber/Yellow) */
+  --warning-50: #FFFBEB;
+  --warning-100: #FEF3C7;
+  --warning-200: #FDE68A;
+  --warning-300: #FCD34D;
+  --warning-400: #FBBF24;
+  --warning-500: #F59E0B;
+  --warning-600: #D97706;
+  --warning-700: #B45309;
   --warning-light: #FEF3C7;
   --warning: #F59E0B;
   --warning-dark: #D97706;
   
   /* Info (Blue) */
+  --info-50: #EFF6FF;
+  --info-100: #DBEAFE;
+  --info-200: #BFDBFE;
+  --info-300: #93C5FD;
+  --info-400: #60A5FA;
+  --info-500: #3B82F6;
+  --info-600: #2563EB;
+  --info-700: #1D4ED8;
   --info-light: #DBEAFE;
   --info: #3B82F6;
   --info-dark: #2563EB;
   
   /* Error (Red) */
+  --error-50: #FEF2F2;
+  --error-100: #FEE2E2;
+  --error-200: #FECACA;
+  --error-300: #FCA5A5;
+  --error-400: #F87171;
+  --error-500: #EF4444;
+  --error-600: #DC2626;
+  --error-700: #B91C1C;
   --error-light: #FEE2E2;
   --error: #EF4444;
   --error-dark: #DC2626;

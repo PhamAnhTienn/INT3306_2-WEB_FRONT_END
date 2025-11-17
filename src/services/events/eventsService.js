@@ -101,7 +101,7 @@ export const unregisterFromEvent = async (eventId) => {
  */
 export const getMyEvents = async () => {
   try {
-    const response = await api.get('/events/my-events');
+    const response = await api.get('/registrations/my');
     return response.data;
   } catch (error) {
     console.error('Error fetching my events:', error);

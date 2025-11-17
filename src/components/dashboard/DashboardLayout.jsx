@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardNavbar from './DashboardNavbar';
 import './DashboardLayout.css';
 
-const DashboardLayout = ({ children, userRole, title, breadcrumbs }) => {
+const DashboardLayout = ({ children, userRole }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Update active item based on current route
+  useEffect(() => {
+    const path = location.pathname;
+    
+    // Map routes to menu item IDs
+    if (path.includes('/volunteer/events') || path.includes('/events')) {
+      setActiveItem('events');
+    } else if (path.includes('/my-events')) {
+      setActiveItem('my-events');
+    } else if (path.includes('/settings')) {
+      setActiveItem('settings');
+    } else if (path.includes('/dashboard')) {
+      setActiveItem('dashboard');
+    } else if (path.includes('/volunteers')) {
+      setActiveItem('volunteers');
+    } else if (path.includes('/analytics')) {
+      setActiveItem('analytics');
+    }
+  }, [location.pathname]);
 
   const handleNavigate = (itemId, path) => {
     setActiveItem(itemId);
     navigate(path);
-    // Handle navigation here (use React Router navigate)
   };
 
   return (
@@ -23,7 +43,7 @@ const DashboardLayout = ({ children, userRole, title, breadcrumbs }) => {
       />
       
       <main className="dashboard-main">
-        <DashboardNavbar title={title} breadcrumbs={breadcrumbs} />
+        <DashboardNavbar />
         
         <div className="dashboard-content">
           {children}

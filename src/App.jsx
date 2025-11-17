@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Causes from './pages/Causes';
 import Events from './pages/Events';
+import MyEvents from './pages/MyEvents';
 import Gallery from './pages/Gallery';
 import News from './pages/News';
 import Contact from './pages/Contact';
@@ -26,6 +27,7 @@ function App() {
         <Route path="/dashboard/manager" element={<ManagerDashboard />} />
         <Route path="/dashboard/volunteer" element={<VolunteerDashboard />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/my-events" element={<MyEvents />} />
         
         {/* Main site routes (with main layout) */}
         <Route path="/*" element={
