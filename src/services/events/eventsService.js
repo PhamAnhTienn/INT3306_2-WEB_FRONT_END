@@ -66,13 +66,13 @@ export const getEventById = async (eventId) => {
 };
 
 /**
- * Register for an event
+ * Register for an event with pending status
  * @param {number} eventId - Event ID
- * @returns {Promise} API response
+ * @returns {Promise} API response with registration data
  */
 export const registerForEvent = async (eventId) => {
   try {
-    const response = await api.post(`/events/${eventId}/register`);
+    const response = await api.post(`/registrations/events/${eventId}`);
     return response.data;
   } catch (error) {
     console.error(`Error registering for event ${eventId}:`, error);

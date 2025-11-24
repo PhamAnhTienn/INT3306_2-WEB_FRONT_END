@@ -10,6 +10,16 @@
   flex-direction: column;
   z-index: 1000;
   overflow-y: auto;
+  /* Hide inner scrollbar to keep a single page scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* WebKit */
+.dashboard-sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .sidebar-header {

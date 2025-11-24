@@ -2,21 +2,6 @@
 /* Following design-tokens.json color system strictly */
 
 .events-page {
-  min-height: 100vh;
-  background: linear-gradient(to bottom, var(--neutral-50) 0%, var(--white) 100%);
-  padding: 2rem 0; /* Reduced padding since DashboardLayout provides structure */
-}
-
-.events-container {
-  max-width: 100%; /* Use full width of dashboard content area */
-  margin: 0 auto;
-  padding: 0 1rem; /* Reduced horizontal padding */
-  width: 100%; /* Ensure full width utilization */
-  overflow: visible; /* Prevent any scrollbar on container */
-} Inspired by Feane Menu Section */
-/* Following design-tokens.json color system strictly */
-
-.events-page {
   /* min-height: 100vh; */
   background: linear-gradient(to bottom, var(--neutral-50) 0%, var(--white) 100%);
   padding: 4rem 0;
@@ -27,7 +12,6 @@
   margin: 0 auto;
   padding: 0 2rem;
   width: 100%; /* Ensure full width utilization */
-  overflow: visible; /* Prevent any scrollbar on container */
 }
 
 /* Header Section */
@@ -181,7 +165,6 @@
   gap: 2rem;
   margin-bottom: 3rem;
   width: 100%; /* Ensure grid uses full container width */
-  overflow: visible; /* Explicitly prevent scrollbar - grid expands naturally */
 }
 
 /* Event Card - Similar to Feane's menu card structure */
@@ -237,6 +220,7 @@
 }
 
 /* Semantic colors for state indicators */
+/* Event Status */
 .status-planned {
   background: var(--info-100); /* Semantic Info-100 */
   color: var(--info-700); /* Semantic Info-700 */
@@ -259,6 +243,31 @@
   background: var(--error-100); /* Semantic Error-100 */
   color: var(--error-700); /* Semantic Error-700 */
   border: 1px solid var(--error-300); /* Semantic Error-300 */
+}
+
+/* Registration Status */
+.status-pending {
+  background: var(--warning-100); /* Semantic Warning-100 */
+  color: var(--warning-700); /* Semantic Warning-700 */
+  border: 1px solid var(--warning-300); /* Semantic Warning-300 */
+}
+
+.status-approved {
+  background: var(--success-100); /* Semantic Success-100 */
+  color: var(--success-700); /* Semantic Success-700 */
+  border: 1px solid var(--success-300); /* Semantic Success-300 */
+}
+
+.status-rejected {
+  background: var(--error-100); /* Semantic Error-100 */
+  color: var(--error-700); /* Semantic Error-700 */
+  border: 1px solid var(--error-300); /* Semantic Error-300 */
+}
+
+.status-waiting {
+  background: var(--info-100); /* Semantic Info-100 */
+  color: var(--info-700); /* Semantic Info-700 */
+  border: 1px solid var(--info-300); /* Semantic Info-300 */
 }
 
 /* Event Content - Dark footer like Feane */
@@ -302,14 +311,22 @@
   flex-shrink: 0;
 }
 
+/* Event Card Actions Container */
+.event-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 /* View Details Button - Primary action (main CTA) */
 .event-view-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  width: 100%;
-  padding: 0.875rem 1.5rem;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.875rem 1rem;
   background: var(--primary-500); /* Primary-500 for main action button */
   color: var(--white); /* White text on primary */
   border: none;
@@ -327,6 +344,83 @@
 }
 
 .event-view-button:active {
+  transform: scale(0.98);
+}
+
+/* Register Button */
+.event-register-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.875rem 1rem;
+  background: var(--success-500);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-register-button:hover {
+  background: var(--success-600);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.event-register-button:active {
+  transform: scale(0.98);
+}
+
+/* Registered Button (disabled state) */
+.event-registered-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.875rem 1rem;
+  background: var(--neutral-300);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Enter Event Button - Secondary action */
+.event-enter-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.875rem 1rem;
+  background: var(--secondary-500); /* Secondary color for differentiation */
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-enter-button:hover {
+  background: var(--secondary-600);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 173, 155, 0.3);
+}
+
+.event-enter-button:active {
   transform: scale(0.98);
 }
 

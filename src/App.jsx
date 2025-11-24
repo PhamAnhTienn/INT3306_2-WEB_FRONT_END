@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Causes from './pages/Causes';
 import Events from './pages/Events';
 import MyEvents from './pages/MyEvents';
+import EventFeed from './pages/EventFeed';
 import Gallery from './pages/Gallery';
 import News from './pages/News';
 import Contact from './pages/Contact';
@@ -26,6 +27,8 @@ function App() {
         {/* Dashboard routes (without main layout) */}
         <Route path="/dashboard/manager" element={<ManagerDashboard />} />
         <Route path="/dashboard/volunteer" element={<VolunteerDashboard />} />
+        <Route path="/volunteer/events" element={<Events />} />
+        <Route path="/volunteer/events/:eventId/feed" element={<EventFeed />} />
         <Route path="/events" element={<Events />} />
         <Route path="/my-events" element={<MyEvents />} />
         

@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt } from 'react-icons/fa';
-import { getAllEvents } from '../services/events/eventsService';
+import { useNavigate } from 'react-router-dom';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
+import { getAllEvents, registerForEvent, getMyEvents } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
 const Events = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,6 +17,9 @@ const Events = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [registering, setRegistering] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(null);
+  const [registerError, setRegisterError] = useState(null);
 
   const statusFilters = [
     { label: 'All', value: '' },
@@ -29,19 +34,38 @@ const Events = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await getAllEvents({
-        page: currentPage,
-        size: 12, // Show 12 events per page
-        sortBy: 'date',
-        sortDirection: 'desc',
-        status: selectedStatus,
-        search: searchQuery,
-      });
+      // Fetch both all events and user's registered events
+      const [eventsResponse, myEventsResponse] = await Promise.all([
+        getAllEvents({
+          page: currentPage,
+          size: 12, // Show 12 events per page
+          sortBy: 'date',
+          sortDirection: 'desc',
+          status: selectedStatus,
+          search: searchQuery,
+        }),
+        getMyEvents()
+      ]);
 
-      if (response.success) {
-        setEvents(response.data.content);
-        setTotalPages(response.data.totalPages);
-        setTotalElements(response.data.totalElements);
+      if (eventsResponse.success) {
+        let allEvents = eventsResponse.data.content;
+        
+        // If user has registered events, mark them as registered
+        if (myEventsResponse.success && myEventsResponse.data.content) {
+          const registeredEventIds = new Set(
+            myEventsResponse.data.content.map(event => event.eventId)
+          );
+          
+          // Update isRegistered flag for events that user has registered for
+          allEvents = allEvents.map(event => ({
+            ...event,
+            isRegistered: registeredEventIds.has(event.eventId)
+          }));
+        }
+        
+        setEvents(allEvents);
+        setTotalPages(eventsResponse.data.totalPages);
+        setTotalElements(eventsResponse.data.totalElements);
       } else {
         setError('Failed to fetch events');
       }
@@ -111,7 +135,42 @@ const Events = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedEvent(null);
+    setRegisterSuccess(null);
+    setRegisterError(null);
     document.body.style.overflow = 'auto'; // Restore scrolling
+  };
+
+  // Handle event registration
+  const handleRegisterEvent = async (eventId) => {
+    setRegistering(true);
+    setRegisterError(null);
+    setRegisterSuccess(null);
+    
+    try {
+      const response = await registerForEvent(eventId);
+      
+      if (response.success) {
+        // Update the events list to mark as registered
+        setEvents(prevEvents => prevEvents.map(event => 
+          event.eventId === eventId ? { ...event, isRegistered: true } : event
+        ));
+        // Update selected event if modal is open
+        if (selectedEvent && selectedEvent.eventId === eventId) {
+          setSelectedEvent(prev => ({ ...prev, isRegistered: true }));
+        }
+        // Show success message briefly
+        alert('Successfully registered for the event! Your registration is pending approval.');
+      } else {
+        setRegisterError(response.message || 'Failed to register for the event');
+        alert(response.message || 'Failed to register for the event');
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'An error occurred while registering';
+      setRegisterError(errorMessage);
+      alert(errorMessage);
+    } finally {
+      setRegistering(false);
+    }
   };
 
   // Generate smart pagination with ellipses
@@ -263,13 +322,34 @@ const Events = () => {
                     </div>
                   </div>
 
-                  <button 
-                    className="event-view-button"
-                    onClick={() => handleViewDetails(event)}
-                  >
-                    <FaClock />
-                    View Details
-                  </button>
+                  <div className="event-card-actions">
+                    <button 
+                      className="event-view-button"
+                      onClick={() => handleViewDetails(event)}
+                    >
+                      <FaClock />
+                      View Details
+                    </button>
+                    {event.status === 'ONGOING' && (
+                      event.isRegistered ? (
+                        <button 
+                          className="event-registered-button"
+                          disabled
+                        >
+                          <FaUsers />
+                          Registered
+                        </button>
+                      ) : (
+                        <button 
+                          className="event-register-button"
+                          onClick={() => handleRegisterEvent(event.eventId)}
+                        >
+                          <FaUsers />
+                          Register
+                        </button>
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -402,12 +482,6 @@ const Events = () => {
                 <button className="modal-action-button secondary" onClick={handleCloseModal}>
                   Close
                 </button>
-                {selectedEvent.status === 'ONGOING' && (
-                  <button className="modal-action-button primary">
-                    <FaUsers />
-                    Register for Event
-                  </button>
-                )}
               </div>
             </div>
           </div>

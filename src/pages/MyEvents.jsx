@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
 import { getMyEvents } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
 const MyEvents = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,10 +20,11 @@ const MyEvents = () => {
 
   const statusFilters = [
     { label: 'All', value: '' },
-    { label: 'Planned', value: 'PLANNED' },
-    { label: 'Ongoing', value: 'ONGOING' },
-    { label: 'Completed', value: 'COMPLETED' },
+    { label: 'Pending', value: 'PENDING' },
+    { label: 'Approved', value: 'APPROVED' },
+    { label: 'Rejected', value: 'REJECTED' },
     { label: 'Cancelled', value: 'CANCELLED' },
+    { label: 'Waiting', value: 'WAITING' },
   ];
 
   // Fetch events from API
@@ -45,10 +48,10 @@ const MyEvents = () => {
           );
         }
 
-        // Apply status filter
+        // Apply registration status filter
         if (selectedStatus) {
           filteredEvents = filteredEvents.filter(
-            (event) => event.status === selectedStatus
+            (event) => event.registrationStatus === selectedStatus
           );
         }
 
@@ -102,17 +105,19 @@ const MyEvents = () => {
     });
   };
 
-  // Get status badge color
+  // Get registration status badge color
   const getStatusColor = (status) => {
     switch (status) {
-      case 'PLANNED':
-        return 'status-planned';
-      case 'ONGOING':
-        return 'status-ongoing';
-      case 'COMPLETED':
-        return 'status-completed';
+      case 'PENDING':
+        return 'status-pending';
+      case 'APPROVED':
+        return 'status-approved';
+      case 'REJECTED':
+        return 'status-rejected';
       case 'CANCELLED':
         return 'status-cancelled';
+      case 'WAITING':
+        return 'status-waiting';
       default:
         return 'status-default';
     }
@@ -258,8 +263,8 @@ const MyEvents = () => {
                   <div className="image-placeholder">
                     <FaCalendar className="placeholder-icon" />
                   </div>
-                  <span className={`event-status-badge ${getStatusColor(event.status)}`}>
-                    {event.status}
+                  <span className={`event-status-badge ${getStatusColor(event.registrationStatus)}`}>
+                    {event.registrationStatus}
                   </span>
                 </div>
 
@@ -289,13 +294,22 @@ const MyEvents = () => {
                     </div>
                   </div>
 
-                  <button 
-                    className="event-view-button"
-                    onClick={() => handleViewDetails(event)}
-                  >
-                    <FaClock />
-                    View Details
-                  </button>
+                  <div className="event-card-actions">
+                    <button 
+                      className="event-view-button"
+                      onClick={() => handleViewDetails(event)}
+                    >
+                      <FaClock />
+                      View Details
+                    </button>
+                    <button 
+                      className="event-enter-button"
+                      onClick={() => navigate(`/volunteer/events/${event.eventId}/feed`)}
+                    >
+                      <FaSignInAlt />
+                      Enter Event
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -364,8 +378,8 @@ const MyEvents = () => {
               {/* Modal Header */}
               <div className="modal-header">
                 <FaCalendar className="modal-header-icon" />
-                <span className={`modal-status-badge ${getStatusColor(selectedEvent.status)}`}>
-                  {selectedEvent.status}
+                <span className={`modal-status-badge ${getStatusColor(selectedEvent.registrationStatus)}`}>
+                  {selectedEvent.registrationStatus}
                 </span>
                 <button className="modal-close-button" onClick={handleCloseModal}>
                   <FaTimes />
@@ -428,12 +442,6 @@ const MyEvents = () => {
                 <button className="modal-action-button secondary" onClick={handleCloseModal}>
                   Close
                 </button>
-                {selectedEvent.status === 'ONGOING' && (
-                  <button className="modal-action-button primary">
-                    <FaUsers />
-                    Register for Event
-                  </button>
-                )}
               </div>
             </div>
           </div>

@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './EventCard.css';
-import { FaCalendar, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
+import { FaCalendar, FaMapMarkerAlt, FaUsers, FaSignInAlt } from 'react-icons/fa';
 
 const EventCard = ({ event, type = 'default' }) => {
+  const navigate = useNavigate();
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -15,6 +18,11 @@ const EventCard = ({ event, type = 'default' }) => {
   const eventLocation = event.location;
   const eventStatus = event.status;
   const maxParticipants = event.maxParticipants || event.maxVolunteers;
+  const eventId = event.eventId || event.id;
+
+  const handleEnterEvent = () => {
+    navigate(`/volunteer/events/${eventId}/feed`);
+  };
 
   return (
     <div className={`event-card event-card-${type}`}>
@@ -59,6 +67,10 @@ const EventCard = ({ event, type = 'default' }) => {
             <span className={`event-status event-status-${eventStatus.toLowerCase()}`}>
               {eventStatus}
             </span>
+            <button className="btn-enter-event" onClick={handleEnterEvent}>
+              <FaSignInAlt />
+              Enter Event
+            </button>
           </div>
         )}
       </div>

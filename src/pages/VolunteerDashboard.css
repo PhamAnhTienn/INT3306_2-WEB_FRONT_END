@@ -422,3 +422,21 @@
     font-size: 0.6875rem;
   }
 }
+
+/* REMOVE INTERNAL SCROLLBARS – KEEP ONLY PAGE SCROLLBAR */
+
+/* For all dashboard internal sections */
+.activities-timeline,
+.events-grid,
+.history-list {
+  max-height: none !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+}
+
+/* Remove custom scrollbars */
+.activities-timeline::-webkit-scrollbar,
+.events-grid::-webkit-scrollbar,
+.history-list::-webkit-scrollbar {
+  display: none !important;
+}
