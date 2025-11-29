@@ -88,7 +88,7 @@
 
 .filter-button {
   padding: 0.75rem 2rem;
-  border: none;
+  border: 2px solid var(--border-light);
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 500;
@@ -102,14 +102,37 @@
 .filter-button:hover {
   background: var(--primary-50); /* Primary-50 for hover (main action highlight) */
   color: var(--primary-600); /* Primary-600 for hover text */
+  border-color: var(--primary-300);
   transform: translateY(-2px);
   box-shadow: var(--shadow); /* Standard shadow on hover */
 }
 
 .filter-button.active {
-  background: var(--neutral-900); /* Neutral-900 for active state (dark) */
-  color: var(--white); /* White text on dark */
+  background: var(--primary-500); /* Primary for active filter */
+  color: var(--white); /* White text */
+  border-color: var(--primary-500);
   box-shadow: var(--shadow-md); /* Emphasized shadow */
+}
+
+/* Status-specific filter button colors when active */
+.filter-button[data-status="PLANNED"].active {
+  background: var(--info-500);
+  border-color: var(--info-500);
+}
+
+.filter-button[data-status="ONGOING"].active {
+  background: var(--success-500);
+  border-color: var(--success-500);
+}
+
+.filter-button[data-status="COMPLETED"].active {
+  background: var(--neutral-600);
+  border-color: var(--neutral-600);
+}
+
+.filter-button[data-status="CANCELLED"].active {
+  background: var(--error-500);
+  border-color: var(--error-500);
 }
 
 /* Results Count */
@@ -177,11 +200,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 1px solid var(--border-light);
 }
 
 .event-card-item:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-lg); /* Large shadow on hover */
+  border-color: var(--primary-300); /* Primary accent on hover */
 }
 
 /* Event Image */
@@ -189,7 +214,7 @@
   position: relative;
   width: 100%;
   height: 220px;
-  background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-200) 100%);
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--secondary-50) 100%);
   overflow: hidden;
 }
 
@@ -203,7 +228,7 @@
 
 .placeholder-icon {
   font-size: 4rem;
-  color: var(--neutral-300); /* Neutral-300 for placeholder icons */
+  color: var(--primary-300); /* Primary-300 for placeholder icons */
 }
 
 .event-status-badge {
@@ -270,20 +295,21 @@
   border: 1px solid var(--info-300); /* Semantic Info-300 */
 }
 
-/* Event Content - Dark footer like Feane */
+/* Event Content - Light background for better readability */
 .event-content {
   padding: 1.5rem;
-  background: var(--neutral-900); /* Neutral-900 for dark background */
-  color: var(--white); /* White text on dark */
+  background: var(--white); /* White background for better readability */
+  color: var(--text-dark); /* Dark text for contrast */
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  border-top: 3px solid var(--primary-400); /* Primary accent border */
 }
 
 .event-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--white); /* White for title on dark background */
+  color: var(--neutral-800); /* Dark color for title readability */
   margin-bottom: 1.25rem;
   line-height: 1.4;
 }
@@ -302,11 +328,11 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.875rem;
-  color: var(--neutral-300); /* Neutral-300 for detail text */
+  color: var(--text-secondary); /* Neutral-500 for readable detail text */
 }
 
 .detail-icon {
-  color: var(--primary-400); /* Primary-400 for icon highlights */
+  color: var(--primary-500); /* Primary-500 for icon highlights */
   font-size: 1rem;
   flex-shrink: 0;
 }

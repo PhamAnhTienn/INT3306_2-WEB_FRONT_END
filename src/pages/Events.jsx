@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
 import { getAllEvents, registerForEvent, getMyEvents } from '../services/events/eventsService';
@@ -11,7 +11,9 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const searchTimeoutRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
@@ -42,13 +44,18 @@ const Events = () => {
           sortBy: 'date',
           sortDirection: 'desc',
           status: selectedStatus,
-          search: searchQuery,
+          search: debouncedSearchQuery,
         }),
         getMyEvents()
       ]);
 
       if (eventsResponse.success) {
         let allEvents = eventsResponse.data.content;
+        
+        // Client-side filtering by status as a fallback (in case backend doesn't filter)
+        if (selectedStatus) {
+          allEvents = allEvents.filter(event => event.status === selectedStatus);
+        }
         
         // If user has registered events, mark them as registered
         if (myEventsResponse.success && myEventsResponse.data.content) {
@@ -65,7 +72,7 @@ const Events = () => {
         
         setEvents(allEvents);
         setTotalPages(eventsResponse.data.totalPages);
-        setTotalElements(eventsResponse.data.totalElements);
+        setTotalElements(selectedStatus ? allEvents.length : eventsResponse.data.totalElements);
       } else {
         setError('Failed to fetch events');
       }
@@ -75,17 +82,37 @@ const Events = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, selectedStatus, searchQuery]);
+  }, [currentPage, selectedStatus, debouncedSearchQuery]);
+
+  // Debounce search query
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500); // 500ms debounce delay
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery]);
 
   // Fetch events on component mount and when filters change
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
 
-  // Handle search - removed separate useEffect since fetchEvents is already called via its dependencies
+  // Handle search - updates the searchQuery which triggers debounce
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(0); // Reset to first page
+    // Reset to first page when search changes (will take effect with debounced query)
+    if (currentPage !== 0) {
+      setCurrentPage(0);
+    }
   };
 
   // Format date to readable format
@@ -249,6 +276,7 @@ const Events = () => {
             <button
               key={filter.value}
               className={`filter-button ${selectedStatus === filter.value ? 'active' : ''}`}
+              data-status={filter.value}
               onClick={() => {
                 setSelectedStatus(filter.value);
                 setCurrentPage(0);

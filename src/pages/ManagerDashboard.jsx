@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import StatCard from '../components/dashboard/StatCard';
+import TimelineItem from '../components/dashboard/TimelineItem';
+import { dashboardAPI } from '../services/dashboard/dashboardService';
 import './ManagerDashboard.css';
-import { FaCalendarAlt, FaUsers, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { 
+  FaCalendarAlt, 
+  FaUsers, 
+  FaCheckCircle, 
+  FaClock,
+  FaUserPlus,
+  FaComment,
+  FaExclamationTriangle,
+  FaClipboardList,
+  FaPercentage,
+  FaCalendarCheck,
+  FaInfoCircle,
+  FaSearch
+} from 'react-icons/fa';
 
 const ManagerDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -10,7 +26,6 @@ const ManagerDashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch dashboard data from API
     fetchDashboardData();
   }, []);
 
@@ -19,89 +34,64 @@ const ManagerDashboard = () => {
       setLoading(true);
       setError(null);
       
-      // Use mock data instead of API
-      const mockData = {
-        totalEvents: 45,
-        totalVolunteers: 234,
-        completedEvents: 28,
-        ongoingEvents: 12,
-        eventStatusDistribution: {
-          pending: 5,
-          ongoing: 12,
-          completed: 28,
-          cancelled: 0
-        },
-        upcomingEvents: [
-          {
-            id: 1,
-            title: 'Community Clean-up Drive',
-            date: '2025-11-05',
-            time: '09:00 AM',
-            location: 'Central Park',
-            volunteers: 25,
-            maxVolunteers: 50,
-            status: 'upcoming'
-          },
-          {
-            id: 2,
-            title: 'Food Bank Distribution',
-            date: '2025-11-08',
-            time: '10:00 AM',
-            location: 'City Hall',
-            volunteers: 15,
-            maxVolunteers: 30,
-            status: 'upcoming'
-          },
-          {
-            id: 3,
-            title: 'Tree Planting Event',
-            date: '2025-11-12',
-            time: '08:00 AM',
-            location: 'Riverside Park',
-            volunteers: 30,
-            maxVolunteers: 60,
-            status: 'upcoming'
-          }
-        ],
-        recentRegistrations: [
-          {
-            id: 1,
-            volunteerName: 'John Doe',
-            eventTitle: 'Community Clean-up Drive',
-            registeredAt: '2025-10-27T14:30:00',
-            status: 'approved'
-          },
-          {
-            id: 2,
-            volunteerName: 'Jane Smith',
-            eventTitle: 'Food Bank Distribution',
-            registeredAt: '2025-10-27T10:15:00',
-            status: 'pending'
-          },
-          {
-            id: 3,
-            volunteerName: 'Mike Johnson',
-            eventTitle: 'Tree Planting Event',
-            registeredAt: '2025-10-26T16:20:00',
-            status: 'approved'
-          },
-          {
-            id: 4,
-            volunteerName: 'Sarah Williams',
-            eventTitle: 'Community Clean-up Drive',
-            registeredAt: '2025-10-26T09:45:00',
-            status: 'approved'
-          }
-        ]
-      };
+      const response = await dashboardAPI.getManagerDashboard();
       
-      setDashboardData(mockData);
+      if (response.success && response.data) {
+        console.log('Fetched manager dashboard data:', response.data);
+        setDashboardData(response.data);
+      } else {
+        setError('Failed to load dashboard data');
+      }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
       setError(error.message || 'Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
+  };
+
+  const getActivityIcon = (activityType) => {
+    switch (activityType) {
+      case 'NEW_REGISTRATION': return <FaUserPlus />;
+      case 'NEW_POST': return <FaComment />;
+      case 'REGISTRATION_APPROVED': return <FaCheckCircle />;
+      case 'REGISTRATION_REJECTED': return <FaExclamationTriangle />;
+      default: return <FaClock />;
+    }
+  };
+
+  const getActivityColor = (activityType) => {
+    switch (activityType) {
+      case 'NEW_REGISTRATION': return 'info';
+      case 'NEW_POST': return 'primary';
+      case 'REGISTRATION_APPROVED': return 'success';
+      case 'REGISTRATION_REJECTED': return 'warning';
+      default: return 'dark';
+    }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = Math.floor((now - date) / 1000); // seconds
+
+    if (diff < 60) return `${diff} seconds ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    if (diff < 2592000) return `${Math.floor(diff / 86400)} days ago`;
+    
+    return date.toLocaleDateString();
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   if (loading) {
@@ -155,6 +145,8 @@ const ManagerDashboard = () => {
     );
   }
 
+  const { registrationStatistics } = dashboardData;
+
   return (
     <DashboardLayout 
       userRole="manager" 
@@ -167,10 +159,8 @@ const ManagerDashboard = () => {
           <div className="stat-col">
             <StatCard
               icon={<FaCalendarAlt />}
-              title="Total Events"
-              value={dashboardData.totalEvents || 0}
-              percentage="+12%"
-              trend="up"
+              title="Total Managed Events"
+              value={dashboardData.totalManagedEvents || 0}
               gradient="primary"
             />
           </div>
@@ -180,20 +170,16 @@ const ManagerDashboard = () => {
               icon={<FaClock />}
               title="Active Events"
               value={dashboardData.activeEvents || 0}
-              percentage="+5%"
-              trend="up"
               gradient="info"
             />
           </div>
           
           <div className="stat-col">
             <StatCard
-              icon={<FaUsers />}
-              title="Total Volunteers"
-              value={dashboardData.totalVolunteers || 0}
-              percentage="+23%"
-              trend="up"
-              gradient="success"
+              icon={<FaCalendarCheck />}
+              title="Upcoming Events"
+              value={dashboardData.upcomingEvents || 0}
+              gradient="warning"
             />
           </div>
           
@@ -202,48 +188,113 @@ const ManagerDashboard = () => {
               icon={<FaCheckCircle />}
               title="Completed Events"
               value={dashboardData.completedEvents || 0}
-              percentage="+8%"
-              trend="up"
-              gradient="warning"
+              gradient="success"
             />
           </div>
         </div>
 
-        {/* Events & Registrations */}
+        {/* Registration Statistics */}
+        <div className="dashboard-row">
+          <div className="dashboard-col-12">
+            <div className="dashboard-card">
+              <div className="card-header">
+                <h6 className="card-title">Registration Statistics</h6>
+                <p className="card-subtitle">Overview of volunteer registrations</p>
+              </div>
+              
+              <div className="registration-stats-grid">
+                <div className="registration-stat-item">
+                  <div className="stat-icon stat-icon-total">
+                    <FaUsers />
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-value">{registrationStatistics?.totalRegistrations || 0}</span>
+                    <span className="stat-label">Total Registrations</span>
+                  </div>
+                </div>
+                
+                <div className="registration-stat-item">
+                  <div className="stat-icon stat-icon-pending">
+                    <FaClock />
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-value">{registrationStatistics?.pendingRegistrations || 0}</span>
+                    <span className="stat-label">Pending</span>
+                  </div>
+                </div>
+                
+                <div className="registration-stat-item">
+                  <div className="stat-icon stat-icon-approved">
+                    <FaCheckCircle />
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-value">{registrationStatistics?.approvedRegistrations || 0}</span>
+                    <span className="stat-label">Approved</span>
+                  </div>
+                </div>
+                
+                <div className="registration-stat-item">
+                  <div className="stat-icon stat-icon-rejected">
+                    <FaExclamationTriangle />
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-value">{registrationStatistics?.rejectedRegistrations || 0}</span>
+                    <span className="stat-label">Rejected</span>
+                  </div>
+                </div>
+                
+                <div className="registration-stat-item">
+                  <div className="stat-icon stat-icon-rate">
+                    <FaPercentage />
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-value">{registrationStatistics?.approvalRate?.toFixed(1) || 0}%</span>
+                    <span className="stat-label">Approval Rate</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Events Needing Approval & Recent Activities */}
         <div className="dashboard-row">
           <div className="dashboard-col-8">
             <div className="dashboard-card">
               <div className="card-header">
-                <h6 className="card-title">Upcoming Events</h6>
+                <h6 className="card-title">Events Needing Approval</h6>
                 <p className="card-subtitle">
-                  {dashboardData.upcomingEvents?.length || 0} events scheduled
+                  {dashboardData.eventsNeedingApproval?.length || 0} events with pending registrations
                 </p>
               </div>
               
               <div className="events-list">
-                {dashboardData.upcomingEvents && dashboardData.upcomingEvents.length > 0 ? (
-                  dashboardData.upcomingEvents.map(event => (
-                    <div key={event.id} className="event-item">
+                {dashboardData.eventsNeedingApproval && dashboardData.eventsNeedingApproval.length > 0 ? (
+                  dashboardData.eventsNeedingApproval.map(event => (
+                    <div key={event.eventId} className="event-item">
                       <div className="event-info">
-                        <h6 className="event-title">{event.title}</h6>
+                        <h6 className="event-title">{event.eventTitle}</h6>
                         <div className="event-meta">
                           <span className="event-date">
-                            <FaCalendarAlt /> {new Date(event.startTime).toLocaleDateString()}
+                            <FaCalendarAlt /> {formatDate(event.eventDate)}
                           </span>
-                          <span className="event-location">
-                            {event.location}
+                          <span className="event-pending-badge">
+                            <FaClock /> {event.pendingCount} pending
                           </span>
+                          {event.isFull && (
+                            <span className="event-full-badge">Full</span>
+                          )}
                         </div>
                       </div>
                       <div className="event-progress">
                         <div className="progress-info">
-                          <span>{event.currentVolunteers}/{event.maxVolunteers} volunteers</span>
-                          <span>{Math.round((event.currentVolunteers / event.maxVolunteers) * 100)}%</span>
+                          <span>{event.approvedCount}/{event.maxParticipants} approved</span>
+                          <span>{Math.round((event.approvedCount / event.maxParticipants) * 100)}%</span>
                         </div>
                         <div className="progress-bar-container">
                           <div 
                             className="progress-bar progress-bar-info"
-                            style={{ width: `${(event.currentVolunteers / event.maxVolunteers) * 100}%` }}
+                            style={{ width: `${(event.approvedCount / event.maxParticipants) * 100}%` }}
                           ></div>
                         </div>
                       </div>
@@ -251,7 +302,11 @@ const ManagerDashboard = () => {
                   ))
                 ) : (
                   <div className="empty-state">
-                    <p>No upcoming events</p>
+                    <div className="empty-state-icon">
+                      <FaClipboardList />
+                    </div>
+                    <h3 className="empty-state-title">No Pending Approvals</h3>
+                    <p>All registrations have been processed.</p>
                   </div>
                 )}
               </div>
@@ -261,29 +316,29 @@ const ManagerDashboard = () => {
           <div className="dashboard-col-4">
             <div className="dashboard-card">
               <div className="card-header">
-                <h6 className="card-title">Recent Registrations</h6>
-                <p className="card-subtitle">Latest volunteer sign-ups</p>
+                <h6 className="card-title">Recent Activities</h6>
+                <p className="card-subtitle">Latest event activities</p>
               </div>
               
-              <div className="registrations-list">
-                {dashboardData.recentRegistrations && dashboardData.recentRegistrations.length > 0 ? (
-                  dashboardData.recentRegistrations.map(reg => (
-                    <div key={reg.id} className="registration-item">
-                      <div className="registration-info">
-                        <h6 className="volunteer-name">{reg.volunteerName}</h6>
-                        <p className="event-name">{reg.eventTitle}</p>
-                        <p className="registration-time">
-                          {new Date(reg.registeredAt).toLocaleString()}
-                        </p>
-                      </div>
-                      <span className={`registration-status status-${reg.status.toLowerCase()}`}>
-                        {reg.status}
-                      </span>
-                    </div>
+              <div className="activities-timeline">
+                {dashboardData.recentActivities && dashboardData.recentActivities.length > 0 ? (
+                  dashboardData.recentActivities.slice(0, 10).map((activity, index) => (
+                    <TimelineItem
+                      key={index}
+                      icon={getActivityIcon(activity.activityType)}
+                      title={activity.eventTitle}
+                      description={`${activity.userName || 'A user'} ${activity.activityDescription}`}
+                      timestamp={formatTimestamp(activity.activityTime)}
+                      color={getActivityColor(activity.activityType)}
+                    />
                   ))
                 ) : (
                   <div className="empty-state">
-                    <p>No recent registrations</p>
+                    <div className="empty-state-icon">
+                      <FaInfoCircle />
+                    </div>
+                    <h3 className="empty-state-title">No Recent Activities</h3>
+                    <p>Activities will appear here once there are interactions with your events.</p>
                   </div>
                 )}
               </div>
@@ -291,66 +346,57 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        {/* Event Status Distribution */}
-        <div className="dashboard-row">
-          <div className="dashboard-col-12">
-            <div className="dashboard-card">
-              <div className="card-header">
-                <h6 className="card-title">Event Status Distribution</h6>
-              </div>
-              
-              <div className="status-distribution">
-                <div className="status-item">
-                  <div className="status-info">
-                    <span className="status-label">Pending Events</span>
-                    <span className="status-count">
-                      {dashboardData.eventStatusDistribution?.pending || 0}
-                    </span>
-                  </div>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar progress-bar-warning" style={{ width: '20%' }}></div>
-                  </div>
+        {/* Upcoming Events Needing Preparation */}
+        {dashboardData.upcomingEventsNeedPreparation && dashboardData.upcomingEventsNeedPreparation.length > 0 && (
+          <div className="dashboard-row">
+            <div className="dashboard-col-12">
+              <div className="dashboard-card">
+                <div className="card-header">
+                  <h6 className="card-title">Events Needing Preparation</h6>
+                  <p className="card-subtitle">Upcoming events that require attention</p>
                 </div>
                 
-                <div className="status-item">
-                  <div className="status-info">
-                    <span className="status-label">Ongoing Events</span>
-                    <span className="status-count">
-                      {dashboardData.eventStatusDistribution?.ongoing || 0}
-                    </span>
-                  </div>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar progress-bar-info" style={{ width: '40%' }}></div>
-                  </div>
-                </div>
-                
-                <div className="status-item">
-                  <div className="status-info">
-                    <span className="status-label">Completed Events</span>
-                    <span className="status-count">
-                      {dashboardData.eventStatusDistribution?.completed || 0}
-                    </span>
-                  </div>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar progress-bar-success" style={{ width: '80%' }}></div>
-                  </div>
-                </div>
-                
-                <div className="status-item">
-                  <div className="status-info">
-                    <span className="status-label">Cancelled Events</span>
-                    <span className="status-count">
-                      {dashboardData.eventStatusDistribution?.cancelled || 0}
-                    </span>
-                  </div>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar progress-bar-danger" style={{ width: '10%' }}></div>
-                  </div>
+                <div className="events-list">
+                  {dashboardData.upcomingEventsNeedPreparation.map(event => (
+                    <div key={event.eventId} className="event-item">
+                      <div className="event-info">
+                        <h6 className="event-title">{event.eventTitle || event.title}</h6>
+                        <div className="event-meta">
+                          <span className="event-date">
+                            <FaCalendarAlt /> {formatDate(event.eventDate || event.date)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Attendance Reports */}
+        {dashboardData.attendanceReports && dashboardData.attendanceReports.length > 0 && (
+          <div className="dashboard-row">
+            <div className="dashboard-col-12">
+              <div className="dashboard-card">
+                <div className="card-header">
+                  <h6 className="card-title">Attendance Reports</h6>
+                  <p className="card-subtitle">Event attendance overview</p>
+                </div>
+                
+                <div className="attendance-list">
+                  {dashboardData.attendanceReports.map((report, index) => (
+                    <div key={index} className="attendance-item">
+                      <h6>{report.eventTitle}</h6>
+                      <p>Attendance: {report.attendedCount}/{report.totalRegistered}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
 import { getMyEvents } from '../services/events/eventsService';
@@ -11,7 +11,9 @@ const MyEvents = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const searchTimeoutRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
@@ -20,11 +22,10 @@ const MyEvents = () => {
 
   const statusFilters = [
     { label: 'All', value: '' },
-    { label: 'Pending', value: 'PENDING' },
-    { label: 'Approved', value: 'APPROVED' },
-    { label: 'Rejected', value: 'REJECTED' },
+    { label: 'Planned', value: 'PLANNED' },
+    { label: 'Ongoing', value: 'ONGOING' },
+    { label: 'Completed', value: 'COMPLETED' },
     { label: 'Cancelled', value: 'CANCELLED' },
-    { label: 'Waiting', value: 'WAITING' },
   ];
 
   // Fetch events from API
@@ -38,9 +39,9 @@ const MyEvents = () => {
         // Filter events based on search query and status
         let filteredEvents = response.data.content;
 
-        // Apply search filter
-        if (searchQuery) {
-          const query = searchQuery.toLowerCase();
+        // Apply search filter using debounced query
+        if (debouncedSearchQuery) {
+          const query = debouncedSearchQuery.toLowerCase();
           filteredEvents = filteredEvents.filter(
             (event) =>
               event.title.toLowerCase().includes(query) ||
@@ -48,10 +49,10 @@ const MyEvents = () => {
           );
         }
 
-        // Apply registration status filter
+        // Apply event status filter (using event.status, not registrationStatus)
         if (selectedStatus) {
           filteredEvents = filteredEvents.filter(
-            (event) => event.registrationStatus === selectedStatus
+            (event) => event.status === selectedStatus
           );
         }
 
@@ -80,17 +81,37 @@ const MyEvents = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, selectedStatus, searchQuery]);
+  }, [currentPage, selectedStatus, debouncedSearchQuery]);
+
+  // Debounce search query
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500); // 500ms debounce delay
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery]);
 
   // Fetch events on component mount and when filters change
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
 
-  // Handle search - removed separate useEffect since fetchEvents is already called via its dependencies
+  // Handle search - updates the searchQuery which triggers debounce
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(0); // Reset to first page
+    // Reset to first page when search changes (will take effect with debounced query)
+    if (currentPage !== 0) {
+      setCurrentPage(0);
+    }
   };
 
   // Format date to readable format
@@ -105,19 +126,17 @@ const MyEvents = () => {
     });
   };
 
-  // Get registration status badge color
+  // Get status badge color
   const getStatusColor = (status) => {
     switch (status) {
-      case 'PENDING':
-        return 'status-pending';
-      case 'APPROVED':
-        return 'status-approved';
-      case 'REJECTED':
-        return 'status-rejected';
+      case 'PLANNED':
+        return 'status-planned';
+      case 'ONGOING':
+        return 'status-ongoing';
+      case 'COMPLETED':
+        return 'status-completed';
       case 'CANCELLED':
         return 'status-cancelled';
-      case 'WAITING':
-        return 'status-waiting';
       default:
         return 'status-default';
     }
@@ -221,6 +240,7 @@ const MyEvents = () => {
             <button
               key={filter.value}
               className={`filter-button ${selectedStatus === filter.value ? 'active' : ''}`}
+              data-status={filter.value}
               onClick={() => {
                 setSelectedStatus(filter.value);
                 setCurrentPage(0);
@@ -263,8 +283,8 @@ const MyEvents = () => {
                   <div className="image-placeholder">
                     <FaCalendar className="placeholder-icon" />
                   </div>
-                  <span className={`event-status-badge ${getStatusColor(event.registrationStatus)}`}>
-                    {event.registrationStatus}
+                  <span className={`event-status-badge ${getStatusColor(event.status)}`}>
+                    {event.status}
                   </span>
                 </div>
 
@@ -378,8 +398,8 @@ const MyEvents = () => {
               {/* Modal Header */}
               <div className="modal-header">
                 <FaCalendar className="modal-header-icon" />
-                <span className={`modal-status-badge ${getStatusColor(selectedEvent.registrationStatus)}`}>
-                  {selectedEvent.registrationStatus}
+                <span className={`modal-status-badge ${getStatusColor(selectedEvent.status)}`}>
+                  {selectedEvent.status}
                 </span>
                 <button className="modal-close-button" onClick={handleCloseModal}>
                   <FaTimes />
