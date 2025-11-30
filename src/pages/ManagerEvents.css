@@ -1,0 +1,557 @@
+.manager-events {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header - scoped to manager-events */
+.manager-events .me-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #FFFFFF;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.manager-events .me-search-box {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.manager-events .me-search-box input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.manager-events .me-search-box input:focus {
+  outline: none;
+  border-color: #FF8A00;
+  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+}
+
+.manager-events .me-search-icon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6B7280;
+}
+
+.manager-events .me-events-count {
+  font-size: 0.875rem;
+  color: #6B7280;
+  font-weight: 600;
+}
+
+/* Events Grid - scoped */
+.manager-events .me-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.manager-events .me-event-card {
+  background: #FFFFFF;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manager-events .me-event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.manager-events .me-event-card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #F3F4F6;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.manager-events .me-event-card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1F2937;
+  line-height: 1.4;
+}
+
+.manager-events .me-event-card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.manager-events .me-event-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+.manager-events .me-event-detail svg {
+  color: #FF8A00;
+  min-width: 16px;
+}
+
+.manager-events .me-event-card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #F3F4F6;
+  background: #F9FAFB;
+}
+
+/* Status Badges - scoped */
+.manager-events .me-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.manager-events .me-status-planned {
+  background: #DBEAFE;
+  color: #2563EB;
+}
+
+.manager-events .me-status-ongoing {
+  background: #FFF4E6;
+  color: #CC6E00;
+}
+
+.manager-events .me-status-completed {
+  background: #D1FAE5;
+  color: #059669;
+}
+
+.manager-events .me-status-cancelled {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* Buttons - scoped */
+.manager-events .me-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.manager-events .me-btn-view {
+  width: 100%;
+  background: linear-gradient(135deg, #FFA133 0%, #CC6E00 100%);
+  color: #FFFFFF;
+}
+
+.manager-events .me-btn-view:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.4);
+}
+
+.manager-events .me-btn-primary {
+  background: linear-gradient(135deg, #FFA133 0%, #CC6E00 100%);
+  color: #FFFFFF;
+}
+
+.manager-events .me-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.4);
+}
+
+/* Pagination - scoped */
+.manager-events .me-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #FFFFFF;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.manager-events .me-pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1F2937;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.manager-events .me-pagination-btn:hover:not(:disabled) {
+  background: #FF8A00;
+  border-color: #FF8A00;
+  color: #FFFFFF;
+}
+
+.manager-events .me-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.manager-events .me-pagination-info {
+  font-size: 0.875rem;
+  color: #6B7280;
+  font-weight: 600;
+}
+
+/* Modal - scoped */
+.manager-events .me-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.manager-events .me-modal-content {
+  background: #FFFFFF;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 900px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.manager-events .me-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.manager-events .me-modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.manager-events .me-modal-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F9FAFB;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.manager-events .me-modal-close:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.manager-events .me-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Registrations Table - scoped */
+.manager-events .me-registrations-table-container {
+  overflow-x: auto;
+}
+
+.manager-events .me-registrations-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manager-events .me-registrations-table th,
+.manager-events .me-registrations-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.manager-events .me-registrations-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #F9FAFB;
+}
+
+.manager-events .me-registrations-table td {
+  font-size: 0.875rem;
+  color: #1F2937;
+}
+
+.manager-events .me-registrations-table tr:hover {
+  background: #F9FAFB;
+}
+
+.manager-events .me-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.manager-events .me-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF8A00 0%, #EC4899 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Registration Status Badges - scoped */
+.manager-events .me-reg-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.manager-events .me-reg-pending {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.manager-events .me-reg-approved {
+  background: #D1FAE5;
+  color: #059669;
+}
+
+.manager-events .me-reg-rejected {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* Action Buttons - scoped */
+.manager-events .me-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.manager-events .me-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.manager-events .me-btn-approve {
+  background: #D1FAE5;
+  color: #059669;
+}
+
+.manager-events .me-btn-approve:hover:not(:disabled) {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+.manager-events .me-btn-reject {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.manager-events .me-btn-reject:hover:not(:disabled) {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.manager-events .me-btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.manager-events .me-modal-pagination {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #F9FAFB;
+  border-radius: 0.5rem;
+}
+
+/* Empty State - scoped */
+.manager-events .me-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.manager-events .me-empty-state-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 138, 0, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.manager-events .me-empty-state-icon svg {
+  font-size: 2rem;
+  color: #FF8A00;
+}
+
+.manager-events .me-empty-state h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.manager-events .me-empty-state p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+/* Loading - scoped */
+.manager-events .me-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.manager-events .me-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #F3F4F6;
+  border-top-color: #FF8A00;
+  border-radius: 50%;
+  animation: me-spin 0.8s linear infinite;
+}
+
+@keyframes me-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.manager-events .me-loading-container p {
+  margin-top: 1rem;
+  color: #6B7280;
+  font-size: 0.875rem;
+}
+
+/* Error Container - scoped */
+.manager-events .me-error-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #FFFFFF;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.manager-events .me-error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.manager-events .me-error-container h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+.manager-events .me-error-container p {
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+/* Responsive - scoped */
+@media (max-width: 768px) {
+  .manager-events .me-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .manager-events .me-search-box {
+    max-width: 100%;
+  }
+
+  .manager-events .me-events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .manager-events .me-modal-overlay {
+    padding: 1rem;
+  }
+
+  .manager-events .me-modal-content {
+    max-height: 90vh;
+  }
+
+  .manager-events .me-registrations-table {
+    font-size: 0.8125rem;
+  }
+
+  .manager-events .me-registrations-table th,
+  .manager-events .me-registrations-table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .manager-events .me-action-buttons {
+    flex-direction: column;
+  }
+}

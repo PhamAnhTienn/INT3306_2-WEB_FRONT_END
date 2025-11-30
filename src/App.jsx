@@ -10,7 +10,10 @@ import News from './pages/News';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
+import ManagerEvents from './pages/ManagerEvents';
+import ManagerVolunteers from './pages/ManagerVolunteers';
 import VolunteerDashboard from './pages/VolunteerDashboard';
 import OAuth2Success from './pages/OAuth2Success';
 import OAuth2Failure from './pages/OAuth2Failure';
@@ -25,8 +28,14 @@ function App() {
         <Route path="/auth/failure" element={<OAuth2Failure />} />
         
         {/* Dashboard routes (without main layout) */}
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
         <Route path="/dashboard/manager" element={<ManagerDashboard />} />
         <Route path="/dashboard/volunteer" element={<VolunteerDashboard />} />
+        
+        {/* Manager routes */}
+        <Route path="/manager/events" element={<ManagerEvents />} />
+        <Route path="/manager/volunteers" element={<ManagerVolunteers />} />
+        
         <Route path="/volunteer/events" element={<Events />} />
         <Route path="/volunteer/events/:eventId/feed" element={<EventFeed />} />
         <Route path="/events" element={<Events />} />

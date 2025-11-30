@@ -20,7 +20,9 @@ const OAuth2Success = () => {
           console.log('User role:', user.user_role);
           
           // Navigate based on user role
-          if (user.user_role === 'EVENT_MANAGER') {
+          if (user.user_role === 'ADMIN') {
+            navigate('/dashboard/admin', { replace: true });
+          } else if (user.user_role === 'EVENT_MANAGER') {
             navigate('/dashboard/manager', { replace: true });
           } else if (user.user_role === 'VOLUNTEER') {
             navigate('/dashboard/volunteer', { replace: true });

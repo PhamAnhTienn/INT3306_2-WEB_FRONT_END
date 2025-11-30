@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/auth/authService';
 import './DashboardSidebar.css';
-import { FaHome, FaCalendarAlt, FaUsers, FaChartBar, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaCalendarAlt, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaClipboardList } from 'react-icons/fa';
 
 const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
   const managerMenuItems = [
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/manager' },
-    { id: 'events', icon: <FaCalendarAlt />, label: 'Events', path: '/events' },
-    { id: 'volunteers', icon: <FaUsers />, label: 'Volunteers', path: '/volunteers' },
-    { id: 'analytics', icon: <FaChartBar />, label: 'Analytics', path: '/analytics' },
+    { id: 'my-events', icon: <FaClipboardList />, label: 'My Events', path: '/manager/events' },
+    { id: 'volunteers', icon: <FaUsers />, label: 'Volunteers', path: '/manager/volunteers' },
+    { id: 'browse-events', icon: <FaCalendarAlt />, label: 'Browse Events', path: '/events' },
     { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/settings' },
   ];
 
