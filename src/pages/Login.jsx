@@ -183,6 +183,9 @@ const Login = () => {
               </button>
 
               <div className="login-footer">
+                <p className="register-link" style={{ marginBottom: '8px' }}>
+                  <Link to="/forgot-password">Forgot your password?</Link>
+                </p>
                 <p className="register-link">
                   Don't have an account? <Link to="/register">Register now</Link>
                 </p>

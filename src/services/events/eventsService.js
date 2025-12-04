@@ -108,3 +108,24 @@ export const getMyEvents = async () => {
     throw error;
   }
 };
+
+/**
+ * Create a new event
+ * @param {Object} eventData - Event data
+ * @param {string} eventData.title - Event title
+ * @param {string} eventData.description - Event description
+ * @param {string} eventData.date - Event date (ISO string)
+ * @param {string} eventData.location - Event location
+ * @param {number} eventData.maxParticipants - Maximum participants
+ * @param {string[]} eventData.tags - Array of tag names
+ * @returns {Promise} API response with created event
+ */
+export const createEvent = async (eventData) => {
+  try {
+    const response = await api.post('/events', eventData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating event:', error);
+    throw error;
+  }
+};

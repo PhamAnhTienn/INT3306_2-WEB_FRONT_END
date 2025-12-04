@@ -1,0 +1,131 @@
+.create-comment {
+  margin-top: 1rem;
+}
+
+.create-comment-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.create-comment-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light, #e5e7eb);
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--text-dark, #1f2937);
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s ease;
+  background: var(--white, #ffffff);
+}
+
+.create-comment-input:focus {
+  border-color: var(--primary-500, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.create-comment-input::placeholder {
+  color: var(--text-light, #9ca3af);
+}
+
+.create-comment-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--neutral-50, #f9fafb);
+}
+
+.create-comment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6b7280);
+  text-align: right;
+}
+
+.create-comment-error {
+  background: var(--error-50, #fef2f2);
+  border: 1px solid var(--error-200, #fecaca);
+  color: var(--error-700, #b91c1c);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.create-comment-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-cancel-comment {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-medium, #d1d5db);
+  color: var(--text-dark, #1f2937);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel-comment:hover:not(:disabled) {
+  background: var(--neutral-100, #f3f4f6);
+}
+
+.btn-cancel-comment:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-submit-comment {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--primary-500, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-submit-comment:hover:not(:disabled) {
+  background: var(--primary-600, #2563eb);
+}
+
+.btn-submit-comment:disabled {
+  background: var(--neutral-300, #d1d5db);
+  cursor: not-allowed;
+}
+
+.btn-submit-comment svg {
+  font-size: 0.875rem;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+

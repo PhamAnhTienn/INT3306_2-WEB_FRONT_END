@@ -4,7 +4,7 @@ import DashboardSidebar from './DashboardSidebar';
 import DashboardNavbar from './DashboardNavbar';
 import './DashboardLayout.css';
 
-const DashboardLayout = ({ children, userRole }) => {
+const DashboardLayout = ({ children, userRole, title, breadcrumbs }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,11 +14,13 @@ const DashboardLayout = ({ children, userRole }) => {
     const path = location.pathname;
     
     // Map routes to menu item IDs
-    if (path.includes('/volunteer/events') || path.includes('/events')) {
+    if (path.includes('/admin/users')) {
+      setActiveItem('users');
+    } else if (path.includes('/volunteer/events') || path.includes('/events')) {
       setActiveItem('events');
     } else if (path.includes('/my-events')) {
       setActiveItem('my-events');
-    } else if (path.includes('/settings')) {
+    } else if (path.includes('/settings') || path.includes('/profile')) {
       setActiveItem('settings');
     } else if (path.includes('/dashboard')) {
       setActiveItem('dashboard');
@@ -43,7 +45,7 @@ const DashboardLayout = ({ children, userRole }) => {
       />
       
       <main className="dashboard-main">
-        <DashboardNavbar />
+        <DashboardNavbar title={title} breadcrumbs={breadcrumbs} />
         
         <div className="dashboard-content">
           {children}

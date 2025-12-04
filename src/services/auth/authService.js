@@ -156,4 +156,58 @@ export const authAPI = {
     isAuthenticated: () => {
         return !!localStorage.getItem('accessToken');
     },
+
+  /**
+   * Send forgot password request
+   * @param {string} email
+   * @returns {Promise}
+   */
+    forgotPassword: async (email) => {
+        try {
+            // Backend expects email as @RequestParam, so send it as query param
+            const response = await api.post('/auth/password/forgot', null, {
+                params: { email },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error sending forgot password request:', error);
+            throw error;
+        }
+    },
+
+  /**
+   * Validate reset password token
+   * @param {string} token
+   * @returns {Promise}
+   */
+    validateResetToken: async (token) => {
+        try {
+            const response = await api.get('/auth/password/validate', {
+                params: { token },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error validating reset token:', error);
+            throw error;
+        }
+    },
+
+  /**
+   * Reset password with token
+   * @param {string} token
+   * @param {string} newPassword
+   * @returns {Promise}
+   */
+    resetPassword: async (token, newPassword) => {
+        try {
+            const response = await api.post('/auth/reset-password', {
+                token,
+                password: newPassword,
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error resetting password:', error);
+            throw error;
+        }
+    },
 };

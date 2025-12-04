@@ -46,10 +46,37 @@
   color: #6B7280;
 }
 
+.manager-events .me-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .manager-events .me-events-count {
   font-size: 0.875rem;
   color: #6B7280;
   font-weight: 600;
+}
+
+.manager-events .me-btn-create {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #FF8A00;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.manager-events .me-btn-create:hover {
+  background: #E67A00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(255, 138, 0, 0.3);
 }
 
 /* Events Grid - scoped */
@@ -113,6 +140,29 @@
   padding: 1rem 1.5rem;
   border-top: 1px solid #F3F4F6;
   background: #F9FAFB;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.manager-events .me-btn-registrations {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: #F3F4F6;
+  color: #1F2937;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.manager-events .me-btn-registrations:hover {
+  background: #E5E7EB;
+  border-color: #D1D5DB;
 }
 
 /* Status Badges - scoped */

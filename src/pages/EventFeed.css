@@ -92,6 +92,10 @@
   padding: 0 1rem 2rem;
 }
 
+.create-post-wrapper {
+  margin-bottom: 1.5rem;
+}
+
 /* Create Post Card */
 .create-post-card {
   background: var(--white);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { managerAPI } from '../services/manager/managerService';
 import './ManagerEvents.css';
@@ -16,9 +17,11 @@ import {
   FaUserTimes,
   FaMapMarkerAlt,
   FaInfoCircle,
+  FaPlus,
 } from 'react-icons/fa';
 
 const ManagerEvents = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -235,8 +238,17 @@ const ManagerEvents = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="me-events-count">
-            <span>{filteredEvents.length} events found</span>
+          <div className="me-header-actions">
+            <div className="me-events-count">
+              <span>{filteredEvents.length} events found</span>
+            </div>
+            <button
+              className="me-btn me-btn-create"
+              onClick={() => navigate('/manager/events/create')}
+            >
+              <FaPlus />
+              <span>Create Event</span>
+            </button>
           </div>
         </div>
 
@@ -270,9 +282,15 @@ const ManagerEvents = () => {
                 <div className="me-event-card-footer">
                   <button
                     className="me-btn me-btn-view"
+                    onClick={() => navigate(`/manager/events/${event.id || event.eventId}`)}
+                  >
+                    <FaEye /> View Details
+                  </button>
+                  <button
+                    className="me-btn me-btn-registrations"
                     onClick={() => handleViewRegistrations(event)}
                   >
-                    <FaEye /> View Registrations
+                    <FaUsers /> Registrations
                   </button>
                 </div>
               </div>

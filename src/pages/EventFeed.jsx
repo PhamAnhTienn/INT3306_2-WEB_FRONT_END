@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaHeart, FaComment, FaShare, FaImage, FaTimes, FaEllipsisV } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaEllipsisV, FaComment } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
+import CreatePost from '../components/posts/CreatePost';
+import LikeButton from '../components/posts/LikeButton';
+import LikeCount from '../components/posts/LikeCount';
+import CommentsList from '../components/comments/CommentsList';
+import { postsAPI } from '../services/posts/postsService';
+import { getEventById } from '../services/events/eventsService';
 import './EventFeed.css';
 
 const EventFeed = () => {
@@ -11,59 +17,27 @@ const EventFeed = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [newPost, setNewPost] = useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [userRegistrationStatus, setUserRegistrationStatus] = useState(null); // APPROVED, PENDING, REJECTED, etc.
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  // Mock event data - Replace with actual API call
   useEffect(() => {
     const fetchEventAndPosts = async () => {
       setLoading(true);
       try {
-        // TODO: Replace with actual API call
-        // const eventResponse = await getEventById(eventId);
-        // const postsResponse = await getEventPosts(eventId);
-        
-        // Mock data
-        setEvent({
-          eventId: eventId,
-          title: 'Community Garden Cleanup',
-          date: '2025-11-25T09:00:00',
-          location: 'Central Park, Hanoi',
-          status: 'ONGOING',
-          maxParticipants: 50,
-          description: 'Join us for a community garden cleanup event!'
-        });
+        // Fetch event details
+        const eventResponse = await getEventById(eventId);
+        if (eventResponse.success && eventResponse.data) {
+          setEvent(eventResponse.data);
+        }
 
         // TODO: Get user's registration status for this event
         // const registrationResponse = await getUserRegistrationStatus(eventId);
         setUserRegistrationStatus('APPROVED'); // Mock - should come from API
 
-        setPosts([
-          {
-            id: 1,
-            author: 'Jane Smith',
-            authorAvatar: null,
-            content: 'So excited for this event! Can\'t wait to make a difference together! 🌱',
-            timestamp: '2025-11-20T14:30:00',
-            likes: 12,
-            comments: 3,
-            isLiked: false,
-            imageUrl: null
-          },
-          {
-            id: 2,
-            author: 'John Doe',
-            authorAvatar: null,
-            content: 'Just finished preparing the tools. Everything is ready for Saturday!',
-            timestamp: '2025-11-21T10:15:00',
-            likes: 8,
-            comments: 1,
-            isLiked: true,
-            imageUrl: null
-          }
-        ]);
+        // Fetch posts
+        await fetchPosts(0, true);
       } catch (err) {
         setError(err.message || 'Failed to load event feed');
       } finally {
@@ -73,6 +47,32 @@ const EventFeed = () => {
 
     fetchEventAndPosts();
   }, [eventId]);
+
+  const fetchPosts = async (pageNum = 0, reset = false) => {
+    try {
+      const response = await postsAPI.getEventPosts(eventId, {
+        page: pageNum,
+        size: 10,
+        sortBy: 'id',
+        sortDir: 'desc',
+      });
+
+      if (response.success && response.data) {
+        const newPosts = response.data.content || [];
+        
+        if (reset) {
+          setPosts(newPosts);
+        } else {
+          setPosts(prev => [...prev, ...newPosts]);
+        }
+
+        setHasMore(!response.data.last);
+        setPage(pageNum);
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -97,49 +97,9 @@ const EventFeed = () => {
     return formatDate(dateString);
   };
 
-  const handleCreatePost = () => {
-    if (!newPost.trim()) return;
-
-    const post = {
-      id: Date.now(),
-      author: 'Current User', // Replace with actual user name
-      authorAvatar: null,
-      content: newPost,
-      timestamp: new Date().toISOString(),
-      likes: 0,
-      comments: 0,
-      isLiked: false,
-      imageUrl: selectedImage
-    };
-
-    setPosts([post, ...posts]);
-    setNewPost('');
-    setSelectedImage(null);
+  const handlePostCreated = (newPost) => {
+    setPosts(prev => [newPost, ...prev]);
     setShowCreatePost(false);
-  };
-
-  const handleLikePost = (postId) => {
-    setPosts(posts.map(post => {
-      if (post.id === postId) {
-        return {
-          ...post,
-          isLiked: !post.isLiked,
-          likes: post.isLiked ? post.likes - 1 : post.likes + 1
-        };
-      }
-      return post;
-    }));
-  };
-
-  const handleImageSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   if (loading) {
@@ -175,16 +135,16 @@ const EventFeed = () => {
             <FaArrowLeft />
           </button>
           <div className="event-feed-header-content">
-            <h1>{event.title}</h1>
+            <h1>{event.title || event.eventTitle}</h1>
             <div className="event-feed-meta">
               <span className="meta-item">
-                <FaCalendar /> {formatDate(event.date)}
+                <FaCalendar /> {formatDate(event.date || event.startTime)}
               </span>
               <span className="meta-item">
                 <FaMapMarkerAlt /> {event.location}
               </span>
               <span className="meta-item">
-                <FaUsers /> {event.maxParticipants} participants
+                <FaUsers /> {event.maxParticipants || event.maxVolunteers} participants
               </span>
             </div>
           </div>
@@ -193,19 +153,31 @@ const EventFeed = () => {
         <div className="event-feed-container">
           {/* Create Post Section - Only show if registration is approved */}
           {userRegistrationStatus === 'APPROVED' ? (
-            <div className="create-post-card">
-              <div className="create-post-header" onClick={() => setShowCreatePost(true)}>
-                <div className="user-avatar">
-                  <FaUsers />
+            <>
+              {!showCreatePost ? (
+                <div className="create-post-card">
+                  <div className="create-post-header" onClick={() => setShowCreatePost(true)}>
+                    <div className="user-avatar">
+                      <FaUsers />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Share something about this event..."
+                      readOnly
+                      className="create-post-input-placeholder"
+                    />
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  placeholder="Share something about this event..."
-                  readOnly
-                  className="create-post-input-placeholder"
-                />
-              </div>
-            </div>
+              ) : (
+                <div className="create-post-wrapper">
+                  <CreatePost
+                    eventId={eventId}
+                    onPostCreated={handlePostCreated}
+                    onCancel={() => setShowCreatePost(false)}
+                  />
+                </div>
+              )}
+            </>
           ) : (
             <div className="registration-notice">
               <p>
@@ -215,53 +187,6 @@ const EventFeed = () => {
                   ? '❌ Your registration was not approved.'
                   : '⚠️ You must be registered and approved to post in this event.'}
               </p>
-            </div>
-          )}
-
-          {/* Create Post Modal */}
-          {showCreatePost && (
-            <div className="modal-overlay" onClick={() => setShowCreatePost(false)}>
-              <div className="create-post-modal" onClick={(e) => e.stopPropagation()}>
-                <div className="create-post-modal-header">
-                  <h3>Create Post</h3>
-                  <button onClick={() => setShowCreatePost(false)} className="btn-close-modal">
-                    <FaTimes />
-                  </button>
-                </div>
-                <div className="create-post-modal-body">
-                  <textarea
-                    value={newPost}
-                    onChange={(e) => setNewPost(e.target.value)}
-                    placeholder="What's on your mind?"
-                    className="create-post-textarea"
-                    autoFocus
-                  />
-                  {selectedImage && (
-                    <div className="selected-image-preview">
-                      <img src={selectedImage} alt="Selected" />
-                      <button onClick={() => setSelectedImage(null)} className="btn-remove-image">
-                        <FaTimes />
-                      </button>
-                    </div>
-                  )}
-                  <div className="create-post-actions">
-                    <label className="btn-add-image">
-                      <FaImage />
-                      <span>Add Photo</span>
-                      <input type="file" accept="image/*" onChange={handleImageSelect} hidden />
-                    </label>
-                  </div>
-                </div>
-                <div className="create-post-modal-footer">
-                  <button
-                    onClick={handleCreatePost}
-                    disabled={!newPost.trim()}
-                    className="btn-post"
-                  >
-                    Post
-                  </button>
-                </div>
-              </div>
             </div>
           )}
 
@@ -275,19 +200,21 @@ const EventFeed = () => {
               </div>
             ) : (
               posts.map((post) => (
-                <div key={post.id} className="post-card">
+                <div key={post.id || post.postId} className="post-card">
                   <div className="post-header">
                     <div className="post-author">
                       <div className="author-avatar">
-                        {post.authorAvatar ? (
-                          <img src={post.authorAvatar} alt={post.author} />
+                        {post.user?.avatarUrl ? (
+                          <img src={post.user.avatarUrl} alt={post.user.username} />
                         ) : (
                           <FaUsers />
                         )}
                       </div>
                       <div className="author-info">
-                        <h4>{post.author}</h4>
-                        <span className="post-time">{getTimeAgo(post.timestamp)}</span>
+                        <h4>{post.user?.fullName || post.user?.username || 'Anonymous'}</h4>
+                        <span className="post-time">
+                          {getTimeAgo(post.createdAt || post.created_at || post.timestamp)}
+                        </span>
                       </div>
                     </div>
                     <button className="btn-post-menu">
@@ -297,35 +224,40 @@ const EventFeed = () => {
 
                   <div className="post-content">
                     <p>{post.content}</p>
-                    {post.imageUrl && (
-                      <div className="post-image">
-                        <img src={post.imageUrl} alt="Post content" />
+                    {post.fileRecords && post.fileRecords.length > 0 && (
+                      <div className="post-images">
+                        {post.fileRecords.map((file, index) => (
+                          <div key={index} className="post-image">
+                            <img src={file.url || file.fileUrl} alt={`Post content ${index + 1}`} />
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
 
                   <div className="post-stats">
-                    <span>{post.likes} likes</span>
-                    <span>{post.comments} comments</span>
+                    <LikeCount
+                      postId={post.id || post.postId}
+                      initialCount={post.likeCount || post.like_count || 0}
+                    />
+                    <span>{post.commentCount || post.comment_count || 0} comments</span>
                   </div>
 
                   <div className="post-actions">
-                    <button
-                      className={`post-action-btn ${post.isLiked ? 'liked' : ''}`}
-                      onClick={() => handleLikePost(post.id)}
-                    >
-                      <FaHeart />
-                      <span>Like</span>
-                    </button>
+                    <LikeButton
+                      postId={post.id || post.postId}
+                      initialLiked={post.isLikedByCurrentUser || false}
+                    />
                     <button className="post-action-btn">
                       <FaComment />
                       <span>Comment</span>
                     </button>
-                    <button className="post-action-btn">
-                      <FaShare />
-                      <span>Share</span>
-                    </button>
                   </div>
+
+                  {/* Comments Section */}
+                  <CommentsList
+                    postId={post.id || post.postId}
+                  />
                 </div>
               ))
             )}

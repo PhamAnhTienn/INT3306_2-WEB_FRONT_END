@@ -1,6 +1,10 @@
 import React from 'react';
 import './DashboardNavbar.css';
-import { FaSearch, FaBell, FaCog } from 'react-icons/fa';
+import { FaSearch, FaCog } from 'react-icons/fa';
+import RoleSwitchButton from '../user/RoleSwitchButton';
+import NotificationBell from '../notifications/NotificationBell';
+// Uncomment below for debugging
+// import RoleDebugInfo from '../user/RoleDebugInfo';
 
 const DashboardNavbar = ({ title, breadcrumbs }) => {
   return (
@@ -11,8 +15,17 @@ const DashboardNavbar = ({ title, breadcrumbs }) => {
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb">
                 {breadcrumbs?.map((crumb, index) => (
-                  <li key={index} className={`breadcrumb-item ${index === breadcrumbs.length - 1 ? 'active' : ''}`}>
-                    {index === breadcrumbs.length - 1 ? crumb : <a href="#">{crumb}</a>}
+                  <li
+                    key={index}
+                    className={`breadcrumb-item ${
+                      index === breadcrumbs.length - 1 ? 'active' : ''
+                    }`}
+                  >
+                    {index === breadcrumbs.length - 1 ? (
+                      crumb
+                    ) : (
+                      <a href="#">{crumb}</a>
+                    )}
                   </li>
                 ))}
               </ol>
@@ -28,9 +41,12 @@ const DashboardNavbar = ({ title, breadcrumbs }) => {
           </div>
 
           <div className="navbar-actions">
-            <button className="navbar-action-btn">
-              <FaBell />
-            </button>
+            {/* Role Switch Button - Only shows if user has both VOLUNTEER and EVENT_MANAGER roles */}
+            <RoleSwitchButton />
+
+            {/* Notification bell with dropdown */}
+            <NotificationBell />
+
             <button className="navbar-action-btn">
               <FaCog />
             </button>

@@ -12,17 +12,26 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
     { id: 'my-events', icon: <FaClipboardList />, label: 'My Events', path: '/manager/events' },
     { id: 'volunteers', icon: <FaUsers />, label: 'Volunteers', path: '/manager/volunteers' },
     { id: 'browse-events', icon: <FaCalendarAlt />, label: 'Browse Events', path: '/events' },
-    { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/settings' },
+    { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
   ];
 
   const volunteerMenuItems = [
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/volunteer' },
     { id: 'events', icon: <FaCalendarAlt />, label: 'Browse Events', path: '/events' },
     { id: 'my-events', icon: <FaUsers />, label: 'My Events', path: '/my-events' },
-    { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/settings' },
+    { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
   ];
 
-  const menuItems = userRole === 'manager' ? managerMenuItems : volunteerMenuItems;
+  const adminMenuItems = [
+    { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/admin' },
+    { id: 'users', icon: <FaUsers />, label: 'User Management', path: '/admin/users' },
+    { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
+  ];
+
+  const menuItems = 
+    userRole === 'admin' ? adminMenuItems :
+    userRole === 'manager' ? managerMenuItems : 
+    volunteerMenuItems;
 
   const handleLogout = async () => {
     setLoggingOut(true);
