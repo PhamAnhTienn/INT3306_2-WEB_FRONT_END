@@ -1,0 +1,103 @@
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.file-upload-label {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.file-upload-dropzone {
+  border: 2px dashed #cbd5e0;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  background-color: #f7fafc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.file-upload-dropzone:hover {
+  border-color: #667eea;
+  background-color: #edf2ff;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-upload-icon {
+  font-size: 2rem;
+  color: #667eea;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-text {
+  font-size: 0.95rem;
+  color: #2d3748;
+}
+
+.file-upload-hint {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+.file-upload-list {
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+}
+
+.file-upload-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-list-header svg {
+  color: #38a169;
+  margin-right: 0.25rem;
+}
+
+.file-upload-clear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #e53e3e;
+}
+
+.file-upload-clear svg {
+  margin: 0;
+}
+
+.file-upload-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-upload-list li {
+  font-size: 0.85rem;
+  color: #4a5568;
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaCalendar, FaMapMarkerAlt, FaUsers, FaTag, FaSpinner, FaArrowLeft } from 'react-icons/fa';
+import { FaCalendar, FaMapMarkerAlt, FaUsers, FaArrowLeft } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { createEvent } from '../services/events/eventsService';
 import { tagsAPI } from '../services/tags/tagsService';
+import TagSelector from '../components/tags/TagSelector';
 import './CreateEvent.css';
 
 const CreateEvent = () => {
@@ -266,33 +267,13 @@ const CreateEvent = () => {
 
             {/* Tags */}
             <div className="form-group">
-              <label>
-                <FaTag />
-                Tags (Optional)
-              </label>
-              {loadingTags ? (
-                <div className="tags-loading">
-                  <FaSpinner className="spinning" />
-                  <span>Loading tags...</span>
-                </div>
-              ) : (
-                <div className="tags-container">
-                  {availableTags.length === 0 ? (
-                    <p className="no-tags">No tags available</p>
-                  ) : (
-                    availableTags.map((tag) => (
-                      <button
-                        key={tag.id || tag.name}
-                        type="button"
-                        className={`tag-chip ${selectedTags.includes(tag.name) ? 'selected' : ''}`}
-                        onClick={() => handleTagToggle(tag.name)}
-                      >
-                        {tag.name}
-                      </button>
-                    ))
-                  )}
-                </div>
-              )}
+              <TagSelector
+                label="Tags (Optional)"
+                availableTags={availableTags}
+                selectedTags={selectedTags}
+                onToggle={handleTagToggle}
+                loading={loadingTags}
+              />
             </div>
 
             {/* Submit Buttons */}
@@ -328,6 +309,7 @@ const CreateEvent = () => {
 };
 
 export default CreateEvent;
+
 
 
 

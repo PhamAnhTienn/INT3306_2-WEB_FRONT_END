@@ -135,6 +135,179 @@
   border-color: var(--error-500);
 }
 
+/* Date Filter */
+.date-filter-container {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  position: relative;
+}
+
+.date-filter-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--border-light);
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  margin: 0 auto;
+  position: relative;
+}
+
+.date-filter-toggle:hover {
+  background: var(--primary-50);
+  color: var(--primary-600);
+  border-color: var(--primary-300);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.date-filter-toggle.active {
+  background: var(--primary-500);
+  color: var(--white);
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-md);
+}
+
+.date-filter-toggle svg {
+  font-size: 0.875rem;
+}
+
+.filter-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--error-500);
+  color: var(--white);
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.date-filter-panel {
+  margin-top: 1rem;
+  background: var(--white);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.date-filter-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date-input-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.date-input-group label svg {
+  color: var(--primary-500);
+  font-size: 0.875rem;
+}
+
+.date-input-group input[type="date"] {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background: var(--white);
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.date-input-group input[type="date"]:focus {
+  outline: none;
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 4px var(--primary-50);
+}
+
+.date-input-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.date-input-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.date-filter-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.date-filter-clear,
+.date-filter-apply {
+  padding: 0.625rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.date-filter-clear {
+  background: var(--neutral-100);
+  color: var(--text-primary);
+}
+
+.date-filter-clear:hover {
+  background: var(--neutral-200);
+  transform: translateY(-2px);
+}
+
+.date-filter-apply {
+  background: var(--primary-500);
+  color: var(--white);
+}
+
+.date-filter-apply:hover {
+  background: var(--primary-600);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+}
+
 /* Results Count */
 .events-results-count {
   text-align: center;
@@ -448,6 +621,88 @@
 
 .event-enter-button:active {
   transform: scale(0.98);
+}
+
+/* Cancel Registration Button - Danger action */
+.event-cancel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 2px solid #ef4444;
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-cancel-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.event-cancel-button:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.event-cancel-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+  border-color: #dc2626;
+}
+
+.event-cancel-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.event-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.event-cancel-button svg {
+  font-size: 0.875rem;
+  transition: transform 0.3s ease;
+}
+
+.event-cancel-button:hover:not(:disabled) svg {
+  transform: rotate(90deg);
+}
+
+/* Small spinner for cancel button */
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(153, 27, 27, 0.3);
+  border-top-color: #991b1b;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Empty State */
@@ -845,6 +1100,59 @@
   border-color: var(--neutral-400);
 }
 
+.modal-action-button.danger {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 2px solid #ef4444;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-action-button.danger::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.modal-action-button.danger:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.modal-action-button.danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+  border-color: #dc2626;
+}
+
+.modal-action-button.danger:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.modal-action-button.danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modal-action-button.danger svg {
+  font-size: 0.875rem;
+  transition: transform 0.3s ease;
+}
+
+.modal-action-button.danger:hover:not(:disabled) svg {
+  transform: rotate(90deg);
+}
+
 /* Responsive Modal */
 @media (max-width: 768px) {
   .modal-content {
@@ -895,4 +1203,73 @@
   color: var(--text-secondary);
   font-weight: 500;
   font-size: 0.9375rem;
+}
+
+/* Registration Status Badge */
+.event-registration-status {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.registration-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: all 0.3s ease;
+}
+
+.registration-status-badge svg {
+  font-size: 0.875rem;
+}
+
+.registration-pending {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+.registration-approved {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.registration-rejected {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+.registration-waiting {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  color: #3730a3;
+  border: 1px solid #6366f1;
+}
+
+.registration-cancelled {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  border: 1px solid #9ca3af;
+}
+
+/* Responsive Date Filter */
+@media (max-width: 768px) {
+  .date-filter-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .date-filter-actions {
+    flex-direction: column;
+  }
+
+  .date-filter-clear,
+  .date-filter-apply {
+    width: 100%;
+  }
 }

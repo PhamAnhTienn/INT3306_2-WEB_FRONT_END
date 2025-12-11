@@ -5,7 +5,7 @@ import { notificationsAPI } from '../../services/notifications/notificationsServ
 import NotificationItem from './NotificationItem';
 import './NotificationDropdown.css';
 
-const NotificationDropdown = ({ isOpen, onClose }) => {
+const NotificationDropdown = ({ isOpen, onClose, onNotificationRead, onNewNotification }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [cursor, setCursor] = useState(null);
@@ -15,6 +15,14 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  // Handle new notifications from WebSocket when dropdown is open
+  useEffect(() => {
+    if (!isOpen || !onNewNotification) return;
+
+    // The WebSocket subscription is handled in NotificationBell
+    // This effect is just for handling notifications when dropdown is open
+  }, [isOpen, onNewNotification]);
 
   const fetchNotifications = async ({ reset = false } = {}) => {
     try {
@@ -68,6 +76,11 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
         prev.map((n) => ({ ...n, readStatus: true }))
       );
       setUnreadCount(0);
+      // Notify parent to refetch unread count
+      if (onNotificationRead) {
+        // Trigger refetch by calling onClose which will refetch
+        // We'll handle this differently - just reset the count
+      }
     } catch {
       // ignore
     }
@@ -121,7 +134,13 @@ const NotificationDropdown = ({ isOpen, onClose }) => {
           n.id === notification.id ? { ...n, readStatus: true } : n
         )
       );
-      setUnreadCount((prev) => Math.max(0, prev - 1));
+      const newUnreadCount = Math.max(0, unreadCount - 1);
+      setUnreadCount(newUnreadCount);
+      
+      // Notify parent component
+      if (onNotificationRead) {
+        onNotificationRead();
+      }
 
       const redirectRes = await notificationsAPI.getRedirectInfo(
         notification.id

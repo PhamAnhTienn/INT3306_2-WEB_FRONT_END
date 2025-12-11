@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
-import { getMyEvents } from '../services/events/eventsService';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaUserCheck, FaUserTimes, FaFilter } from 'react-icons/fa';
+import { getMyEvents, unregisterFromEvent } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
@@ -13,12 +13,16 @@ const MyEvents = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [showDateFilter, setShowDateFilter] = useState(false);
   const searchTimeoutRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cancellingId, setCancellingId] = useState(null);
 
   const statusFilters = [
     { label: 'All', value: '' },
@@ -56,6 +60,25 @@ const MyEvents = () => {
           );
         }
 
+        // Filter by date range
+        if (startDate || endDate) {
+          filteredEvents = filteredEvents.filter(event => {
+            if (!event.date) return false;
+            const eventDate = new Date(event.date);
+            const start = startDate ? new Date(startDate) : null;
+            const end = endDate ? new Date(endDate) : null;
+            
+            if (start && end) {
+              return eventDate >= start && eventDate <= end;
+            } else if (start) {
+              return eventDate >= start;
+            } else if (end) {
+              return eventDate <= end;
+            }
+            return true;
+          });
+        }
+
         // Calculate pagination for filtered results
         const pageSize = 12;
         const totalFiltered = filteredEvents.length;
@@ -81,7 +104,7 @@ const MyEvents = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, selectedStatus, debouncedSearchQuery]);
+  }, [currentPage, selectedStatus, debouncedSearchQuery, startDate, endDate]);
 
   // Debounce search query
   useEffect(() => {
@@ -142,6 +165,44 @@ const MyEvents = () => {
     }
   };
 
+  // Get registration status badge
+  const getRegistrationStatusBadge = (status) => {
+    switch (status) {
+      case 'PENDING':
+        return (
+          <span className="registration-status-badge registration-pending">
+            <FaClock /> Pending
+          </span>
+        );
+      case 'APPROVED':
+        return (
+          <span className="registration-status-badge registration-approved">
+            <FaUserCheck /> Approved
+          </span>
+        );
+      case 'REJECTED':
+        return (
+          <span className="registration-status-badge registration-rejected">
+            <FaUserTimes /> Rejected
+          </span>
+        );
+      case 'WAITING':
+        return (
+          <span className="registration-status-badge registration-waiting">
+            <FaClock /> Waiting
+          </span>
+        );
+      case 'CANCELLED':
+        return (
+          <span className="registration-status-badge registration-cancelled">
+            <FaTimes /> Cancelled
+          </span>
+        );
+      default:
+        return <span className="registration-status-badge">{status}</span>;
+    }
+  };
+
   // Handle page change
   const handlePageChange = (newPage) => {
     if (newPage >= 0 && newPage < totalPages) {
@@ -162,6 +223,22 @@ const MyEvents = () => {
     setIsModalOpen(false);
     setSelectedEvent(null);
     document.body.style.overflow = 'auto'; // Restore scrolling
+  };
+
+  const handleCancelRegistration = async (eventId) => {
+    if (!window.confirm('Are you sure you want to cancel your registration for this event?')) {
+      return;
+    }
+    try {
+      setCancellingId(eventId);
+      await unregisterFromEvent(eventId);
+      await fetchEvents();
+      handleCloseModal();
+    } catch (err) {
+      alert(err.message || 'Failed to cancel registration');
+    } finally {
+      setCancellingId(null);
+    }
   };
 
   // Generate smart pagination with ellipses
@@ -251,6 +328,73 @@ const MyEvents = () => {
           ))}
         </div>
 
+        {/* Date Filter */}
+        <div className="date-filter-container">
+          <button 
+            className={`date-filter-toggle ${(startDate || endDate) ? 'active' : ''}`}
+            onClick={() => setShowDateFilter(!showDateFilter)}
+          >
+            <FaFilter />
+            <span>Filter by Date</span>
+            {(startDate || endDate) && <span className="filter-badge">Active</span>}
+          </button>
+          
+          {showDateFilter && (
+            <div className="date-filter-panel">
+              <div className="date-filter-inputs">
+                <div className="date-input-group">
+                  <label htmlFor="start-date">
+                    <FaCalendar /> From Date
+                  </label>
+                  <input
+                    type="date"
+                    id="start-date"
+                    value={startDate}
+                    onChange={(e) => {
+                      setStartDate(e.target.value);
+                      setCurrentPage(0);
+                    }}
+                    max={endDate || undefined}
+                  />
+                </div>
+                <div className="date-input-group">
+                  <label htmlFor="end-date">
+                    <FaCalendar /> To Date
+                  </label>
+                  <input
+                    type="date"
+                    id="end-date"
+                    value={endDate}
+                    onChange={(e) => {
+                      setEndDate(e.target.value);
+                      setCurrentPage(0);
+                    }}
+                    min={startDate || undefined}
+                  />
+                </div>
+              </div>
+              <div className="date-filter-actions">
+                <button
+                  className="date-filter-clear"
+                  onClick={() => {
+                    setStartDate('');
+                    setEndDate('');
+                    setCurrentPage(0);
+                  }}
+                >
+                  Clear
+                </button>
+                <button
+                  className="date-filter-apply"
+                  onClick={() => setShowDateFilter(false)}
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Results Count */}
         {!loading && (
           <div className="events-results-count">
@@ -308,11 +452,18 @@ const MyEvents = () => {
                       <span>Max {event.maxParticipants} participants</span>
                     </div>
 
-                    <div className="event-detail-item">
-                      <FaUser className="detail-icon" />
-                      <span>By {event.creatorUsername}</span>
-                    </div>
+                  <div className="event-detail-item">
+                    <FaUser className="detail-icon" />
+                    <span>By {event.creatorUsername}</span>
                   </div>
+                </div>
+
+                {/* Registration Status */}
+                {event.registrationStatus && (
+                  <div className="event-registration-status">
+                    {getRegistrationStatusBadge(event.registrationStatus)}
+                  </div>
+                )}
 
                   <div className="event-card-actions">
                     <button 
@@ -329,6 +480,25 @@ const MyEvents = () => {
                       <FaSignInAlt />
                       Enter Event
                     </button>
+                    {event.registrationStatus !== 'REJECTED' && (
+                      <button
+                        className="event-cancel-button"
+                        disabled={cancellingId === event.eventId}
+                        onClick={() => handleCancelRegistration(event.eventId)}
+                      >
+                        {cancellingId === event.eventId ? (
+                          <>
+                            <span className="spinner-small"></span>
+                            Cancelling...
+                          </>
+                        ) : (
+                          <>
+                            <FaTimes />
+                            Cancel Registration
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -443,6 +613,18 @@ const MyEvents = () => {
                       <div className="modal-detail-value">{selectedEvent.creatorUsername}</div>
                     </div>
                   </div>
+                  
+                  {selectedEvent.registrationStatus && (
+                    <div className="modal-detail-item">
+                      <FaUserCheck className="modal-detail-icon" />
+                      <div className="modal-detail-content">
+                        <div className="modal-detail-label">Registration Status</div>
+                        <div className="modal-detail-value">
+                          {getRegistrationStatusBadge(selectedEvent.registrationStatus)}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Description Section */}
@@ -462,6 +644,25 @@ const MyEvents = () => {
                 <button className="modal-action-button secondary" onClick={handleCloseModal}>
                   Close
                 </button>
+                {selectedEvent.registrationStatus !== 'REJECTED' && (
+                  <button
+                    className="modal-action-button danger"
+                    disabled={cancellingId === selectedEvent.eventId}
+                    onClick={() => handleCancelRegistration(selectedEvent.eventId)}
+                  >
+                    {cancellingId === selectedEvent.eventId ? (
+                      <>
+                        <span className="spinner-small"></span>
+                        Cancelling...
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes />
+                        Cancel Registration
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>

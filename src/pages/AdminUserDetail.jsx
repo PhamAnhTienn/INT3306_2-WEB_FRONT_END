@@ -68,7 +68,12 @@ const AdminUserDetail = () => {
 
   const handleAction = (action) => {
     setShowModal(action);
-    setModalData({});
+    // For enable/disable, set initial modal data based on current user state
+    if (action === 'enable') {
+      setModalData({ enabled: !userDetail.enabled }); // Toggle: if enabled, we'll disable, so set to false
+    } else {
+      setModalData({});
+    }
   };
 
   const handleModalClose = () => {
@@ -87,9 +92,10 @@ const AdminUserDetail = () => {
       let response;
       switch (showModal) {
         case 'enable':
+          // Toggle: if currently enabled, disable it; if disabled, enable it
           response = await adminAPI.enableOrDisableUser(
             userId,
-            modalData.enabled
+            !userDetail.enabled
           );
           break;
         case 'role':
@@ -120,9 +126,17 @@ const AdminUserDetail = () => {
           break;
         case 'promote':
           response = await adminAPI.promoteToEventManager(userId);
+          if (response.success) {
+            // Show success message
+            alert('User promoted to Event Manager successfully');
+          }
           break;
         case 'demote':
           response = await adminAPI.demoteFromEventManager(userId);
+          if (response.success) {
+            // Show success message
+            alert('User demoted from Event Manager successfully');
+          }
           break;
         default:
           return;
@@ -133,7 +147,8 @@ const AdminUserDetail = () => {
         if (showModal === 'delete') {
           navigate('/admin/users');
         } else {
-          fetchUserDetail(); // Refresh detail
+          // Refresh detail after any action (enable, role, password, promote, demote)
+          fetchUserDetail();
         }
       }
     } catch (err) {
@@ -143,24 +158,31 @@ const AdminUserDetail = () => {
   };
 
   const getRoleBadge = (roles) => {
-    if (!roles || roles.length === 0) return null;
-    return roles.map((role, idx) => {
+    if (!roles) return null;
+    
+    // Convert to array if it's a Set or other iterable
+    const rolesArray = Array.isArray(roles) ? roles : Array.from(roles || []);
+    if (rolesArray.length === 0) return null;
+    
+    return rolesArray.map((role, idx) => {
       // Handle both string and object formats
       let roleName;
       if (typeof role === 'string') {
         roleName = role;
       } else if (role && typeof role === 'object') {
         // Role object with 'name' field (e.g., {id: 1, name: "VOLUNTEER"})
-        roleName = role.name || role.roleName || role.toString();
+        roleName = role.name || role.roleName || role.value || role.role || String(role);
       } else {
         roleName = String(role);
       }
       
-      const roleClass = roleName.toLowerCase().replace('_', '-');
-      const displayName = roleName.replace('_', ' ');
+      // Normalize: remove ROLE_ prefix and convert to display format
+      roleName = roleName.replace(/^ROLE_/, '').replace('_', ' ');
+      
+      const roleClass = roleName.toLowerCase().replace(/\s+/g, '-');
       return (
         <span key={`${roleName}-${idx}`} className={`role-badge role-${roleClass}`}>
-          {displayName}
+          {roleName}
         </span>
       );
     });
@@ -174,7 +196,7 @@ const AdminUserDetail = () => {
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>
-              {showModal === 'enable' && (modalData.enabled ? 'Enable' : 'Disable')} User
+              {showModal === 'enable' && (userDetail.enabled ? 'Disable' : 'Enable')} User
               {showModal === 'role' && 'Change User Role'}
               {showModal === 'password' && 'Reset Password'}
               {showModal === 'delete' && 'Delete User'}
@@ -194,16 +216,12 @@ const AdminUserDetail = () => {
 
             {showModal === 'enable' && (
               <div className="form-group">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={modalData.enabled ?? userDetail.enabled}
-                    onChange={(e) =>
-                      setModalData({ ...modalData, enabled: e.target.checked })
-                    }
-                  />
-                  Enable this user
-                </label>
+                <p>
+                  Current status: <strong>{userDetail.enabled ? 'Enabled' : 'Disabled'}</strong>
+                </p>
+                <p>
+                  This will {userDetail.enabled ? 'disable' : 'enable'} the user account.
+                </p>
               </div>
             )}
 
@@ -347,6 +365,7 @@ const AdminUserDetail = () => {
             <button
               className="btn btn-secondary"
               onClick={() => handleAction('enable')}
+              title={userDetail.enabled ? 'Disable User' : 'Enable User'}
             >
               {userDetail.enabled ? <FaBan /> : <FaCheckCircle />}{' '}
               {userDetail.enabled ? 'Disable' : 'Enable'}
@@ -363,24 +382,58 @@ const AdminUserDetail = () => {
             >
               <FaKey /> Reset Password
             </button>
-            {userDetail.roles?.some(r => {
-              const roleName = typeof r === 'string' ? r : (r?.name || r?.roleName);
-              return roleName === 'EVENT_MANAGER';
-            }) ? (
-              <button
-                className="btn btn-warning"
-                onClick={() => handleAction('demote')}
-              >
-                <FaArrowDown /> Demote
-              </button>
-            ) : (
-              <button
-                className="btn btn-success"
-                onClick={() => handleAction('promote')}
-              >
-                <FaArrowUp /> Promote
-              </button>
-            )}
+            {(() => {
+              // UserDetailDTO from backend only has 'role' (String, active role), not 'roles' (Set)
+              // Backend returns: role: "EVENT_MANAGER" (from user.getRole().name())
+              const normalizeRoleName = (role) => {
+                if (!role) return '';
+                const str = String(role).replace(/^ROLE_/, '').toUpperCase().trim();
+                return str;
+              };
+              
+              // Check active role - UserDetailDTO has 'role' field (String)
+              const activeRole = normalizeRoleName(userDetail.role);
+              const hasEventManagerRole = activeRole === 'EVENT_MANAGER';
+              
+              // Also check roles array if it exists (for backward compatibility)
+              let hasEventManagerInRoles = false;
+              if (userDetail.roles) {
+                const rolesArray = Array.isArray(userDetail.roles) 
+                  ? userDetail.roles 
+                  : Array.from(userDetail.roles || []);
+                
+                hasEventManagerInRoles = rolesArray.some(r => {
+                  let roleName = '';
+                  if (typeof r === 'string') {
+                    roleName = r;
+                  } else if (r && typeof r === 'object') {
+                    roleName = r.name || r.roleName || r.value || r.role || String(r);
+                  } else {
+                    roleName = String(r);
+                  }
+                  return normalizeRoleName(roleName) === 'EVENT_MANAGER';
+                });
+              }
+              
+              // User has EVENT_MANAGER if active role is EVENT_MANAGER OR has it in roles array
+              const isEventManager = hasEventManagerRole || hasEventManagerInRoles;
+              
+              return isEventManager ? (
+                <button
+                  className="btn btn-warning"
+                  onClick={() => handleAction('demote')}
+                >
+                  <FaArrowDown /> Demote
+                </button>
+              ) : (
+                <button
+                  className="btn btn-success"
+                  onClick={() => handleAction('promote')}
+                >
+                  <FaArrowUp /> Promote
+                </button>
+              );
+            })()}
             <button
               className="btn btn-danger"
               onClick={() => handleAction('delete')}
@@ -476,7 +529,15 @@ const AdminUserDetail = () => {
               <h2>Roles & Permissions</h2>
             </div>
             <div className="roles-section">
-              <div className="roles-list">{getRoleBadge(userDetail.roles)}</div>
+              <div className="roles-list">
+                {userDetail.role ? (
+                  <span className={`role-badge role-${userDetail.role.toLowerCase().replace('_', '-')}`}>
+                    {userDetail.role.replace('_', ' ')}
+                  </span>
+                ) : (
+                  <span className="empty-text">No role assigned</span>
+                )}
+              </div>
             </div>
           </div>
 

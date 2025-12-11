@@ -18,6 +18,7 @@ import {
   FaMapMarkerAlt,
   FaInfoCircle,
   FaPlus,
+  FaComment,
 } from 'react-icons/fa';
 
 const ManagerEvents = () => {
@@ -27,12 +28,6 @@ const ManagerEvents = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [registrations, setRegistrations] = useState([]);
-  const [registrationsLoading, setRegistrationsLoading] = useState(false);
-  const [registrationPage, setRegistrationPage] = useState(0);
-  const [registrationTotalPages, setRegistrationTotalPages] = useState(0);
-  const [actionLoading, setActionLoading] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchEvents = useCallback(async () => {
@@ -64,79 +59,9 @@ const ManagerEvents = () => {
     fetchEvents();
   }, [fetchEvents]);
 
-  const fetchRegistrations = async (eventId) => {
-    try {
-      setRegistrationsLoading(true);
-      const response = await managerAPI.getEventRegistrations(eventId, {
-        pageNumber: registrationPage,
-        pageSize: 10,
-      });
-
-      if (response.success && response.data) {
-        setRegistrations(response.data.content || []);
-        setRegistrationTotalPages(response.data.totalPages || 0);
-      }
-    } catch (err) {
-      console.error('Error fetching registrations:', err);
-    } finally {
-      setRegistrationsLoading(false);
-    }
-  };
-
   const handleViewRegistrations = async (event) => {
-    setSelectedEvent(event);
-    setRegistrationPage(0);
-    await fetchRegistrations(event.id);
+    navigate(`/manager/events/${event.id || event.eventId}/registrations`);
   };
-
-  const handleCloseModal = () => {
-    setSelectedEvent(null);
-    setRegistrations([]);
-    setRegistrationPage(0);
-  };
-
-  const handleApprove = async (registrationId) => {
-    if (!selectedEvent) return;
-
-    setActionLoading((prev) => ({ ...prev, [registrationId]: 'approving' }));
-    try {
-      await managerAPI.approveRegistration(selectedEvent.id, registrationId);
-      // Refresh registrations
-      await fetchRegistrations(selectedEvent.id);
-      // Refresh events to update counts
-      await fetchEvents();
-    } catch (err) {
-      console.error('Error approving registration:', err);
-      alert('Failed to approve registration');
-    } finally {
-      setActionLoading((prev) => ({ ...prev, [registrationId]: null }));
-    }
-  };
-
-  const handleReject = async (registrationId) => {
-    if (!selectedEvent) return;
-
-    setActionLoading((prev) => ({ ...prev, [registrationId]: 'rejecting' }));
-    try {
-      await managerAPI.rejectRegistration(selectedEvent.id, registrationId);
-      // Refresh registrations
-      await fetchRegistrations(selectedEvent.id);
-      // Refresh events to update counts
-      await fetchEvents();
-    } catch (err) {
-      console.error('Error rejecting registration:', err);
-      alert('Failed to reject registration');
-    } finally {
-      setActionLoading((prev) => ({ ...prev, [registrationId]: null }));
-    }
-  };
-
-  useEffect(() => {
-    if (selectedEvent) {
-      fetchRegistrations(selectedEvent.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registrationPage]);
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -292,6 +217,12 @@ const ManagerEvents = () => {
                   >
                     <FaUsers /> Registrations
                   </button>
+                  <button
+                    className="me-btn me-btn-posts"
+                    onClick={() => navigate(`/manager/events/${event.id || event.eventId}/feed`)}
+                  >
+                    <FaComment /> View Posts
+                  </button>
                 </div>
               </div>
             ))
@@ -329,126 +260,6 @@ const ManagerEvents = () => {
           </div>
         )}
 
-        {/* Registrations Modal */}
-        {selectedEvent && (
-          <div className="me-modal-overlay" onClick={handleCloseModal}>
-            <div className="me-modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="me-modal-header">
-                <h2>Registrations for "{selectedEvent.title}"</h2>
-                <button className="me-modal-close" onClick={handleCloseModal}>
-                  &times;
-                </button>
-              </div>
-
-              <div className="me-modal-body">
-                {registrationsLoading ? (
-                  <div className="me-loading-container">
-                    <div className="me-loading-spinner"></div>
-                    <p>Loading registrations...</p>
-                  </div>
-                ) : registrations.length > 0 ? (
-                  <>
-                    <div className="me-registrations-table-container">
-                      <table className="me-registrations-table">
-                        <thead>
-                          <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Registered At</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {registrations.map((reg) => (
-                            <tr key={reg.id}>
-                              <td>
-                                <div className="me-user-cell">
-                                  <div className="me-user-avatar">
-                                    {reg.user?.fullName?.charAt(0) || reg.user?.username?.charAt(0) || '?'}
-                                  </div>
-                                  <span>{reg.user?.fullName || reg.user?.username || 'Unknown'}</span>
-                                </div>
-                              </td>
-                              <td>{reg.user?.email || 'N/A'}</td>
-                              <td>{formatDate(reg.registeredAt)}</td>
-                              <td>{getRegistrationStatusBadge(reg.status)}</td>
-                              <td>
-                                {reg.status === 'PENDING' && (
-                                  <div className="me-action-buttons">
-                                    <button
-                                      className="me-btn-action me-btn-approve"
-                                      onClick={() => handleApprove(reg.id)}
-                                      disabled={actionLoading[reg.id]}
-                                    >
-                                      {actionLoading[reg.id] === 'approving' ? (
-                                        'Approving...'
-                                      ) : (
-                                        <>
-                                          <FaUserCheck /> Approve
-                                        </>
-                                      )}
-                                    </button>
-                                    <button
-                                      className="me-btn-action me-btn-reject"
-                                      onClick={() => handleReject(reg.id)}
-                                      disabled={actionLoading[reg.id]}
-                                    >
-                                      {actionLoading[reg.id] === 'rejecting' ? (
-                                        'Rejecting...'
-                                      ) : (
-                                        <>
-                                          <FaUserTimes /> Reject
-                                        </>
-                                      )}
-                                    </button>
-                                  </div>
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    {/* Registration Pagination */}
-                    {registrationTotalPages > 1 && (
-                      <div className="me-pagination me-modal-pagination">
-                        <button
-                          className="me-pagination-btn"
-                          disabled={registrationPage === 0}
-                          onClick={() => setRegistrationPage((p) => Math.max(0, p - 1))}
-                        >
-                          <FaChevronLeft />
-                        </button>
-                        <span className="me-pagination-info">
-                          Page {registrationPage + 1} of {registrationTotalPages}
-                        </span>
-                        <button
-                          className="me-pagination-btn"
-                          disabled={registrationPage >= registrationTotalPages - 1}
-                          onClick={() =>
-                            setRegistrationPage((p) => Math.min(registrationTotalPages - 1, p + 1))
-                          }
-                        >
-                          <FaChevronRight />
-                        </button>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="me-empty-state">
-                    <div className="me-empty-state-icon">
-                      <FaUsers />
-                    </div>
-                    <h3>No Registrations</h3>
-                    <p>No one has registered for this event yet.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </DashboardLayout>
   );

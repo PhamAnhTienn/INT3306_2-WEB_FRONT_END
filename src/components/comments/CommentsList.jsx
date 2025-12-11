@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FaComment, FaSpinner } from 'react-icons/fa';
 import { commentsAPI } from '../../services/comments/commentsService';
+import websocketService from '../../services/websocket/websocketService';
+import { useAuth } from '../../hooks/useAuth';
 import CommentItem from './CommentItem';
 import CreateComment from './CreateComment';
 import './CommentsList.css';
@@ -12,6 +14,10 @@ const CommentsList = ({ postId, onCommentCountChange }) => {
   const [cursor, setCursor] = useState(null);
   const [hasNext, setHasNext] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
+  const unsubscribeRef = useRef(null);
+
+  const PAGE_SIZE = 5;
 
   const fetchComments = useCallback(async (reset = false) => {
     try {
@@ -25,7 +31,7 @@ const CommentsList = ({ postId, onCommentCountChange }) => {
 
       const response = await commentsAPI.getPostComments(postId, {
         cursor: reset ? null : cursor,
-        limit: 10,
+        limit: PAGE_SIZE,
       });
 
       if (response.success && response.data) {
@@ -55,17 +61,121 @@ const CommentsList = ({ postId, onCommentCountChange }) => {
     }
   }, [postId, cursor, onCommentCountChange]);
 
+  // Subscribe to WebSocket for real-time comments
+  useEffect(() => {
+    if (!postId || !user) return;
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+
+    let isSubscribed = false;
+
+    const subscribeToComments = () => {
+      if (isSubscribed) return;
+      
+      // Subscribe to comments topic for this post
+      const topic = `/topic/posts/${postId}/comments`;
+      unsubscribeRef.current = websocketService.subscribe(
+        topic,
+        (newComment) => {
+          console.log('New comment received via WebSocket:', newComment);
+          
+          // Normalize comment data (handle both direct DTO and wrapped format)
+          const comment = newComment.data || newComment;
+          const incomingKey = comment.id || comment.commentId;
+          
+          // Only add top-level comments (replies are handled by CommentReplies component)
+          if (comment.parentCommentId) {
+            console.log('Skipping reply comment, will be handled by CommentReplies:', comment.id);
+            return;
+          }
+          
+          // Update or add comment to the list
+          setComments(prev => {
+            // Only try to match existing when we have a valid id
+            const existingIndex = incomingKey
+              ? prev.findIndex(c =>
+                  (c.id || c.commentId) === incomingKey
+                )
+              : -1;
+            
+            if (existingIndex !== -1) {
+              // Comment already exists, update it with fresh data from backend
+              console.log('Comment already exists, updating:', incomingKey);
+              const updated = [...prev];
+              updated[existingIndex] = comment; // Replace with fresh data from WebSocket
+              return updated;
+            }
+            
+            // New top-level comment, add at the beginning (latest first)
+            console.log('Adding new top-level comment to list:', incomingKey, comment);
+            const updated = [comment, ...prev];
+            
+            // Update comment count
+            if (onCommentCountChange) {
+              onCommentCountChange(updated.length);
+            }
+            
+            return updated;
+          });
+        }
+      );
+      isSubscribed = true;
+      console.log('Subscribed to comments topic:', topic);
+    };
+
+    // Check if already connected, subscribe immediately
+    if (websocketService.getConnected()) {
+      subscribeToComments();
+    } else {
+      // Ensure WebSocket is connected
+      websocketService.connect(
+        token,
+        () => {
+          subscribeToComments();
+        },
+        (error) => {
+          console.error('WebSocket connection error for comments:', error);
+        }
+      );
+    }
+
+    // Cleanup: unsubscribe when component unmounts or postId changes
+    return () => {
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+        unsubscribeRef.current = null;
+        isSubscribed = false;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postId, user]);
+
   useEffect(() => {
     fetchComments(true);
   }, [postId]);
 
   const handleCommentCreated = (newComment) => {
-    // Add new comment to the top of the list (optimistic update)
-    setComments(prev => [newComment, ...prev]);
+    // Don't add comment here - let WebSocket handle it
+    // This prevents duplicate comments and ensures all users see comments in real-time
+    // The comment will be added via WebSocket broadcast from backend
+    console.log('Comment created, waiting for WebSocket broadcast:', newComment.id);
+  };
 
-    // Optionally notify parent about new count
+  const handleCommentUpdated = (updatedComment) => {
+    setComments(prev =>
+      prev.map(c =>
+        (c.id || c.commentId) === (updatedComment.id || updatedComment.commentId)
+          ? updatedComment
+          : c
+      )
+    );
+  };
+
+  const handleCommentDeleted = (commentId) => {
+    setComments(prev => prev.filter(c => (c.id || c.commentId) !== commentId));
     if (onCommentCountChange) {
-      onCommentCountChange(comments.length + 1);
+      onCommentCountChange(comments.length - 1);
     }
   };
 
@@ -117,7 +227,9 @@ const CommentsList = ({ postId, onCommentCountChange }) => {
               key={comment.id || comment.commentId}
               comment={comment}
               postId={postId}
-              onReplyCreated={handleCommentCreated}
+            onReplyCreated={handleCommentCreated}
+            onCommentUpdated={handleCommentUpdated}
+            onCommentDeleted={handleCommentDeleted}
             />
           ))
         )}
@@ -125,7 +237,7 @@ const CommentsList = ({ postId, onCommentCountChange }) => {
 
       {hasNext && (
         <button
-          className="btn-load-more-comments"
+        className="btn-load-more"
           onClick={handleLoadMore}
           disabled={loadingMore}
         >

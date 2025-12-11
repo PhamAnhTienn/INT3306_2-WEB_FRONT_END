@@ -1,20 +1,25 @@
 .comment-item {
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eef1f6;
 }
 
 .comment-header {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .comment-author {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .comment-avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--neutral-200, #e5e7eb);
   display: flex;
@@ -34,44 +39,121 @@
 .comment-author-info {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 0.1rem;
+}
+
+.comment-menu-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .comment-author-name {
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-dark, #1f2937);
 }
 
 .comment-time {
-  font-size: 0.8125rem;
+  font-size: 0.78rem;
   color: var(--text-secondary, #6b7280);
 }
 
 .comment-content {
-  margin-bottom: 0.5rem;
-  padding-left: calc(36px + 0.75rem);
+  margin-bottom: 0.35rem;
+  padding-left: calc(32px + 0.6rem);
+}
+
+.comment-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.comment-media-item {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--neutral-100);
+  border: 1px solid #e5e7ef;
+  aspect-ratio: 4 / 3;
+}
+
+.comment-media-item img,
+.comment-media-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.comment-media-item video {
+  background: black;
+}
+.comment-reply-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.55rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.5rem;
+  background: var(--primary-50, #fff4e6);
+  color: var(--primary-700, #995200);
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .comment-content p {
   display: inline-block;
   max-width: 100%;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.65rem;
   background: var(--neutral-100, #f3f4f6);
   color: var(--text-dark, #1f2937);
-  line-height: 1.6;
+  line-height: 1.45;
   margin: 0;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
+.comment-toggle {
+  margin-left: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--primary-600, #cc6e00);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.comment-toggle:hover {
+  text-decoration: underline;
+}
+
 .comment-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding-left: calc(36px + 0.75rem);
+  gap: 0.4rem;
+  padding-left: calc(32px + 0.6rem);
   flex-wrap: wrap;
+}
+
+/* Like button (comment) compact style */
+.comment-actions .like-button {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7ef;
+  background: #ffffff;
+  gap: 0.3rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #374151;
+  box-shadow: none;
+}
+
+.comment-actions .like-button:hover {
+  background: #f3f4f6;
 }
 
 .btn-reply,
@@ -103,6 +185,75 @@
 .comment-reply-form {
   margin-top: 1rem;
   padding-left: calc(36px + 0.75rem);
+}
+
+.comment-edit-form {
+  margin-top: 0.5rem;
+}
+
+.comment-edit-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--primary-300);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.comment-edit-textarea:focus {
+  border-color: var(--primary-500);
+}
+
+.comment-edit-error {
+  color: var(--error-600);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.comment-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  justify-content: flex-end;
+}
+
+.btn-cancel-edit,
+.btn-save-edit {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-cancel-edit {
+  background: transparent;
+  border: 1.5px solid var(--border-medium);
+  color: var(--text-dark);
+}
+
+.btn-cancel-edit:hover:not(:disabled) {
+  background: var(--neutral-100);
+}
+
+.btn-save-edit {
+  background: var(--primary-500);
+  color: var(--white);
+}
+
+.btn-save-edit:hover:not(:disabled) {
+  background: var(--primary-600);
+}
+
+.btn-save-edit:disabled,
+.btn-cancel-edit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 

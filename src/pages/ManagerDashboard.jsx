@@ -40,11 +40,41 @@ const ManagerDashboard = () => {
         console.log('Fetched manager dashboard data:', response.data);
         setDashboardData(response.data);
       } else {
-        setError('Failed to load dashboard data');
+        const errorMsg = response.message || 'Failed to load dashboard data';
+        console.error('Dashboard API error:', errorMsg);
+        setError(errorMsg);
       }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
-      setError(error.message || 'Failed to load dashboard data');
+      
+      // Extract error message from different error formats
+      let errorMessage = 'Failed to load dashboard data';
+      
+      if (error.response) {
+        // Server responded with error status
+        const status = error.response.status;
+        const data = error.response.data;
+        
+        if (status === 403) {
+          errorMessage = 'Access denied. You do not have permission to view this dashboard.';
+        } else if (status === 401) {
+          errorMessage = 'Unauthorized. Please log in again.';
+        } else if (status === 404) {
+          errorMessage = 'Dashboard endpoint not found.';
+        } else if (data?.message) {
+          errorMessage = data.message;
+        } else {
+          errorMessage = `Server error (${status}). Please try again later.`;
+        }
+      } else if (error.request) {
+        // Request was made but no response received
+        errorMessage = 'Network error. Please check your connection and try again.';
+      } else if (error.message) {
+        // Error message from axios or other source
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -119,10 +149,21 @@ const ManagerDashboard = () => {
         <div className="error-container">
           <div className="error-icon">⚠️</div>
           <h3>Unable to load dashboard</h3>
-          <p>{error}</p>
-          <button className="btn btn-primary" onClick={fetchDashboardData}>
-            Try Again
-          </button>
+          <p className="error-message">{error}</p>
+          <div className="error-actions">
+            <button className="btn btn-primary" onClick={fetchDashboardData}>
+              Try Again
+            </button>
+            {error.includes('Access denied') || error.includes('Unauthorized') ? (
+              <button 
+                className="btn btn-secondary" 
+                onClick={() => window.location.href = '/login'}
+                style={{ marginLeft: '0.5rem' }}
+              >
+                Go to Login
+              </button>
+            ) : null}
+          </div>
         </div>
       </DashboardLayout>
     );

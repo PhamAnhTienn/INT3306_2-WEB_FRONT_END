@@ -11,14 +11,75 @@ export const commentsAPI = {
    * @param {Object} commentData - Comment data
    * @param {string} commentData.content - Comment content
    * @param {number} commentData.parentId - Optional parent comment ID for replies
+   * @param {File[]} files - Optional array of image/video files
    * @returns {Promise} API response with created comment
    */
-  createComment: async (postId, commentData) => {
+  createComment: async (postId, commentData, files = []) => {
     try {
-      const response = await api.post(`/comments/posts/${postId}`, commentData);
+      // Always use multipart to avoid content-type mismatch
+      const formData = new FormData();
+      formData.append('createCommentDTO', JSON.stringify(commentData));
+      if (files && files.length > 0) {
+        files.forEach((file) => formData.append('files', file));
+      }
+      // Override default JSON header
+      const response = await api.post(`/comments/posts/${postId}/with-files`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       return response.data;
     } catch (error) {
       console.error(`Error creating comment on post ${postId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a comment
+   * @param {number} commentId - Comment ID
+   * @param {Object} updateData - Update data
+   * @param {string} updateData.content - Updated content
+   * @returns {Promise} API response with updated comment
+   */
+  updateComment: async (commentId, updateData) => {
+    try {
+      const response = await api.put(`/comments/${commentId}`, updateData);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating comment ${commentId}:`, error);
+      throw error;
+    }
+  },
+
+  updateCommentWithFiles: async (commentId, updateData, files = []) => {
+    try {
+      const formData = new FormData();
+      if (updateData?.content !== undefined) {
+        formData.append('content', updateData.content);
+      }
+      if (files && files.length > 0) {
+        files.forEach((file) => formData.append('files', file));
+      }
+      const response = await api.put(`/comments/${commentId}/with-files`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating comment ${commentId} with files:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a comment
+   * @param {number} commentId - Comment ID
+   * @returns {Promise} API response
+   */
+  deleteComment: async (commentId) => {
+    try {
+      const response = await api.delete(`/comments/${commentId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting comment ${commentId}:`, error);
       throw error;
     }
   },
@@ -78,6 +139,33 @@ export const commentsAPI = {
   },
 
   /**
+   * Get all replies flattened (all nested replies at same level)
+   * @param {number} commentId - Comment ID
+   * @param {Object} params - Query parameters
+   * @param {string} params.cursor - Cursor for pagination
+   * @param {number} params.limit - Number of replies to fetch
+   * @returns {Promise} API response with all replies flattened
+   */
+  getAllRepliesFlattened: async (commentId, params = {}) => {
+    try {
+      const {
+        cursor = null,
+        limit = 10,
+      } = params;
+
+      const queryParams = new URLSearchParams();
+      if (cursor) queryParams.append('cursor', cursor);
+      queryParams.append('limit', limit.toString());
+
+      const response = await api.get(`/comments/${commentId}/replies/flattened?${queryParams.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching flattened replies for comment ${commentId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
    * Get a single comment by ID
    * @param {number} commentId - Comment ID
    * @returns {Promise} API response with comment
@@ -94,6 +182,12 @@ export const commentsAPI = {
 };
 
 export default commentsAPI;
+
+
+
+
+
+
 
 
 

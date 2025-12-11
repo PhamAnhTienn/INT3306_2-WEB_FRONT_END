@@ -103,7 +103,12 @@ const AdminUsers = () => {
   const handleAction = (user, action) => {
     setSelectedUser(user);
     setShowModal(action);
-    setModalData({});
+    // For enable/disable, set initial modal data based on current user state
+    if (action === 'enable') {
+      setModalData({ enabled: !user.enabled }); // Toggle: if enabled, we'll disable, so set to false
+    } else {
+      setModalData({});
+    }
   };
 
   const handleModalClose = () => {
@@ -123,9 +128,10 @@ const AdminUsers = () => {
       let response;
       switch (showModal) {
         case 'enable':
+          // Toggle: if currently enabled, disable it; if disabled, enable it
           response = await adminAPI.enableOrDisableUser(
             userId,
-            modalData.enabled
+            !selectedUser.enabled
           );
           break;
         case 'role':
@@ -202,24 +208,31 @@ const AdminUsers = () => {
   };
 
   const getRoleBadge = (roles) => {
-    if (!roles || roles.length === 0) return null;
-    return roles.map((role, idx) => {
+    if (!roles) return null;
+    
+    // Convert to array if it's a Set or other iterable
+    const rolesArray = Array.isArray(roles) ? roles : Array.from(roles || []);
+    if (rolesArray.length === 0) return null;
+    
+    return rolesArray.map((role, idx) => {
       // Handle both string and object formats
       let roleName;
       if (typeof role === 'string') {
         roleName = role;
       } else if (role && typeof role === 'object') {
         // Role object with 'name' field (e.g., {id: 1, name: "VOLUNTEER"})
-        roleName = role.name || role.roleName || role.toString();
+        roleName = role.name || role.roleName || role.value || role.role || String(role);
       } else {
         roleName = String(role);
       }
       
-      const roleClass = roleName.toLowerCase().replace('_', '-');
-      const displayName = roleName.replace('_', ' ');
+      // Normalize: remove ROLE_ prefix and convert to display format
+      roleName = roleName.replace(/^ROLE_/, '').replace('_', ' ');
+      
+      const roleClass = roleName.toLowerCase().replace(/\s+/g, '-');
       return (
         <span key={`${roleName}-${idx}`} className={`role-badge role-${roleClass}`}>
-          {displayName}
+          {roleName}
         </span>
       );
     });
@@ -233,7 +246,7 @@ const AdminUsers = () => {
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>
-              {showModal === 'enable' && (modalData.enabled ? 'Enable' : 'Disable')} User
+              {showModal === 'enable' && (selectedUser.enabled ? 'Disable' : 'Enable')} User
               {showModal === 'role' && 'Change User Role'}
               {showModal === 'password' && 'Reset Password'}
               {showModal === 'delete' && 'Delete User'}
@@ -253,16 +266,12 @@ const AdminUsers = () => {
 
             {showModal === 'enable' && (
               <div className="form-group">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={modalData.enabled ?? selectedUser.enabled}
-                    onChange={(e) =>
-                      setModalData({ ...modalData, enabled: e.target.checked })
-                    }
-                  />
-                  Enable this user
-                </label>
+                <p>
+                  Current status: <strong>{selectedUser.enabled ? 'Enabled' : 'Disabled'}</strong>
+                </p>
+                <p>
+                  This will {selectedUser.enabled ? 'disable' : 'enable'} the user account.
+                </p>
               </div>
             )}
 
@@ -518,7 +527,7 @@ const AdminUsers = () => {
                           <button
                             className="btn-icon btn-edit"
                             onClick={() => handleAction(user, 'enable')}
-                            title={user.enabled ? 'Disable' : 'Enable'}
+                            title={user.enabled ? 'Disable User' : 'Enable User'}
                           >
                             {user.enabled ? <FaBan /> : <FaCheckCircle />}
                           </button>
@@ -536,26 +545,65 @@ const AdminUsers = () => {
                           >
                             <FaKey />
                           </button>
-                          {user.roles?.some(r => {
-                            const roleName = typeof r === 'string' ? r : (r?.name || r?.roleName);
-                            return roleName === 'EVENT_MANAGER';
-                          }) ? (
-                            <button
-                              className="btn-icon btn-warning"
-                              onClick={() => handleAction(user, 'demote')}
-                              title="Demote from Event Manager"
-                            >
-                              <FaArrowDown />
-                            </button>
-                          ) : (
-                            <button
-                              className="btn-icon btn-success"
-                              onClick={() => handleAction(user, 'promote')}
-                              title="Promote to Event Manager"
-                            >
-                              <FaArrowUp />
-                            </button>
-                          )}
+                          {(() => {
+                            // Normalize role name: handle string, object, or enum format
+                            const normalizeRoleName = (role) => {
+                              if (!role) return '';
+                              
+                              // Handle string
+                              if (typeof role === 'string') {
+                                return role.replace(/^ROLE_/, '').toUpperCase().trim();
+                              }
+                              
+                              // Handle object (e.g., {id: 1, name: "EVENT_MANAGER"})
+                              if (typeof role === 'object' && role !== null) {
+                                // Try multiple possible property names
+                                const name = role.name || role.roleName || role.value || role.role;
+                                if (name) {
+                                  return String(name).replace(/^ROLE_/, '').toUpperCase().trim();
+                                }
+                                // Fallback to toString
+                                const str = role.toString();
+                                if (str && str !== '[object Object]') {
+                                  return str.replace(/^ROLE_/, '').toUpperCase().trim();
+                                }
+                              }
+                              
+                              // Fallback: convert to string
+                              const str = String(role);
+                              return str.replace(/^ROLE_/, '').toUpperCase().trim();
+                            };
+                            
+                            // Convert roles to array if it's a Set or other iterable
+                            const rolesArray = user.roles 
+                              ? (Array.isArray(user.roles) ? user.roles : Array.from(user.roles || []))
+                              : [];
+                            
+                            // Check if user has EVENT_MANAGER role
+                            const hasEventManagerRole = rolesArray.length > 0 && rolesArray.some(r => {
+                              const normalized = normalizeRoleName(r);
+                              const isEventManager = normalized === 'EVENT_MANAGER';
+                              return isEventManager;
+                            });
+                            
+                            return hasEventManagerRole ? (
+                              <button
+                                className="btn-icon btn-warning"
+                                onClick={() => handleAction(user, 'demote')}
+                                title="Demote from Event Manager"
+                              >
+                                <FaArrowDown />
+                              </button>
+                            ) : (
+                              <button
+                                className="btn-icon btn-success"
+                                onClick={() => handleAction(user, 'promote')}
+                                title="Promote to Event Manager"
+                              >
+                                <FaArrowUp />
+                              </button>
+                            );
+                          })()}
                           <button
                             className="btn-icon btn-danger"
                             onClick={() => handleAction(user, 'delete')}

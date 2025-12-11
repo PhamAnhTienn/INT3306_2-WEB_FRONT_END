@@ -9,6 +9,7 @@ const CreatePost = ({ eventId, onPostCreated, onCancel }) => {
   const [previewUrls, setPreviewUrls] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const isUploading = isSubmitting && selectedFiles.length > 0;
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
@@ -127,6 +128,12 @@ const CreatePost = ({ eventId, onPostCreated, onCancel }) => {
               {error}
             </div>
           )}
+          {isUploading && (
+            <div className="create-post-uploading">
+              <FaSpinner className="spinning" />
+              <span>Uploading media...</span>
+            </div>
+          )}
 
           {/* Image Previews */}
           {previewUrls.length > 0 && (
@@ -150,10 +157,10 @@ const CreatePost = ({ eventId, onPostCreated, onCancel }) => {
           <div className="create-post-actions">
             <label className="btn-add-files" disabled={isSubmitting}>
               <FaImage />
-              <span>Add Photos</span>
+              <span>Add Photos / Videos</span>
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/*"
                 multiple
                 onChange={handleFileSelect}
                 disabled={isSubmitting || selectedFiles.length >= 5}
@@ -162,7 +169,7 @@ const CreatePost = ({ eventId, onPostCreated, onCancel }) => {
             </label>
             {selectedFiles.length > 0 && (
               <span className="files-count">
-                {selectedFiles.length}/5 images
+                {selectedFiles.length}/5 files
               </span>
             )}
           </div>
@@ -198,6 +205,13 @@ const CreatePost = ({ eventId, onPostCreated, onCancel }) => {
 };
 
 export default CreatePost;
+
+
+
+
+
+
+
 
 
 

@@ -220,6 +220,87 @@ export const adminAPI = {
       throw error;
     }
   },
+
+  /**
+   * Get event detail (admin)
+   * @param {number} eventId
+   */
+  getEventDetail: async (eventId) => {
+    try {
+      const response = await api.get(`/admin/events/${eventId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching admin event detail:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Approve event
+   * @param {number} eventId
+   */
+  approveEvent: async (eventId) => {
+    try {
+      const response = await api.put(`/admin/events/${eventId}/approve`);
+      return response.data;
+    } catch (error) {
+      console.error('Error approving event:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Reject event
+   * @param {number} eventId
+   * @param {string} reason
+   */
+  rejectEvent: async (eventId, reason) => {
+    try {
+      const response = await api.put(`/admin/events/${eventId}/reject`, {
+        reason: reason || null,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error rejecting event:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Export events to CSV
+   * @param {Object} filters
+   * @param {string} filters.status
+   * @param {string} filters.startDate
+   * @param {string} filters.endDate
+   */
+  exportEventsToCSV: async (filters = {}) => {
+    try {
+      const response = await api.get('/admin/export/events/csv', {
+        params: filters,
+        responseType: 'blob',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error exporting events to CSV:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Export events to JSON
+   */
+  exportEventsToJSON: async () => {
+    try {
+      const response = await api.get('/admin/export/events/json', {
+        responseType: 'blob',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error exporting events to JSON:', error);
+      throw error;
+    }
+  },
 };
+
 
 

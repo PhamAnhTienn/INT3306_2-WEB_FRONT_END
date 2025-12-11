@@ -1,0 +1,83 @@
+.post-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.post-menu-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.post-menu-toggle:hover {
+  background-color: var(--neutral-100);
+  color: var(--primary-500);
+}
+
+.post-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--white);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-md);
+  min-width: 140px;
+  z-index: 10;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-menu-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  color: var(--text-dark);
+  transition: all 0.2s ease;
+}
+
+.post-menu-dropdown button:hover {
+  background-color: var(--neutral-50);
+}
+
+.post-menu-dropdown button svg {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.post-menu-dropdown button:hover svg {
+  color: var(--primary-500);
+}
+
+.post-menu-dropdown button:last-child:hover {
+  background-color: #fee;
+  color: #c00;
+}
+
+.post-menu-dropdown button:last-child:hover svg {
+  color: #c00;
+}
+

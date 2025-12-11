@@ -19,10 +19,71 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [switchingRole, setSwitchingRole] = useState(null);
 
-  const layoutRole =
-    profile?.activeRole === 'EVENT_MANAGER' || profile?.activeRole === 'ADMIN'
-      ? 'manager'
-      : 'volunteer';
+  // Normalize role name: handle string, object, or enum format
+  const normalizeRoleName = (role) => {
+    if (!role) return '';
+    if (typeof role === 'string') {
+      // Remove ROLE_ prefix if present, convert to uppercase
+      return role.replace(/^ROLE_/, '').toUpperCase();
+    }
+    if (typeof role === 'object' && role !== null) {
+      const name = role.name || role.roleName || role.toString();
+      return name.replace(/^ROLE_/, '').toUpperCase();
+    }
+    return String(role).replace(/^ROLE_/, '').toUpperCase();
+  };
+
+  // Determine layout role based on active role OR available roles
+  // Priority: activeRole > check if user has ADMIN/EVENT_MANAGER in roles list > user context
+  const getLayoutRole = () => {
+    // First, check activeRole from API
+    const activeRoleRaw = profile?.activeRole || rolesInfo?.activeRole;
+    const activeRole = normalizeRoleName(activeRoleRaw);
+    
+    if (activeRole === 'ADMIN') {
+      return 'admin';
+    } else if (activeRole === 'EVENT_MANAGER') {
+      return 'manager';
+    }
+    
+    // If activeRole is not set or is VOLUNTEER, check roles list
+    // to determine the highest privilege role available
+    const rolesList = rolesInfo?.roles || [];
+    if (rolesList && rolesList.length > 0) {
+      // Check if user has ADMIN role (highest priority)
+      const hasAdmin = rolesList.some(r => {
+        const roleName = normalizeRoleName(r);
+        return roleName === 'ADMIN';
+      });
+      if (hasAdmin) {
+        return 'admin';
+      }
+      
+      // Check if user has EVENT_MANAGER role
+      const hasEventManager = rolesList.some(r => {
+        const roleName = normalizeRoleName(r);
+        return roleName === 'EVENT_MANAGER';
+      });
+      if (hasEventManager) {
+        return 'manager';
+      }
+    }
+    
+    // Also check from user context (from localStorage) - fallback
+    if (user) {
+      const userRole = normalizeRoleName(user.role || user.activeRole);
+      if (userRole === 'ADMIN') {
+        return 'admin';
+      } else if (userRole === 'EVENT_MANAGER') {
+        return 'manager';
+      }
+    }
+    
+    // Default to volunteer
+    return 'volunteer';
+  };
+
+  const layoutRole = getLayoutRole();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,17 +144,20 @@ const Profile = () => {
       return <span className="empty-text">No roles assigned</span>;
     }
 
-    return rolesInfo.roles.map((role) => {
-      const isActive =
-        role === rolesInfo.activeRole || role === profile?.activeRole;
+    return rolesInfo.roles.map((role, index) => {
+      const roleName = normalizeRoleName(role);
+      const activeRoleRaw = rolesInfo.activeRole || profile?.activeRole;
+      const activeRoleName = normalizeRoleName(activeRoleRaw);
+      const isActive = roleName === activeRoleName;
+      
       return (
         <button
-          key={role}
+          key={roleName || index}
           className={`role-chip ${isActive ? 'active' : ''}`}
-          onClick={() => handleSwitchRole(role)}
-          disabled={switchingRole === role}
+          onClick={() => handleSwitchRole(roleName)}
+          disabled={switchingRole === roleName || isActive}
         >
-          {role.replace('_', ' ')}
+          {roleName.replace('_', ' ')}
         </button>
       );
     });
@@ -152,9 +216,11 @@ const Profile = () => {
                   <span className="badge">
                     Active Role:{' '}
                     <strong>
-                      {profile?.activeRole
-                        ? profile.activeRole.replace('_', ' ')
-                        : 'N/A'}
+                      {(() => {
+                        const activeRoleRaw = profile?.activeRole || rolesInfo?.activeRole;
+                        const activeRole = normalizeRoleName(activeRoleRaw);
+                        return activeRole ? activeRole.replace('_', ' ') : 'N/A';
+                      })()}
                     </strong>
                   </span>
                   <span
@@ -204,6 +270,9 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+
 
 
 

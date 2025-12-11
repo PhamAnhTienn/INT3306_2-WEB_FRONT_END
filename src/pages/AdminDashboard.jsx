@@ -4,6 +4,7 @@ import DashboardLayout from '../components/dashboard/DashboardLayout';
 import StatCard from '../components/dashboard/StatCard';
 import TimelineItem from '../components/dashboard/TimelineItem';
 import { dashboardAPI } from '../services/dashboard/dashboardService';
+import { adminAPI } from '../services/admin/adminService';
 import './AdminDashboard.css';
 import { 
   FaUsers, 
@@ -34,6 +35,7 @@ const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [eventActionLoading, setEventActionLoading] = useState({});
 
   useEffect(() => {
     fetchDashboardData();
@@ -57,6 +59,56 @@ const AdminDashboard = () => {
       setError(error.message || 'Failed to load dashboard data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleApproveEvent = async (eventId) => {
+    if (!window.confirm('Approve this event?')) return;
+    try {
+      setEventActionLoading((prev) => ({ ...prev, [eventId]: 'approving' }));
+      await adminAPI.approveEvent(eventId);
+      await fetchDashboardData();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to approve event');
+    } finally {
+      setEventActionLoading((prev) => ({ ...prev, [eventId]: null }));
+    }
+  };
+
+  const handleRejectEvent = async (eventId) => {
+    const reason = window.prompt('Reason for rejection (optional):') || '';
+    if (reason === null) return;
+    try {
+      setEventActionLoading((prev) => ({ ...prev, [eventId]: 'rejecting' }));
+      await adminAPI.rejectEvent(eventId, reason);
+      await fetchDashboardData();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to reject event');
+    } finally {
+      setEventActionLoading((prev) => ({ ...prev, [eventId]: null }));
+    }
+  };
+
+  const handleExportEvents = async (format) => {
+    try {
+      let blob;
+      if (format === 'csv') {
+        blob = await adminAPI.exportEventsToCSV();
+      } else {
+        blob = await adminAPI.exportEventsToJSON();
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `events_export.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error exporting events:', err);
+      alert('Failed to export events');
     }
   };
 
@@ -183,6 +235,22 @@ const AdminDashboard = () => {
       breadcrumbs={['Admin', 'Dashboard']}
     >
       <div className="admin-dashboard">
+        {/* Header actions (export events) */}
+        <div className="dashboard-header-actions">
+          <button
+            className="btn btn-secondary"
+            onClick={() => handleExportEvents('csv')}
+          >
+            Export Events CSV
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => handleExportEvents('json')}
+          >
+            Export Events JSON
+          </button>
+        </div>
+
         {/* Main Stats Overview */}
         <div className="dashboard-stats">
           <div className="stat-col">
@@ -506,11 +574,31 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                       <div className="pending-event-actions">
-                        <button className="btn btn-sm btn-success">
-                          <FaCheckCircle /> Approve
+                        <button
+                          className="btn btn-sm btn-success"
+                          disabled={eventActionLoading[event.eventId]}
+                          onClick={() => handleApproveEvent(event.eventId)}
+                        >
+                          {eventActionLoading[event.eventId] === 'approving' ? (
+                            'Approving...'
+                          ) : (
+                            <>
+                              <FaCheckCircle /> Approve
+                            </>
+                          )}
                         </button>
-                        <button className="btn btn-sm btn-danger">
-                          <FaTimesCircle /> Reject
+                        <button
+                          className="btn btn-sm btn-danger"
+                          disabled={eventActionLoading[event.eventId]}
+                          onClick={() => handleRejectEvent(event.eventId)}
+                        >
+                          {eventActionLoading[event.eventId] === 'rejecting' ? (
+                            'Rejecting...'
+                          ) : (
+                            <>
+                              <FaTimesCircle /> Reject
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>

@@ -15,44 +15,21 @@ export const postsAPI = {
    */
   createPost: async (eventId, postData, files = []) => {
     try {
-      const createPostDTO = {
-        content: postData.content || '',
-      };
+      // Always send multipart/form-data so files (if any) go through
+      const formData = new FormData();
+      formData.append('content', postData.content || '');
 
-      // Spring Boot với @RequestBody và @RequestParam:
-      // - @RequestBody expects JSON in body
-      // - @RequestParam expects files as query params or form-data parts
-      // We'll send JSON body and files as form-data parts
       if (files && files.length > 0) {
-        // For multipart, we need to send JSON as a string in form-data
-        // and files as separate parts
-        const formData = new FormData();
-        
-        // Send DTO as JSON string in a form field
-        formData.append('createPostDTO', JSON.stringify(createPostDTO));
-        
-        // Append files
         files.forEach((file) => {
           formData.append('files', file);
         });
-
-        // Note: Spring Boot may need special handling for this
-        // If this doesn't work, backend may need to use @ModelAttribute instead
-        const response = await api.post(`/posts/events/${eventId}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        return response.data;
-      } else {
-        // No files - send JSON normally
-        const response = await api.post(`/posts/events/${eventId}`, createPostDTO, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        return response.data;
       }
+
+      // Force multipart header to override default JSON header
+      const response = await api.post(`/posts/events/${eventId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
     } catch (error) {
       console.error(`Error creating post for event ${eventId}:`, error);
       throw error;
@@ -89,6 +66,60 @@ export const postsAPI = {
       return response.data;
     } catch (error) {
       console.error(`Error fetching posts for event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a post
+   * @param {number} postId - Post ID
+   * @param {Object} updateData - Update data
+   * @param {string} updateData.content - Updated content
+   * @returns {Promise} API response with updated post
+   */
+  updatePost: async (postId, updateData) => {
+    try {
+      const response = await api.put(`/posts/${postId}`, updateData);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating post ${postId}:`, error);
+      throw error;
+    }
+  },
+
+  updatePostWithFiles: async (postId, updateData, files = [], removeFileIds = []) => {
+    try {
+      const formData = new FormData();
+      if (updateData?.content !== undefined) {
+        formData.append('content', updateData.content);
+      }
+      if (files && files.length > 0) {
+        files.forEach((file) => formData.append('files', file));
+      }
+      if (removeFileIds && removeFileIds.length > 0) {
+        removeFileIds.forEach((id) => formData.append('removeFileIds', id));
+      }
+      const response = await api.put(`/posts/${postId}/with-files`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating post ${postId} with files:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a post
+   * @param {number} postId - Post ID
+   * @returns {Promise} API response
+   */
+  deletePost: async (postId) => {
+    try {
+      const response = await api.delete(`/posts/${postId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error deleting post ${postId}:`, error);
       throw error;
     }
   },

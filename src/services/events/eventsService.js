@@ -81,13 +81,13 @@ export const registerForEvent = async (eventId) => {
 };
 
 /**
- * Unregister from an event
+ * Cancel registration for an event (current user)
  * @param {number} eventId - Event ID
  * @returns {Promise} API response
  */
 export const unregisterFromEvent = async (eventId) => {
   try {
-    const response = await api.delete(`/events/${eventId}/unregister`);
+    const response = await api.delete(`/registrations/events/${eventId}`);
     return response.data;
   } catch (error) {
     console.error(`Error unregistering from event ${eventId}:`, error);
@@ -105,6 +105,21 @@ export const getMyEvents = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching my events:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get user's registration status for a specific event
+ * @param {number} eventId - Event ID
+ * @returns {Promise} API response with registration status (null if not registered)
+ */
+export const getRegistrationStatus = async (eventId) => {
+  try {
+    const response = await api.get(`/registrations/events/${eventId}/status`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching registration status for event ${eventId}:`, error);
     throw error;
   }
 };
