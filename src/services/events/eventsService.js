@@ -81,13 +81,13 @@ export const registerForEvent = async (eventId) => {
 };
 
 /**
- * Cancel registration for an event (current user)
+ * Unregister from an event
  * @param {number} eventId - Event ID
  * @returns {Promise} API response
  */
 export const unregisterFromEvent = async (eventId) => {
   try {
-    const response = await api.delete(`/registrations/events/${eventId}`);
+    const response = await api.delete(`/events/${eventId}/unregister`);
     return response.data;
   } catch (error) {
     console.error(`Error unregistering from event ${eventId}:`, error);

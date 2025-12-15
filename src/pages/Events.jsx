@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaFilter } from 'react-icons/fa';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
 import { getAllEvents, registerForEvent, getMyEvents } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
@@ -13,9 +13,6 @@ const Events = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [showDateFilter, setShowDateFilter] = useState(false);
   const searchTimeoutRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -60,25 +57,6 @@ const Events = () => {
           allEvents = allEvents.filter(event => event.status === selectedStatus);
         }
         
-        // Filter by date range
-        if (startDate || endDate) {
-          allEvents = allEvents.filter(event => {
-            if (!event.date) return false;
-            const eventDate = new Date(event.date);
-            const start = startDate ? new Date(startDate) : null;
-            const end = endDate ? new Date(endDate) : null;
-            
-            if (start && end) {
-              return eventDate >= start && eventDate <= end;
-            } else if (start) {
-              return eventDate >= start;
-            } else if (end) {
-              return eventDate <= end;
-            }
-            return true;
-          });
-        }
-        
         // If user has registered events, mark them as registered
         if (myEventsResponse.success && myEventsResponse.data.content) {
           const registeredEventIds = new Set(
@@ -94,7 +72,7 @@ const Events = () => {
         
         setEvents(allEvents);
         setTotalPages(eventsResponse.data.totalPages);
-        setTotalElements((selectedStatus || startDate || endDate) ? allEvents.length : eventsResponse.data.totalElements);
+        setTotalElements(selectedStatus ? allEvents.length : eventsResponse.data.totalElements);
       } else {
         setError('Failed to fetch events');
       }
@@ -104,7 +82,7 @@ const Events = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, selectedStatus, debouncedSearchQuery, startDate, endDate]);
+  }, [currentPage, selectedStatus, debouncedSearchQuery]);
 
   // Debounce search query
   useEffect(() => {
@@ -216,7 +194,19 @@ const Events = () => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'An error occurred while registering';
       setRegisterError(errorMessage);
-      alert(errorMessage);
+      
+      // Check if user already registered - update UI accordingly
+      if (errorMessage.toLowerCase().includes('already registered')) {
+        setEvents(prevEvents => prevEvents.map(event => 
+          event.eventId === eventId ? { ...event, isRegistered: true } : event
+        ));
+        if (selectedEvent && selectedEvent.eventId === eventId) {
+          setSelectedEvent(prev => ({ ...prev, isRegistered: true }));
+        }
+        alert('You have already registered for this event.');
+      } else {
+        alert(errorMessage);
+      }
     } finally {
       setRegistering(false);
     }
@@ -307,73 +297,6 @@ const Events = () => {
               {filter.label}
             </button>
           ))}
-        </div>
-
-        {/* Date Filter */}
-        <div className="date-filter-container">
-          <button 
-            className={`date-filter-toggle ${(startDate || endDate) ? 'active' : ''}`}
-            onClick={() => setShowDateFilter(!showDateFilter)}
-          >
-            <FaFilter />
-            <span>Filter by Date</span>
-            {(startDate || endDate) && <span className="filter-badge">Active</span>}
-          </button>
-          
-          {showDateFilter && (
-            <div className="date-filter-panel">
-              <div className="date-filter-inputs">
-                <div className="date-input-group">
-                  <label htmlFor="start-date">
-                    <FaCalendar /> From Date
-                  </label>
-                  <input
-                    type="date"
-                    id="start-date"
-                    value={startDate}
-                    onChange={(e) => {
-                      setStartDate(e.target.value);
-                      setCurrentPage(0);
-                    }}
-                    max={endDate || undefined}
-                  />
-                </div>
-                <div className="date-input-group">
-                  <label htmlFor="end-date">
-                    <FaCalendar /> To Date
-                  </label>
-                  <input
-                    type="date"
-                    id="end-date"
-                    value={endDate}
-                    onChange={(e) => {
-                      setEndDate(e.target.value);
-                      setCurrentPage(0);
-                    }}
-                    min={startDate || undefined}
-                  />
-                </div>
-              </div>
-              <div className="date-filter-actions">
-                <button
-                  className="date-filter-clear"
-                  onClick={() => {
-                    setStartDate('');
-                    setEndDate('');
-                    setCurrentPage(0);
-                  }}
-                >
-                  Clear
-                </button>
-                <button
-                  className="date-filter-apply"
-                  onClick={() => setShowDateFilter(false)}
-                >
-                  Apply
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Results Count */}

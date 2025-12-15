@@ -10,8 +10,6 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
   const managerMenuItems = [
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/manager' },
     { id: 'my-events', icon: <FaClipboardList />, label: 'My Events', path: '/manager/events' },
-    { id: 'volunteers', icon: <FaUsers />, label: 'Volunteers', path: '/manager/volunteers' },
-    { id: 'browse-events', icon: <FaCalendarAlt />, label: 'Browse Events', path: '/events' },
     { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
   ];
 

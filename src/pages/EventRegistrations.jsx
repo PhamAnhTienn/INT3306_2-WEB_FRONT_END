@@ -7,6 +7,8 @@ import {
   FaUserCheck,
   FaUserTimes,
   FaClock,
+  FaFileExport,
+  FaFilter,
 } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { managerAPI } from '../services/manager/managerService';
@@ -24,6 +26,8 @@ const EventRegistrations = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [actionLoading, setActionLoading] = useState({});
+  const [statusFilter, setStatusFilter] = useState('');
+  const [completedOnly, setCompletedOnly] = useState(false);
 
   const fetchEvent = async () => {
     try {
@@ -44,6 +48,8 @@ const EventRegistrations = () => {
       const response = await managerAPI.getEventRegistrations(eventId, {
         pageNumber: page,
         pageSize: 10,
+        status: statusFilter || undefined,
+        completedOnly: completedOnly || undefined,
       });
 
       console.log('Registrations response:', response);
@@ -71,7 +77,7 @@ const EventRegistrations = () => {
     fetchEvent();
     fetchRegistrations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventId, page]);
+  }, [eventId, page, statusFilter, completedOnly]);
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
@@ -105,8 +111,35 @@ const EventRegistrations = () => {
             <FaUserTimes /> Rejected
           </span>
         );
+      case 'WAITING':
+        return (
+          <span className="me-reg-status-badge me-reg-waiting">
+            <FaClock /> Waiting
+          </span>
+        );
+      case 'CANCELLED':
+        return (
+          <span className="me-reg-status-badge me-reg-cancelled">
+            <FaUserTimes /> Cancelled
+          </span>
+        );
       default:
         return <span className="me-reg-status-badge">{status}</span>;
+    }
+  };
+
+  const handleExport = async (format) => {
+    try {
+      const res = await managerAPI.exportEventRegistrations(eventId, format, statusFilter || undefined, completedOnly || undefined);
+      const blob = new Blob([res.data], { type: format === 'csv' ? 'text/csv' : 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `registrations-${eventId}.${format}`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      alert('Failed to export registrations');
     }
   };
 
@@ -194,6 +227,52 @@ const EventRegistrations = () => {
               </span>
             </div>
           </div>
+          <div className="me-header-right">
+            <div className="me-filter-group">
+              <select
+                className="me-filter-select"
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                  setPage(0);
+                }}
+              >
+                <option value="">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="WAITING">Waiting</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+              <label className="me-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={completedOnly}
+                  onChange={(e) => {
+                    setCompletedOnly(e.target.checked);
+                    setPage(0);
+                  }}
+                />
+                Completed Only
+              </label>
+            </div>
+            <div className="me-export-buttons">
+              <button
+                className="me-btn me-btn-export"
+                onClick={() => handleExport('csv')}
+                title="Export as CSV"
+              >
+                <FaFileExport /> CSV
+              </button>
+              <button
+                className="me-btn me-btn-export"
+                onClick={() => handleExport('json')}
+                title="Export as JSON"
+              >
+                <FaFileExport /> JSON
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="me-registrations-table-container">
@@ -218,6 +297,7 @@ const EventRegistrations = () => {
                   <th>User</th>
                   <th>Email</th>
                   <th>Registered At</th>
+                  <th>Completed At</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -245,6 +325,7 @@ const EventRegistrations = () => {
                       </td>
                       <td>{user?.email || 'N/A'}</td>
                       <td>{formatDate(reg.registeredAt)}</td>
+                      <td>{formatDate(reg.completedAt)}</td>
                       <td>{getRegistrationStatusBadge(reg.status)}</td>
                     <td>
                       {reg.status === 'PENDING' && (
@@ -277,41 +358,45 @@ const EventRegistrations = () => {
                           </button>
                         </div>
                       )}
+                      {reg.status === 'APPROVED' && (
+                        <span className="me-action-info">Approved</span>
+                      )}
+                      {reg.status === 'REJECTED' && (
+                        <span className="me-action-info">Rejected</span>
+                      )}
                     </td>
-                  </tr>
+                    </tr>
                   );
                 })}
               </tbody>
             </table>
           ) : (
             <div className="me-empty-state">
-              <div className="me-empty-state-icon">
-                <FaUsers />
-              </div>
-              <h3>No Registrations</h3>
-              <p>No one has registered for this event yet.</p>
+              <FaUsers className="me-empty-icon" />
+              <h3>No Registrations Found</h3>
+              <p>There are no registrations matching your filters.</p>
             </div>
           )}
         </div>
 
         {totalPages > 1 && (
-          <div className="me-pagination me-modal-pagination">
+          <div className="me-pagination">
             <button
-              className="me-pagination-btn"
+              className="me-btn me-btn-pagination"
+              onClick={() => setPage(Math.max(0, page - 1))}
               disabled={page === 0}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
             >
-              <FaChevronLeft />
+              <FaChevronLeft /> Previous
             </button>
             <span className="me-pagination-info">
               Page {page + 1} of {totalPages}
             </span>
             <button
-              className="me-pagination-btn"
+              className="me-btn me-btn-pagination"
+              onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
               disabled={page >= totalPages - 1}
-              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             >
-              <FaChevronRight />
+              Next <FaChevronRight />
             </button>
           </div>
         )}
@@ -321,9 +406,3 @@ const EventRegistrations = () => {
 };
 
 export default EventRegistrations;
-
-
-
-
-
-

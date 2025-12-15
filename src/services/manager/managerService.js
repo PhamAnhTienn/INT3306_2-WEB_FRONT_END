@@ -47,6 +47,8 @@ export const getEventRegistrations = async (eventId, params = {}) => {
       pageSize = 10,
       sortBy = 'id',
       sortDir = 'asc',
+      status,
+      completedOnly,
     } = params;
 
     const queryParams = new URLSearchParams({
@@ -55,6 +57,13 @@ export const getEventRegistrations = async (eventId, params = {}) => {
       sortBy,
       sortDir,
     });
+
+    if (status) {
+      queryParams.append('status', status);
+    }
+    if (completedOnly) {
+      queryParams.append('completedOnly', 'true');
+    }
 
     const response = await api.get(`/registrations/events/${eventId}?${queryParams.toString()}`);
     return response.data;
@@ -119,10 +128,43 @@ export const getRegistrationCount = async (eventId, status) => {
  */
 export const getEventDetails = async (eventId) => {
   try {
-    const response = await api.get(`/events/${eventId}`);
+    // Add timestamp to prevent caching
+    const response = await api.get(`/events/${eventId}`, {
+      params: {
+        _t: Date.now() // Force fresh data
+      }
+    });
     return response.data;
   } catch (error) {
     console.error(`Error fetching event ${eventId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Export event registrations to CSV or JSON
+ * @param {number} eventId - Event ID
+ * @param {string} format - Export format ('csv' or 'json')
+ * @param {string} status - Optional status filter
+ * @param {boolean} completedOnly - Optional completed only filter
+ * @returns {Promise} Blob response
+ */
+export const exportEventRegistrations = async (eventId, format = 'csv', status, completedOnly) => {
+  try {
+    const queryParams = new URLSearchParams({ format });
+    if (status) {
+      queryParams.append('status', status);
+    }
+    if (completedOnly) {
+      queryParams.append('completedOnly', 'true');
+    }
+
+    const response = await api.get(`/registrations/events/${eventId}/export?${queryParams.toString()}`, {
+      responseType: 'blob',
+    });
+    return response;
+  } catch (error) {
+    console.error(`Error exporting registrations for event ${eventId}:`, error);
     throw error;
   }
 };
@@ -135,6 +177,7 @@ export const managerAPI = {
   rejectRegistration,
   getRegistrationCount,
   getEventDetails,
+  exportEventRegistrations,
 };
 
 export default managerAPI;

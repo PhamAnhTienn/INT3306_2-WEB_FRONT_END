@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaCalendar, FaMapMarkerAlt, FaUsers, FaArrowLeft } from 'react-icons/fa';
+import { FaCalendar, FaMapMarkerAlt, FaUsers, FaArrowLeft, FaSpinner } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { createEvent } from '../services/events/eventsService';
 import { tagsAPI } from '../services/tags/tagsService';

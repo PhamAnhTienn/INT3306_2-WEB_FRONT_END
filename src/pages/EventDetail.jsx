@@ -14,6 +14,8 @@ const EventDetail = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Reset event state when eventId changes
+    setEvent(null);
     fetchEventDetails();
   }, [eventId]);
 
@@ -21,14 +23,25 @@ const EventDetail = () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('=== FETCHING EVENT DETAILS ===');
+      console.log('EventId:', eventId);
+      
       const response = await managerAPI.getEventDetails(eventId);
+      console.log('API Response:', response);
+      console.log('Response success:', response?.success);
+      console.log('Response data:', response?.data);
       
       if (response.success && response.data) {
+        console.log('Event data received:', response.data);
+        console.log('Event status:', response.data.status);
         setEvent(response.data);
       } else {
+        console.warn('Failed to load event details, response:', response);
         setError('Failed to load event details');
       }
     } catch (error) {
+      console.error('Error fetching event details:', error);
+      console.error('Error response:', error.response);
       setError(error.message || 'Failed to load event details');
     } finally {
       setLoading(false);
