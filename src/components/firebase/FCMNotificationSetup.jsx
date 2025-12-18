@@ -81,25 +81,7 @@ const FCMNotificationSetup = () => {
       {/* Banner để request notification permission */}
       <NotificationPermissionBanner />
       
-      {/* Debug info (chỉ hiện trong development) */}
-      {import.meta.env.DEV && fcmToken && (
-        <div style={{ 
-          position: 'fixed', 
-          bottom: '10px', 
-          left: '10px', 
-          background: '#f0f0f0', 
-          padding: '10px', 
-          borderRadius: '5px',
-          fontSize: '12px',
-          zIndex: 9999,
-          maxWidth: '300px'
-        }}>
-          <div>✅ FCM Token: {fcmToken.substring(0, 20)}...</div>
-          {isRegistering && <div>⏳ Registering...</div>}
-          {registrationError && <div style={{ color: 'red' }}>❌ {registrationError}</div>}
-          {!isRegistering && !registrationError && user && <div>✅ Token registered</div>}
-        </div>
-      )}
+      {/* Debug info cho FCM đã tắt để tránh hiển thị token trên UI */}
     </>
   );
 };

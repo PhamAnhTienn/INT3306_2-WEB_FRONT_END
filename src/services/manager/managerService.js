@@ -36,34 +36,24 @@ export const getManagerEvents = async (params = {}) => {
 
 /**
  * Get all registrations for a specific event
- * @param {number} eventId - Event ID
- * @param {Object} params - Query parameters
- * @returns {Promise} API response with registrations
+ * Supports basic paging; backend currently does not filter by status/completedOnly.
  */
 export const getEventRegistrations = async (eventId, params = {}) => {
   try {
     const {
-      pageNumber = 0,
-      pageSize = 10,
+      page = 0,
+      size = 10,
       sortBy = 'id',
       sortDir = 'asc',
-      status,
-      completedOnly,
+      // status, completedOnly are accepted but not yet supported by backend
     } = params;
 
     const queryParams = new URLSearchParams({
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber: page.toString(),
+      pageSize: size.toString(),
       sortBy,
       sortDir,
     });
-
-    if (status) {
-      queryParams.append('status', status);
-    }
-    if (completedOnly) {
-      queryParams.append('completedOnly', 'true');
-    }
 
     const response = await api.get(`/registrations/events/${eventId}?${queryParams.toString()}`);
     return response.data;
@@ -75,9 +65,6 @@ export const getEventRegistrations = async (eventId, params = {}) => {
 
 /**
  * Approve a registration
- * @param {number} eventId - Event ID
- * @param {number} registrationId - Registration ID
- * @returns {Promise} API response
  */
 export const approveRegistration = async (eventId, registrationId) => {
   try {
@@ -91,9 +78,6 @@ export const approveRegistration = async (eventId, registrationId) => {
 
 /**
  * Reject a registration
- * @param {number} eventId - Event ID
- * @param {number} registrationId - Registration ID
- * @returns {Promise} API response
  */
 export const rejectRegistration = async (eventId, registrationId) => {
   try {
@@ -101,6 +85,19 @@ export const rejectRegistration = async (eventId, registrationId) => {
     return response.data;
   } catch (error) {
     console.error(`Error rejecting registration ${registrationId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Delete/remove a registration (manager can remove user from event)
+ */
+export const deleteRegistration = async (registrationId) => {
+  try {
+    const response = await api.delete(`/registrations/${registrationId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting registration ${registrationId}:`, error);
     throw error;
   }
 };
@@ -122,49 +119,50 @@ export const getRegistrationCount = async (eventId, status) => {
 };
 
 /**
+ * Export registrations for an event (CSV/JSON)
+ * Returns a Blob for download.
+ */
+export const exportEventRegistrations = async (
+  eventId,
+  format = 'csv',
+  status = '',
+  completedOnly = false,
+) => {
+  try {
+    const queryParams = new URLSearchParams({
+      format,
+    });
+    if (status) {
+      queryParams.append('status', status);
+    }
+    if (completedOnly) {
+      queryParams.append('completedOnly', completedOnly.toString());
+    }
+
+    const response = await api.get(
+      `/registrations/events/${eventId}/export?${queryParams.toString()}`,
+      {
+        responseType: 'blob',
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error exporting registrations for event ${eventId}:`, error);
+    throw error;
+  }
+};
+
+/**
  * Get event details
  * @param {number} eventId - Event ID
  * @returns {Promise} API response with event details
  */
 export const getEventDetails = async (eventId) => {
   try {
-    // Add timestamp to prevent caching
-    const response = await api.get(`/events/${eventId}`, {
-      params: {
-        _t: Date.now() // Force fresh data
-      }
-    });
+    const response = await api.get(`/events/${eventId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching event ${eventId}:`, error);
-    throw error;
-  }
-};
-
-/**
- * Export event registrations to CSV or JSON
- * @param {number} eventId - Event ID
- * @param {string} format - Export format ('csv' or 'json')
- * @param {string} status - Optional status filter
- * @param {boolean} completedOnly - Optional completed only filter
- * @returns {Promise} Blob response
- */
-export const exportEventRegistrations = async (eventId, format = 'csv', status, completedOnly) => {
-  try {
-    const queryParams = new URLSearchParams({ format });
-    if (status) {
-      queryParams.append('status', status);
-    }
-    if (completedOnly) {
-      queryParams.append('completedOnly', 'true');
-    }
-
-    const response = await api.get(`/registrations/events/${eventId}/export?${queryParams.toString()}`, {
-      responseType: 'blob',
-    });
-    return response;
-  } catch (error) {
-    console.error(`Error exporting registrations for event ${eventId}:`, error);
     throw error;
   }
 };
@@ -175,6 +173,7 @@ export const managerAPI = {
   getEventRegistrations,
   approveRegistration,
   rejectRegistration,
+  deleteRegistration,
   getRegistrationCount,
   getEventDetails,
   exportEventRegistrations,

@@ -1,0 +1,393 @@
+.event-registrations-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.registrations-header {
+  margin-bottom: 2rem;
+}
+
+.registrations-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark, #1f2937);
+  margin: 0 0 0.5rem 0;
+}
+
+.registrations-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6b7280);
+  margin: 0;
+}
+
+.registrations-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--white, #ffffff);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-medium, #d1d5db);
+  border-radius: 0.5rem;
+  background: var(--white, #ffffff);
+  color: var(--text-dark, #1f2937);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  border-color: var(--primary-400, #60a5fa);
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary-500, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filter-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-checkbox {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.filter-checkbox-label {
+  font-size: 0.875rem;
+  color: var(--text-dark, #1f2937);
+  cursor: pointer;
+  user-select: none;
+}
+
+.export-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-export {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--white, #ffffff);
+  border: 1px solid var(--border-medium, #d1d5db);
+  border-radius: 0.5rem;
+  color: var(--text-dark, #1f2937);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-export:hover {
+  background: var(--neutral-50, #f9fafb);
+  border-color: var(--primary-400, #60a5fa);
+}
+
+.registrations-table-container {
+  background: var(--white, #ffffff);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+.registrations-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.registrations-table thead {
+  background: var(--neutral-50, #f9fafb);
+  border-bottom: 1px solid var(--border-light, #e5e7eb);
+}
+
+.registrations-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-dark, #1f2937);
+  white-space: nowrap;
+}
+
+.registrations-table th.text-right {
+  text-align: right;
+}
+
+.registrations-table tbody {
+  background: var(--white, #ffffff);
+}
+
+.registrations-table tbody tr {
+  border-bottom: 1px solid var(--border-light, #e5e7eb);
+  transition: background 0.15s ease;
+}
+
+.registrations-table tbody tr:hover {
+  background: var(--neutral-50, #f9fafb);
+}
+
+.registrations-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.registrations-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-dark, #1f2937);
+}
+
+.volunteer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.volunteer-name {
+  font-weight: 600;
+  color: var(--text-dark, #1f2937);
+}
+
+.volunteer-username {
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.reg-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.reg-status-approved {
+  background: var(--success-50, #f0fdf4);
+  color: var(--success-700, #15803d);
+}
+
+.reg-status-pending {
+  background: var(--warning-50, #fffbeb);
+  color: var(--warning-700, #a16207);
+}
+
+.reg-status-rejected {
+  background: var(--error-50, #fef2f2);
+  color: var(--error-700, #b91c1c);
+}
+
+.reg-status-cancelled {
+  background: var(--neutral-100, #f3f4f6);
+  color: var(--neutral-700, #374151);
+}
+
+.reg-status-waiting {
+  background: var(--info-50, #eff6ff);
+  color: var(--info-700, #1d4ed8);
+}
+
+.completed-badge {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.completed-yes {
+  color: var(--success-600, #16a34a);
+}
+
+.completed-no {
+  color: var(--neutral-400, #9ca3af);
+}
+
+.actions-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-action-approve {
+  padding: 0.375rem 0.75rem;
+  background: var(--success-600, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-approve:hover {
+  background: var(--success-700, #15803d);
+}
+
+.btn-action-reject {
+  padding: 0.375rem 0.75rem;
+  background: var(--error-600, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-reject:hover {
+  background: var(--error-700, #b91c1c);
+}
+
+.btn-action-delete {
+  padding: 0.375rem 0.75rem;
+  background: var(--neutral-600, #4b5563);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-delete:hover {
+  background: var(--neutral-700, #374151);
+}
+
+.registrations-empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.registrations-empty-icon {
+  font-size: 3rem;
+  color: var(--neutral-300, #d1d5db);
+  margin-bottom: 1rem;
+}
+
+.registrations-empty h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-dark, #1f2937);
+  margin: 0 0 0.5rem 0;
+}
+
+.registrations-empty p {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6b7280);
+  margin: 0;
+}
+
+.registrations-loading {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--text-secondary, #6b7280);
+}
+
+.registrations-error {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--error-600, #dc2626);
+}
+
+.registrations-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--white, #ffffff);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.btn-pagination {
+  padding: 0.5rem 1rem;
+  background: var(--white, #ffffff);
+  border: 1px solid var(--border-medium, #d1d5db);
+  border-radius: 0.375rem;
+  color: var(--text-dark, #1f2937);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pagination:hover:not(:disabled) {
+  background: var(--neutral-50, #f9fafb);
+  border-color: var(--primary-400, #60a5fa);
+}
+
+.btn-pagination:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .event-registrations-page {
+    padding: 1rem;
+  }
+
+  .registrations-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .export-group {
+    justify-content: stretch;
+  }
+
+  .btn-export {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .registrations-table-container {
+    overflow-x: auto;
+  }
+
+  .registrations-table {
+    min-width: 800px;
+  }
+
+  .registrations-header h1 {
+    font-size: 1.5rem;
+  }
+}
+

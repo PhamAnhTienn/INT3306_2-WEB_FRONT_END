@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
-import { getMyEvents, getEventById } from '../services/events/eventsService';
+import { getMyEvents } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
@@ -151,53 +151,10 @@ const MyEvents = () => {
   };
 
   // Open modal with event details
-  const handleViewDetails = async (event) => {
-    console.log('handleViewDetails called with event:', event);
-    console.log('Event keys:', Object.keys(event));
-    console.log('Event eventId:', event.eventId, 'Event id:', event.id);
-    console.log('Event status:', event.status);
-    
-    // Use event from list first to show modal immediately
+  const handleViewDetails = (event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    
-    // Fetch fresh event details to ensure we have the latest status
-    try {
-      const eventId = event.eventId || event.id;
-      console.log('=== FETCHING EVENT DETAILS ===');
-      console.log('EventId to fetch:', eventId);
-      console.log('Current event status:', event.status);
-      
-      if (!eventId) {
-        console.error('No eventId found in event object:', event);
-        return;
-      }
-      
-      const response = await getEventById(eventId);
-      console.log('API Response:', response);
-      console.log('Response success:', response?.success);
-      console.log('Response data:', response?.data);
-      
-      if (response && response.success && response.data) {
-        console.log('=== EVENT DETAILS FETCHED ===');
-        console.log('Fetched event details:', response.data);
-        console.log('New status:', response.data.status);
-        console.log('Old status:', event.status);
-        // Update selectedEvent with fresh data
-        setSelectedEvent(response.data);
-      } else {
-        console.warn('=== FETCH FAILED ===');
-        console.warn('Response structure:', response);
-        console.warn('Failed to fetch event details, using event from list');
-      }
-    } catch (err) {
-      console.error('=== ERROR FETCHING EVENT DETAILS ===');
-      console.error('Error:', err);
-      console.error('Error message:', err.message);
-      console.error('Error response:', err.response);
-      // Keep using event from list if fetch fails
-    }
   };
 
   // Close modal
@@ -347,13 +304,42 @@ const MyEvents = () => {
                     </div>
 
                     <div className="event-detail-item">
-                      <FaUsers className="detail-icon" />
-                      <span>Max {event.maxParticipants} participants</span>
-                    </div>
-
-                    <div className="event-detail-item">
                       <FaUser className="detail-icon" />
                       <span>By {event.creatorUsername}</span>
+                    </div>
+                  </div>
+
+                  {/* Participants Progress */}
+                  <div className="event-participants">
+                    <div className="participants-header">
+                      <FaUsers className="participants-icon" />
+                      <span className="participants-text">
+                        {event.currentParticipants || 0} / {event.maxParticipants} Participants
+                      </span>
+                      {(() => {
+                        const current = event.currentParticipants || 0;
+                        const max = event.maxParticipants;
+                        const percentage = (current / max) * 100;
+                        
+                        if (current >= max) {
+                          return <span className="availability-badge badge-full">Full</span>;
+                        } else if (percentage >= 80) {
+                          return <span className="availability-badge badge-almost-full">Almost Full</span>;
+                        } else if (percentage >= 50) {
+                          return <span className="availability-badge badge-filling">Filling Up</span>;
+                        }
+                        return <span className="availability-badge badge-available">Available</span>;
+                      })()}
+                    </div>
+                    <div className="participants-progress-bar">
+                      <div 
+                        className={`participants-progress-fill ${
+                          ((event.currentParticipants || 0) / event.maxParticipants) >= 1 ? 'full' :
+                          ((event.currentParticipants || 0) / event.maxParticipants) >= 0.8 ? 'almost-full' :
+                          ((event.currentParticipants || 0) / event.maxParticipants) >= 0.5 ? 'filling' : 'available'
+                        }`}
+                        style={{ width: `${Math.min(((event.currentParticipants || 0) / event.maxParticipants) * 100, 100)}%` }}
+                      ></div>
                     </div>
                   </div>
 
@@ -474,8 +460,20 @@ const MyEvents = () => {
                   <div className="modal-detail-item">
                     <FaUsers className="modal-detail-icon" />
                     <div className="modal-detail-content">
-                      <div className="modal-detail-label">Max Participants</div>
-                      <div className="modal-detail-value">{selectedEvent.maxParticipants} people</div>
+                      <div className="modal-detail-label">Participants</div>
+                      <div className="modal-detail-value">
+                        {selectedEvent.currentParticipants || 0} / {selectedEvent.maxParticipants} registered
+                        {(() => {
+                          const current = selectedEvent.currentParticipants || 0;
+                          const max = selectedEvent.maxParticipants;
+                          if (current >= max) {
+                            return <span className="modal-availability-badge badge-full">Full</span>;
+                          } else if ((current / max) >= 0.8) {
+                            return <span className="modal-availability-badge badge-almost-full">Almost Full</span>;
+                          }
+                          return null;
+                        })()}
+                      </div>
                     </div>
                   </div>
 
@@ -486,6 +484,33 @@ const MyEvents = () => {
                       <div className="modal-detail-value">{selectedEvent.creatorUsername}</div>
                     </div>
                   </div>
+                </div>
+
+                {/* Participants Progress in Modal */}
+                <div className="modal-participants-progress">
+                  <div className="participants-progress-bar">
+                    <div 
+                      className={`participants-progress-fill ${
+                        ((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) >= 1 ? 'full' :
+                        ((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) >= 0.8 ? 'almost-full' :
+                        ((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) >= 0.5 ? 'filling' : 'available'
+                      }`}
+                      style={{ width: `${Math.min(((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) * 100, 100)}%` }}
+                    ></div>
+                  </div>
+                  {(() => {
+                    const current = selectedEvent.currentParticipants || 0;
+                    const max = selectedEvent.maxParticipants;
+                    const remaining = max - current;
+                    if (current >= max) {
+                      return <p className="availability-message warning">⚠️ This event is full.</p>;
+                    } else if (remaining <= 3) {
+                      return <p className="availability-message warning">⚠️ Only {remaining} spot(s) remaining!</p>;
+                    } else if ((current / max) >= 0.8) {
+                      return <p className="availability-message info">ℹ️ This event is filling up fast. {remaining} spots available.</p>;
+                    }
+                    return <p className="availability-message success">✅ {remaining} spots available</p>;
+                  })()}
                 </div>
 
                 {/* Description Section */}

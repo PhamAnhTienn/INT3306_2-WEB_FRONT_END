@@ -7,14 +7,6 @@ import api from '../../api/client';
 
 /**
  * Fetch all events with pagination and filtering
- * @param {Object} params - Query parameters
- * @param {number} params.page - Page number (0-indexed)
- * @param {number} params.size - Number of items per page
- * @param {string} params.sortBy - Field to sort by (e.g., 'date', 'createdAt')
- * @param {string} params.sortDirection - Sort direction ('asc' or 'desc')
- * @param {string} params.status - Filter by event status (PLANNED, ONGOING, COMPLETED, CANCELLED)
- * @param {string} params.search - Search query for title/description
- * @returns {Promise} API response with events data
  */
 export const getAllEvents = async (params = {}) => {
   try {
@@ -25,22 +17,22 @@ export const getAllEvents = async (params = {}) => {
       sortDirection = 'desc',
       status = '',
       search = '',
+      from = '',
+      to = '',
+      category = '',
     } = params;
 
-    // Build query parameters
     const queryParams = new URLSearchParams({
       page: page.toString(),
       size: size.toString(),
       sort: `${sortBy},${sortDirection}`,
     });
 
-    // Add optional filters
-    if (status) {
-      queryParams.append('status', status);
-    }
-    if (search) {
-      queryParams.append('search', search);
-    }
+    if (status) queryParams.append('status', status);
+    if (search) queryParams.append('search', search);
+    if (from) queryParams.append('from', from);
+    if (to) queryParams.append('to', to);
+    if (category) queryParams.append('category', category);
 
     const response = await api.get(`/events?${queryParams.toString()}`);
     return response.data;
@@ -52,8 +44,6 @@ export const getAllEvents = async (params = {}) => {
 
 /**
  * Fetch a single event by ID
- * @param {number} eventId - Event ID
- * @returns {Promise} API response with event details
  */
 export const getEventById = async (eventId) => {
   try {
@@ -66,9 +56,20 @@ export const getEventById = async (eventId) => {
 };
 
 /**
+ * Get registration status for current user in a given event
+ */
+export const getRegistrationStatus = async (eventId) => {
+  try {
+    const response = await api.get(`/registrations/events/${eventId}/status`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching registration status for event ${eventId}:`, error);
+    throw error;
+  }
+};
+
+/**
  * Register for an event with pending status
- * @param {number} eventId - Event ID
- * @returns {Promise} API response with registration data
  */
 export const registerForEvent = async (eventId) => {
   try {
@@ -82,8 +83,6 @@ export const registerForEvent = async (eventId) => {
 
 /**
  * Unregister from an event
- * @param {number} eventId - Event ID
- * @returns {Promise} API response
  */
 export const unregisterFromEvent = async (eventId) => {
   try {
@@ -96,12 +95,26 @@ export const unregisterFromEvent = async (eventId) => {
 };
 
 /**
- * Get user's registered events
- * @returns {Promise} API response with user's events
+ * Get user's registered events (supports status filter & pagination)
  */
-export const getMyEvents = async () => {
+export const getMyEvents = async ({
+  status = '',
+  page = 0,
+  size = 10,
+  sortBy = 'registeredAt',
+  sortDirection = 'desc',
+} = {}) => {
   try {
-    const response = await api.get('/registrations/my');
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      size: size.toString(),
+      sortBy,
+      sortDirection,
+    });
+    if (status) queryParams.append('status', status);
+
+    // Backend endpoint is `/api/v1/registrations/my`
+    const response = await api.get(`/registrations/my?${queryParams.toString()}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching my events:', error);
@@ -110,30 +123,26 @@ export const getMyEvents = async () => {
 };
 
 /**
- * Get user's registration status for a specific event
- * @param {number} eventId - Event ID
- * @returns {Promise} API response with registration status (null if not registered)
+ * Get user's registrations with full details (including status)
+ * Used to show registration status badges in Events list
  */
-export const getRegistrationStatus = async (eventId) => {
+export const getMyRegistrations = async (page = 0, size = 100) => {
   try {
-    const response = await api.get(`/registrations/events/${eventId}/status`);
+    const queryParams = new URLSearchParams({
+      pageNumber: page.toString(),
+      pageSize: size.toString(),
+    });
+
+    const response = await api.get(`/registrations/my-registrations?${queryParams.toString()}`);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching registration status for event ${eventId}:`, error);
+    console.error('Error fetching my registrations:', error);
     throw error;
   }
 };
 
 /**
- * Create a new event
- * @param {Object} eventData - Event data
- * @param {string} eventData.title - Event title
- * @param {string} eventData.description - Event description
- * @param {string} eventData.date - Event date (ISO string)
- * @param {string} eventData.location - Event location
- * @param {number} eventData.maxParticipants - Maximum participants
- * @param {string[]} eventData.tags - Array of tag names
- * @returns {Promise} API response with created event
+ * Create a new event (manager)
  */
 export const createEvent = async (eventData) => {
   try {

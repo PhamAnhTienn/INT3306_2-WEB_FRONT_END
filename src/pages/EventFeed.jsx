@@ -59,131 +59,55 @@ const EventFeed = () => {
   const userRole = getUserRole();
   const isManager = userRole === 'manager' || userRole === 'admin';
 
-  // Reset state when eventId changes
-  useEffect(() => {
-    setUserRegistrationStatus(null);
-    setRegistrationData(null);
-    setEvent(null);
-    setPosts([]);
-    setPage(0);
-    setHasMore(true);
-    setError(null);
-    setShowCreatePost(false);
-    setEditingPost(null);
-  }, [eventId]);
-
   useEffect(() => {
     const fetchEventAndPosts = async () => {
       setLoading(true);
       try {
-        // Clear any previous errors
-        setError(null);
-        
         // Fetch event details
         const eventResponse = await getEventById(eventId);
         if (eventResponse.success && eventResponse.data) {
-          const eventData = eventResponse.data;
-          console.log('Event data received:', eventData);
-          console.log('Event status:', eventData.status, 'Type:', typeof eventData.status);
-          setEvent(eventData);
-          
-          // Check if event is PLANNED - feed is not available
-          // Check both string and enum comparison
-          const eventStatusStr = String(eventData.status).toUpperCase();
-          if (eventStatusStr === 'PLANNED') {
-            console.log('Event is PLANNED, blocking feed access');
-            setError('Event feed is not available for events with PLANNED status. Please wait until the event is approved.');
-            setLoading(false);
-            return;
-          } else {
-            console.log('Event status is NOT PLANNED:', eventStatusStr, '- Allowing feed access');
-          }
+          setEvent(eventResponse.data);
+        }
 
-          let registrationStatus = null;
-          let registrationInfo = null;
-          let isEventCreator = false;
+        let registrationStatus = null;
+        let registrationInfo = null;
 
-          // Check if user is the event creator
-          if (eventData && user && eventData.creatorId && user.id) {
-            isEventCreator = eventData.creatorId === user.id;
-          }
-
-          // Event creator (manager) can always access feed
-          if (isManager && isEventCreator) {
-            registrationStatus = 'APPROVED';
-            console.log('User is event creator, allowing access');
-          } else if (isManager && !isEventCreator) {
-            // Manager but not creator - need registration
-            // Get user's registration status for this event
-            try {
-              const registrationResponse = await getRegistrationStatus(eventId);
-              console.log('Manager registration status response for event', eventId, ':', registrationResponse);
-              if (registrationResponse && registrationResponse.success) {
-                if (registrationResponse.data && registrationResponse.data.status) {
-                  registrationStatus = registrationResponse.data.status;
-                  registrationInfo = registrationResponse.data;
-                  console.log('Manager registration status:', registrationStatus, registrationInfo);
-                } else {
-                  registrationStatus = null;
-                  registrationInfo = null;
-                  console.log('Manager not registered for this event');
-                }
-              }
-            } catch (regErr) {
-              console.error('Error checking registration status:', regErr);
+        // Managers can always access feed
+        if (isManager) {
+          registrationStatus = 'APPROVED';
+        } else {
+          // Get user's registration status for this event
+          try {
+            const registrationResponse = await getRegistrationStatus(eventId);
+            if (registrationResponse.success && registrationResponse.data) {
+              registrationStatus = registrationResponse.data.status;
+              registrationInfo = registrationResponse.data;
+            } else {
+              // Not registered
               registrationStatus = null;
             }
-          } else {
-            // Get user's registration status for this event
-            try {
-              const registrationResponse = await getRegistrationStatus(eventId);
-              console.log('Volunteer registration status response for event', eventId, ':', registrationResponse);
-              if (registrationResponse && registrationResponse.success) {
-                if (registrationResponse.data && registrationResponse.data.status) {
-                  registrationStatus = registrationResponse.data.status;
-                  registrationInfo = registrationResponse.data;
-                  console.log('User registration status:', registrationStatus, registrationInfo);
-                } else {
-                  // Not registered (data is null or no status)
-                  registrationStatus = null;
-                  registrationInfo = null;
-                  console.log('User not registered for this event (data:', registrationResponse.data, ')');
-                }
-              } else {
-                // API returned success=false or invalid response
-                registrationStatus = null;
-                registrationInfo = null;
-                console.log('Registration check failed:', registrationResponse?.message || 'Invalid response');
-              }
-            } catch (regErr) {
-              // If error, assume not registered
-              console.error('Error checking registration status:', regErr);
-              registrationStatus = null;
-            }
+          } catch (regErr) {
+            // If 404 or not found, user is not registered
+            registrationStatus = null;
           }
+        }
 
-          setUserRegistrationStatus(registrationStatus);
-          setRegistrationData(registrationInfo);
+        setUserRegistrationStatus(registrationStatus);
+        setRegistrationData(registrationInfo);
 
-          // Only fetch posts if user has access (APPROVED or manager)
-          if (isManager || registrationStatus === 'APPROVED') {
-            await fetchPosts(0, true);
-          }
+        // Only fetch posts if user has access (APPROVED or manager)
+        if (isManager || registrationStatus === 'APPROVED') {
+          await fetchPosts(0, true);
         }
       } catch (err) {
-        console.error('Error fetching event and posts:', err);
-        console.error('Error details:', err.response?.data || err.message);
-        // Only set error if it's not about PLANNED status (that's handled above)
-        if (!err.message?.includes('PLANNED')) {
-          setError(err.message || 'Failed to load event feed');
-        }
+        setError(err.message || 'Failed to load event feed');
       } finally {
         setLoading(false);
       }
     };
 
     fetchEventAndPosts();
-  }, [eventId, isManager, user]);
+  }, [eventId, isManager]);
 
   const fetchPosts = async (pageNum = 0, reset = false) => {
     try {
@@ -290,67 +214,24 @@ const EventFeed = () => {
     try {
       setRegistering(true);
       const response = await registerForEvent(eventId);
-      console.log('Register response:', response);
-      if (response && response.success) {
+      if (response.success) {
         // Refresh registration status
-        try {
-          const registrationResponse = await getRegistrationStatus(eventId);
-          console.log('Registration status after register:', registrationResponse);
-          if (registrationResponse && registrationResponse.success && registrationResponse.data) {
-            setUserRegistrationStatus(registrationResponse.data.status);
-            setRegistrationData(registrationResponse.data);
-          } else if (response.data) {
-            // Use registration data from register response if available
-            setUserRegistrationStatus(response.data.status);
-            setRegistrationData(response.data);
-          }
-        } catch (statusErr) {
-          console.error('Error fetching registration status after register:', statusErr);
-          // Fallback: use response data if available
-          if (response.data) {
-            setUserRegistrationStatus(response.data.status);
-            setRegistrationData(response.data);
-          }
+        const registrationResponse = await getRegistrationStatus(eventId);
+        if (registrationResponse.success && registrationResponse.data) {
+          setUserRegistrationStatus(registrationResponse.data.status);
+          setRegistrationData(registrationResponse.data);
         }
       }
     } catch (err) {
-      console.error('Register error:', err);
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to register for event';
-      // Check if user already registered
-      if (errorMessage.toLowerCase().includes('already registered')) {
-        // Refresh registration status to update UI
-        try {
-          const registrationResponse = await getRegistrationStatus(eventId);
-          console.log('Registration status after already registered error:', registrationResponse);
-          if (registrationResponse && registrationResponse.success && registrationResponse.data) {
-            setUserRegistrationStatus(registrationResponse.data.status);
-            setRegistrationData(registrationResponse.data);
-          }
-        } catch (statusErr) {
-          console.error('Error fetching registration status:', statusErr);
-        }
-        alert('You have already registered for this event.');
-      } else {
-        alert(errorMessage);
-      }
+      alert(err.message || 'Failed to register for event');
     } finally {
       setRegistering(false);
     }
   };
 
-  // Check if user is event creator
-  const isEventCreator = event && user && event.creatorId && user.id 
-    ? event.creatorId === user.id 
-    : false;
-
   // Check if user can access feed
-  // Event creator (manager) can always access, or APPROVED volunteers
-  const canAccessFeed = (isManager && isEventCreator) || userRegistrationStatus === 'APPROVED';
+  const canAccessFeed = isManager || userRegistrationStatus === 'APPROVED';
   const canViewPosts = canAccessFeed; // Can view but not post if not approved
-  
-  // Check if user can post
-  // Only event creator (manager) or APPROVED volunteers can post
-  const canPost = (isManager && isEventCreator) || userRegistrationStatus === 'APPROVED';
 
   if (loading) {
     return (
@@ -364,12 +245,10 @@ const EventFeed = () => {
   }
 
   if (error || !event) {
-    console.log('Error or no event - Error:', error, 'Event:', event);
     return (
       <DashboardLayout userRole={userRole}>
         <div className="event-feed-error">
           <p>⚠️ {error || 'Event not found'}</p>
-          {event && <p>Event Status: {event.status}</p>}
           <button 
             onClick={() => navigate(isManager ? '/manager/events' : '/volunteer/events')} 
             className="btn-back"
@@ -381,44 +260,8 @@ const EventFeed = () => {
     );
   }
 
-  // Show access restriction screen for users who don't have access
-  // Check if event is PLANNED
-  const eventStatus = event?.status;
-  const eventStatusStr = eventStatus ? String(eventStatus).toUpperCase() : '';
-  const isPlanned = eventStatusStr === 'PLANNED';
-  
-  console.log('Render check - Event status:', eventStatus, 'String:', eventStatusStr, 'Is PLANNED:', isPlanned);
-  
-  if (event && isPlanned) {
-    return (
-      <DashboardLayout userRole={userRole}>
-        <div className="event-feed-page">
-          <div className="event-feed-header">
-            <div className="event-feed-title">
-              <h1>{event.title || event.eventTitle}</h1>
-            </div>
-          </div>
-          <div className="access-restriction-container">
-            <div className="access-restriction-card">
-              <div className="restriction-icon not-registered">
-                <FaClock />
-              </div>
-              <h2>Event Feed Not Available</h2>
-              <p>Event feed is not available for events with PLANNED status. Please wait until the event is approved.</p>
-              <button 
-                className="btn-back-to-events"
-                onClick={() => navigate('/manager/events')}
-              >
-                <FaArrowLeft /> Back to My Events
-              </button>
-            </div>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
-
-  if (!canAccessFeed) {
+  // Show access restriction screen for volunteers who haven't been approved
+  if (!isManager && !canAccessFeed) {
     return (
       <DashboardLayout userRole={userRole}>
         <div className="event-feed-page">
@@ -437,7 +280,7 @@ const EventFeed = () => {
                   <FaMapMarkerAlt /> {event.location}
                 </span>
                 <span className="meta-item">
-                  <FaUsers /> {event.maxParticipants || event.maxVolunteers} participants
+                  <FaUsers /> {event.currentParticipants || 0}/{event.maxParticipants || event.maxVolunteers} participants
                 </span>
               </div>
             </div>
@@ -578,7 +421,7 @@ const EventFeed = () => {
                 <FaMapMarkerAlt /> {event.location}
               </span>
               <span className="meta-item">
-                <FaUsers /> {event.maxParticipants || event.maxVolunteers} participants
+                <FaUsers /> {event.currentParticipants || 0}/{event.maxParticipants || event.maxVolunteers} participants
               </span>
             </div>
           </div>
@@ -587,8 +430,8 @@ const EventFeed = () => {
         <div className="event-feed-container">
           <div className="event-feed-layout">
             <div className="feed-main">
-              {/* Create Post Section - Only show if user can post (event creator or APPROVED) */}
-              {canPost ? (
+              {/* Create Post Section - Only show if registration is approved */}
+              {userRegistrationStatus === 'APPROVED' ? (
                 <>
                   {!showCreatePost ? (
                     <div className="create-post-card">
@@ -762,8 +605,8 @@ const EventFeed = () => {
                 <ul>
                   <li><strong>Date:</strong> {formatDate(event.date || event.startTime)}</li>
                   <li><strong>Location:</strong> {event.location}</li>
-                  <li><strong>Capacity:</strong> {event.maxParticipants || event.maxVolunteers}</li>
-                  <li><strong>Status:</strong> {userRegistrationStatus || 'N/A'}</li>
+                  <li><strong>Participants:</strong> {event.currentParticipants || 0} / {event.maxParticipants || event.maxVolunteers}</li>
+                  <li><strong>Your Status:</strong> {userRegistrationStatus || 'Not Registered'}</li>
                 </ul>
               </div>
               <div className="sidebar-card">

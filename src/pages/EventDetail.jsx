@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaInfoCircle } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { getEventById } from '../services/events/eventsService';
-import { managerAPI } from '../services/manager/managerService';
 import './EventDetail.css';
 
 const EventDetail = () => {
@@ -14,37 +13,38 @@ const EventDetail = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Reset event state when eventId changes
-    setEvent(null);
-    fetchEventDetails();
-  }, [eventId]);
-
-  const fetchEventDetails = async () => {
-    try {
+    const load = async () => {
       setLoading(true);
       setError(null);
-      console.log('=== FETCHING EVENT DETAILS ===');
-      console.log('EventId:', eventId);
-      
-      const response = await managerAPI.getEventDetails(eventId);
-      console.log('API Response:', response);
-      console.log('Response success:', response?.success);
-      console.log('Response data:', response?.data);
-      
-      if (response.success && response.data) {
-        console.log('Event data received:', response.data);
-        console.log('Event status:', response.data.status);
-        setEvent(response.data);
-      } else {
-        console.warn('Failed to load event details, response:', response);
-        setError('Failed to load event details');
+      try {
+        const res = await getEventById(eventId);
+        if (res.success && res.data) {
+          setEvent(res.data);
+        } else {
+          setError(res.message || 'Failed to load event');
+        }
+      } catch (err) {
+        const message = err.response?.data?.message || err.message || 'Failed to load event';
+        setError(message);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching event details:', error);
-      console.error('Error response:', error.response);
-      setError(error.message || 'Failed to load event details');
-    } finally {
-      setLoading(false);
+    };
+    load();
+  }, [eventId]);
+
+  const getStatusBadge = (status) => {
+    switch ((status || '').toUpperCase()) {
+      case 'PLANNED':
+        return <span className="status-badge status-planned">Planned</span>;
+      case 'ONGOING':
+        return <span className="status-badge status-ongoing">Ongoing</span>;
+      case 'COMPLETED':
+        return <span className="status-badge status-completed">Completed</span>;
+      case 'CANCELLED':
+        return <span className="status-badge status-cancelled">Cancelled</span>;
+      default:
+        return <span className="status-badge">{status}</span>;
     }
   };
 
@@ -60,42 +60,60 @@ const EventDetail = () => {
     });
   };
 
-  const getStatusBadge = (status) => {
-    const statusClass = status?.toLowerCase() || 'default';
-    return (
-      <span className={`status-badge status-${statusClass}`}>
-        {status || 'UNKNOWN'}
-      </span>
-    );
-  };
-
   if (loading) {
     return (
       <DashboardLayout
         userRole="manager"
-        title="Event Details"
-        breadcrumbs={['Manager', 'Events', 'Details']}
+        title="Event Detail"
+        breadcrumbs={['Manager', 'My Events', 'Detail']}
       >
-        <div className="event-detail-loading">
-          <div className="spinner"></div>
-          <p>Loading event details...</p>
+        <div className="event-detail-page">
+          <div className="event-detail-loading">
+            <div className="spinner"></div>
+            <p>Loading event details...</p>
+          </div>
         </div>
       </DashboardLayout>
     );
   }
 
-  if (error || !event) {
+  if (error) {
     return (
       <DashboardLayout
         userRole="manager"
-        title="Event Details"
-        breadcrumbs={['Manager', 'Events', 'Details']}
+        title="Event Detail"
+        breadcrumbs={['Manager', 'My Events', 'Detail']}
       >
-        <div className="event-detail-error">
-          <p>⚠️ {error || 'Event not found'}</p>
-          <button onClick={() => navigate('/manager/events')} className="btn-back">
-            Go Back
-          </button>
+        <div className="event-detail-page">
+          <div className="event-detail-error">
+            <FaInfoCircle style={{ fontSize: '3rem', color: '#ef4444', marginBottom: '1rem' }} />
+            <h3>Failed to Load Event</h3>
+            <p>{error}</p>
+            <button className="btn-action" onClick={() => navigate(-1)}>
+              <FaArrowLeft /> Go Back
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!event) {
+    return (
+      <DashboardLayout
+        userRole="manager"
+        title="Event Detail"
+        breadcrumbs={['Manager', 'My Events', 'Detail']}
+      >
+        <div className="event-detail-page">
+          <div className="event-detail-error">
+            <FaInfoCircle style={{ fontSize: '3rem', color: '#6b7280', marginBottom: '1rem' }} />
+            <h3>Event Not Found</h3>
+            <p>The event you're looking for doesn't exist or has been removed.</p>
+            <button className="btn-action" onClick={() => navigate(-1)}>
+              <FaArrowLeft /> Go Back
+            </button>
+          </div>
         </div>
       </DashboardLayout>
     );
@@ -104,45 +122,37 @@ const EventDetail = () => {
   return (
     <DashboardLayout
       userRole="manager"
-      title="Event Details"
-      breadcrumbs={['Manager', 'Events', 'Details']}
+      title="Event Detail"
+      breadcrumbs={['Manager', 'My Events', 'Detail']}
     >
       <div className="event-detail-page">
+        {/* Header */}
         <div className="event-detail-header">
-          <button
-            className="btn-back"
-            onClick={() => navigate('/manager/events')}
-          >
-            <FaArrowLeft />
-            <span>Back to Events</span>
+          <button className="btn-back" onClick={() => navigate(-1)}>
+            <FaArrowLeft /> Back to My Events
           </button>
-          
+
           <div className="event-detail-title-section">
             <div className="title-row">
-              <h1>{event.title || event.eventTitle}</h1>
+              <h1>{event.title}</h1>
               {getStatusBadge(event.status)}
-            </div>
-            <div className="event-actions">
-              {/* Edit button - can be added when edit API is available */}
-              {/* <button className="btn-action btn-edit">
-                <FaEdit />
-                <span>Edit</span>
-              </button> */}
             </div>
           </div>
         </div>
 
+        {/* Content Grid */}
         <div className="event-detail-content">
+          {/* Main Content */}
           <div className="event-detail-main">
+            {/* Basic Information Card */}
             <div className="event-detail-card">
               <h3>Event Information</h3>
-              
               <div className="event-info-grid">
                 <div className="info-item">
-                  <FaCalendar className="info-icon" />
+                  <FaCalendarAlt className="info-icon" />
                   <div className="info-content">
                     <span className="info-label">Date & Time</span>
-                    <span className="info-value">{formatDate(event.date || event.startTime)}</span>
+                    <span className="info-value">{formatDate(event.date)}</span>
                   </div>
                 </div>
 
@@ -150,69 +160,77 @@ const EventDetail = () => {
                   <FaMapMarkerAlt className="info-icon" />
                   <div className="info-content">
                     <span className="info-label">Location</span>
-                    <span className="info-value">{event.location || 'N/A'}</span>
+                    <span className="info-value">{event.location || 'Not specified'}</span>
                   </div>
                 </div>
 
                 <div className="info-item">
                   <FaUsers className="info-icon" />
                   <div className="info-content">
-                    <span className="info-label">Participants</span>
-                    <span className="info-value">
-                      {event.currentParticipants || 0} / {event.maxParticipants || 0}
-                    </span>
+                    <span className="info-label">Max Participants</span>
+                    <span className="info-value">{event.maxParticipants || 'N/A'}</span>
+                  </div>
+                </div>
+
+                <div className="info-item">
+                  <FaUsers className="info-icon" />
+                  <div className="info-content">
+                    <span className="info-label">Current Participants</span>
+                    <span className="info-value">{event.currentParticipants || 0}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="event-description">
-                <h4>Description</h4>
-                <p>{event.description || 'No description provided.'}</p>
-              </div>
-
-              {event.tags && event.tags.length > 0 && (
-                <div className="event-tags">
-                  <h4>Tags</h4>
-                  <div className="tags-list">
-                    {event.tags.map((tag, index) => (
-                      <span key={index} className="tag-badge">
-                        {tag.name || tag}
-                      </span>
-                    ))}
-                  </div>
+              {/* Description */}
+              {event.description && (
+                <div className="event-description">
+                  <h4>Description</h4>
+                  <p>{event.description}</p>
                 </div>
               )}
             </div>
           </div>
 
+          {/* Sidebar */}
           <div className="event-detail-sidebar">
+            {/* Quick Actions */}
             <div className="event-detail-card">
               <h3>Quick Actions</h3>
               <div className="quick-actions">
                 <button
                   className="btn-quick-action"
-                  onClick={() => navigate(`/manager/volunteers?eventId=${eventId}`)}
+                  onClick={() => navigate(`/manager/events/${eventId}/registrations`)}
                 >
                   <FaUsers />
-                  <span>View Registrations</span>
+                  View Registrations
+                </button>
+                <button
+                  className="btn-quick-action"
+                  onClick={() => navigate(`/manager/events/${eventId}/feed`)}
+                >
+                  <FaInfoCircle />
+                  View Event Feed
                 </button>
               </div>
             </div>
 
+            {/* Event Stats */}
             <div className="event-detail-card">
               <h3>Event Statistics</h3>
               <div className="event-stats">
                 <div className="stat-item">
                   <span className="stat-label">Status</span>
-                  {getStatusBadge(event.status)}
+                  <span className="stat-value">{event.status}</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-label">Created</span>
+                  <span className="stat-label">Registered</span>
                   <span className="stat-value">
-                    {event.createdAt 
-                      ? new Date(event.createdAt).toLocaleDateString()
-                      : 'N/A'}
+                    {event.currentParticipants || 0} / {event.maxParticipants || 0}
                   </span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Creator</span>
+                  <span className="stat-value">{event.creatorUsername || 'N/A'}</span>
                 </div>
               </div>
             </div>
@@ -224,15 +242,3 @@ const EventDetail = () => {
 };
 
 export default EventDetail;
-
-
-
-
-
-
-
-
-
-
-
-

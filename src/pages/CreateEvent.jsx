@@ -1,315 +1,181 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { FaCalendar, FaMapMarkerAlt, FaUsers, FaArrowLeft, FaSpinner } from 'react-icons/fa';
-import DashboardLayout from '../components/dashboard/DashboardLayout';
+import { useNavigate } from 'react-router-dom';
 import { createEvent } from '../services/events/eventsService';
-import { tagsAPI } from '../services/tags/tagsService';
-import TagSelector from '../components/tags/TagSelector';
-import './CreateEvent.css';
 
 const CreateEvent = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+
+  const [form, setForm] = useState({
     title: '',
     description: '',
-    date: '',
     location: '',
+    date: '',
     maxParticipants: '',
-    tags: [],
   });
-  const [availableTags, setAvailableTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [loadingTags, setLoadingTags] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchTags();
-  }, []);
-
-  const fetchTags = async () => {
-    try {
-      setLoadingTags(true);
-      const response = await tagsAPI.getAllTags();
-      if (response.success && response.data) {
-        setAvailableTags(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching tags:', error);
-    } finally {
-      setLoadingTags(false);
-    }
-  };
-
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
-
-  const handleTagToggle = (tagName) => {
-    setSelectedTags(prev => {
-      if (prev.includes(tagName)) {
-        return prev.filter(t => t !== tagName);
-      } else {
-        return [...prev, tagName];
-      }
-    });
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.title.trim()) {
-      newErrors.title = 'Title is required';
-    } else if (formData.title.length < 10 || formData.title.length > 50) {
-      newErrors.title = 'Title must be between 10 and 50 characters';
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description = 'Description is required';
-    } else if (formData.description.length < 10 || formData.description.length > 2000) {
-      newErrors.description = 'Description must be between 10 and 2000 characters';
-    }
-
-    if (!formData.date) {
-      newErrors.date = 'Date is required';
-    } else {
-      const selectedDate = new Date(formData.date);
-      const now = new Date();
-      if (selectedDate < now) {
-        newErrors.date = 'Date must be in the future';
-      }
-    }
-
-    if (!formData.location.trim()) {
-      newErrors.location = 'Location is required';
-    }
-
-    if (!formData.maxParticipants) {
-      newErrors.maxParticipants = 'Max participants is required';
-    } else if (parseInt(formData.maxParticipants) < 1) {
-      newErrors.maxParticipants = 'Must have at least 1 participant';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    if (!validateForm()) {
+    if (!form.title || !form.description || !form.location || !form.date) {
+      setError('Please fill in all required fields.');
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
-
-      const eventData = {
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        date: new Date(formData.date).toISOString(),
-        location: formData.location.trim(),
-        maxParticipants: parseInt(formData.maxParticipants),
-        tags: selectedTags,
+      const payload = {
+        title: form.title.trim(),
+        description: form.description.trim(),
+        location: form.location.trim(),
+        date: form.date, // ISO string from input[type=datetime-local]
+        maxParticipants: form.maxParticipants ? Number(form.maxParticipants) : null,
       };
 
-      const response = await createEvent(eventData);
-
-      if (response.success) {
-        // Redirect to manager events page
-        navigate('/manager/events');
-      } else {
-        setErrors({ submit: response.message || 'Failed to create event' });
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 
-                          error.message || 
-                          'Failed to create event. Please try again.';
-      setErrors({ submit: errorMessage });
+      await createEvent(payload);
+      navigate('/manager/events');
+    } catch (err) {
+      const message =
+        err.response?.data?.message || err.message || 'Failed to create event. Please try again.';
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <DashboardLayout
-      userRole="manager"
-      title="Create Event"
-      breadcrumbs={['Manager', 'Events', 'Create']}
-    >
-      <div className="create-event-page">
-        <div className="create-event-container">
-          <div className="create-event-header">
-            <button
-              className="btn-back"
-              onClick={() => navigate('/manager/events')}
-            >
-              <FaArrowLeft />
-              <span>Back to Events</span>
-            </button>
-            <h1>Create New Event</h1>
-            <p>Fill in the details below to create a new volunteer event</p>
+    <div className="min-h-screen bg-gray-50 flex justify-center py-8 px-4">
+      <div className="w-full max-w-3xl bg-white shadow-md rounded-xl p-6">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+        >
+          <FaArrowLeft className="mr-2" />
+          Back
+        </button>
+
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Create New Event</h1>
+
+        {error && (
+          <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Title<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Tree planting campaign..."
+            />
           </div>
 
-          <form className="create-event-form" onSubmit={handleSubmit}>
-            {errors.submit && (
-              <div className="form-error">
-                {errors.submit}
-              </div>
-            )}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description<span className="text-red-500">*</span>
+            </label>
+            <textarea
+              name="description"
+              rows={4}
+              value={form.description}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Describe the purpose, tasks, and expectations..."
+            />
+          </div>
 
-            {/* Title */}
-            <div className="form-group">
-              <label htmlFor="title">
-                Event Title <span className="required">*</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Location<span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="Enter event title (10-50 characters)"
-                className={errors.title ? 'error' : ''}
-                maxLength={50}
-              />
-              {errors.title && <span className="field-error">{errors.title}</span>}
-              <span className="char-count">{formData.title.length}/50</span>
-            </div>
-
-            {/* Description */}
-            <div className="form-group">
-              <label htmlFor="description">
-                Description <span className="required">*</span>
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Describe your event (10-2000 characters)"
-                className={errors.description ? 'error' : ''}
-                rows={6}
-                maxLength={2000}
-              />
-              {errors.description && <span className="field-error">{errors.description}</span>}
-              <span className="char-count">{formData.description.length}/2000</span>
-            </div>
-
-            {/* Date and Location Row */}
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="date">
-                  <FaCalendar />
-                  Event Date & Time <span className="required">*</span>
-                </label>
-                <input
-                  type="datetime-local"
-                  id="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
-                  className={errors.date ? 'error' : ''}
-                />
-                {errors.date && <span className="field-error">{errors.date}</span>}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="location">
-                  <FaMapMarkerAlt />
-                  Location <span className="required">*</span>
-                </label>
+              <div className="flex items-center rounded-md border border-gray-300 px-3 py-2">
+                <FaMapMarkerAlt className="text-gray-400 mr-2" />
                 <input
                   type="text"
-                  id="location"
                   name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  placeholder="Enter event location"
-                  className={errors.location ? 'error' : ''}
+                  value={form.location}
+                  onChange={handleChange}
+                  className="flex-1 text-sm focus:outline-none"
+                  placeholder="UET, Cau Giay, Hanoi"
                 />
-                {errors.location && <span className="field-error">{errors.location}</span>}
               </div>
             </div>
 
-            {/* Max Participants */}
-            <div className="form-group">
-              <label htmlFor="maxParticipants">
-                <FaUsers />
-                Maximum Participants <span className="required">*</span>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Date &amp; Time<span className="text-red-500">*</span>
               </label>
+              <div className="flex items-center rounded-md border border-gray-300 px-3 py-2">
+                <FaCalendar className="text-gray-400 mr-2" />
+                <input
+                  type="datetime-local"
+                  name="date"
+                  value={form.date}
+                  onChange={handleChange}
+                  className="flex-1 text-sm focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Max Participants
+            </label>
+            <div className="flex items-center rounded-md border border-gray-300 px-3 py-2">
+              <FaUsers className="text-gray-400 mr-2" />
               <input
                 type="number"
-                id="maxParticipants"
-                name="maxParticipants"
-                value={formData.maxParticipants}
-                onChange={handleInputChange}
-                placeholder="Enter maximum number of participants"
-                className={errors.maxParticipants ? 'error' : ''}
                 min="1"
+                name="maxParticipants"
+                value={form.maxParticipants}
+                onChange={handleChange}
+                className="flex-1 text-sm focus:outline-none"
+                placeholder="Optional"
               />
-              {errors.maxParticipants && (
-                <span className="field-error">{errors.maxParticipants}</span>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center px-5 py-2.5 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-60"
+            >
+              {isSubmitting ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" />
+                  Creating...
+                </>
+              ) : (
+                'Create Event'
               )}
-            </div>
-
-            {/* Tags */}
-            <div className="form-group">
-              <TagSelector
-                label="Tags (Optional)"
-                availableTags={availableTags}
-                selectedTags={selectedTags}
-                onToggle={handleTagToggle}
-                loading={loadingTags}
-              />
-            </div>
-
-            {/* Submit Buttons */}
-            <div className="form-actions">
-              <button
-                type="button"
-                className="btn-cancel"
-                onClick={() => navigate('/manager/events')}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn-submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <FaSpinner className="spinning" />
-                    <span>Creating...</span>
-                  </>
-                ) : (
-                  'Create Event'
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
+            </button>
+          </div>
+        </form>
       </div>
-    </DashboardLayout>
+    </div>
   );
 };
 
 export default CreateEvent;
-
-
 
 

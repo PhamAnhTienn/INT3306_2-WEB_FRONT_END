@@ -4,7 +4,7 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-comp
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCw0CoTbFIELlhZXN-93vwjpywATT7JA6k",
+  apiKey: "AIzaSyC-F6QotPkWpCgK4s81tfUVEBdqCpT1UXk",
   authDomain: "volunteer-web-push.firebaseapp.com",
   projectId: "volunteer-web-push",
   storageBucket: "volunteer-web-push.firebasestorage.app",

@@ -10,26 +10,19 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
   const managerMenuItems = [
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/manager' },
     { id: 'my-events', icon: <FaClipboardList />, label: 'My Events', path: '/manager/events' },
-    { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
+    // Removed Volunteers and Browse Events from manager sidebar as requested
+    { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/profile' },
   ];
 
   const volunteerMenuItems = [
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/volunteer' },
     { id: 'events', icon: <FaCalendarAlt />, label: 'Browse Events', path: '/events' },
     { id: 'my-events', icon: <FaUsers />, label: 'My Events', path: '/my-events' },
-    { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
+    // Settings should open the Profile page
+    { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/profile' },
   ];
 
-  const adminMenuItems = [
-    { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/admin' },
-    { id: 'users', icon: <FaUsers />, label: 'User Management', path: '/admin/users' },
-    { id: 'settings', icon: <FaCog />, label: 'Profile', path: '/profile' },
-  ];
-
-  const menuItems = 
-    userRole === 'admin' ? adminMenuItems :
-    userRole === 'manager' ? managerMenuItems : 
-    volunteerMenuItems;
+  const menuItems = userRole === 'manager' ? managerMenuItems : volunteerMenuItems;
 
   const handleLogout = async () => {
     setLoggingOut(true);

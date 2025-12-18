@@ -18,6 +18,7 @@ const EventCard = ({ event, type = 'default' }) => {
   const eventLocation = event.location;
   const eventStatus = event.status;
   const maxParticipants = event.maxParticipants || event.maxVolunteers;
+  const currentParticipants = event.currentParticipants || 0;
   const eventId = event.eventId || event.id;
 
   const handleEnterEvent = () => {
@@ -57,10 +58,26 @@ const EventCard = ({ event, type = 'default' }) => {
           {maxParticipants && (
             <div className="event-detail-item">
               <FaUsers className="event-detail-icon" />
-              <span>{maxParticipants} max participants</span>
+              <span>{currentParticipants} / {maxParticipants} participants</span>
             </div>
           )}
         </div>
+
+        {/* Participants Progress Bar */}
+        {maxParticipants && (
+          <div className="event-card-participants-progress">
+            <div className="participants-progress-bar">
+              <div 
+                className={`participants-progress-fill ${
+                  (currentParticipants / maxParticipants) >= 1 ? 'full' :
+                  (currentParticipants / maxParticipants) >= 0.8 ? 'almost-full' :
+                  (currentParticipants / maxParticipants) >= 0.5 ? 'filling' : 'available'
+                }`}
+                style={{ width: `${Math.min((currentParticipants / maxParticipants) * 100, 100)}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
 
         {eventStatus && (
           <div className="event-card-footer">

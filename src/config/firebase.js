@@ -5,7 +5,7 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCw0CoTbFIELlhZXN-93vwjpywATT7JA6k",
+  apiKey: "AIzaSyC-F6QotPkWpCgK4s81tfUVEBdqCpT1UXk",
   authDomain: "volunteer-web-push.firebaseapp.com",
   projectId: "volunteer-web-push",
   storageBucket: "volunteer-web-push.firebasestorage.app",
@@ -100,7 +100,7 @@ export const requestPermission = async () => {
       try {
         const token = await getToken(messagingInstance, { vapidKey });
         if (token) {
-          console.log('FCM Token:', token);
+          // Token lấy thành công, không log ra console để tránh lộ
           return { token, error: null };
         } else {
           console.log('No registration token available.');

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
-import { getAllEvents, registerForEvent, getMyEvents } from '../services/events/eventsService';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
+import { getAllEvents, registerForEvent, getMyRegistrations } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
@@ -36,8 +36,8 @@ const Events = () => {
     setLoading(true);
     setError(null);
     try {
-      // Fetch both all events and user's registered events
-      const [eventsResponse, myEventsResponse] = await Promise.all([
+      // Fetch both all events and user's registrations (with status)
+      const [eventsResponse, myRegistrationsResponse] = await Promise.all([
         getAllEvents({
           page: currentPage,
           size: 12, // Show 12 events per page
@@ -46,7 +46,7 @@ const Events = () => {
           status: selectedStatus,
           search: debouncedSearchQuery,
         }),
-        getMyEvents()
+        getMyRegistrations()
       ]);
 
       if (eventsResponse.success) {
@@ -57,16 +57,17 @@ const Events = () => {
           allEvents = allEvents.filter(event => event.status === selectedStatus);
         }
         
-        // If user has registered events, mark them as registered
-        if (myEventsResponse.success && myEventsResponse.data.content) {
-          const registeredEventIds = new Set(
-            myEventsResponse.data.content.map(event => event.eventId)
-          );
+        // Map registrations to events with status
+        if (myRegistrationsResponse.success && myRegistrationsResponse.data.content) {
+          const registrationsMap = new Map();
+          myRegistrationsResponse.data.content.forEach(reg => {
+            registrationsMap.set(reg.eventId, reg.status);
+          });
           
-          // Update isRegistered flag for events that user has registered for
+          // Add registration status to each event
           allEvents = allEvents.map(event => ({
             ...event,
-            isRegistered: registeredEventIds.has(event.eventId)
+            registrationStatus: registrationsMap.get(event.eventId) || null
           }));
         }
         
@@ -169,6 +170,26 @@ const Events = () => {
 
   // Handle event registration
   const handleRegisterEvent = async (eventId) => {
+    // Find the event to check capacity
+    const event = events.find(e => e.eventId === eventId);
+    if (event) {
+      const current = event.currentParticipants || 0;
+      const max = event.maxParticipants;
+      
+      // Show warning if event is full or almost full
+      if (current >= max) {
+        const confirmMsg = `This event is currently full (${current}/${max} participants).\n\nYou will be added to the WAITING LIST and will be notified if a spot becomes available.\n\nDo you want to continue?`;
+        if (!window.confirm(confirmMsg)) {
+          return;
+        }
+      } else if (current >= max * 0.9) {
+        const confirmMsg = `This event is almost full (${current}/${max} participants).\n\nOnly ${max - current} spot(s) remaining!\n\nDo you want to register now?`;
+        if (!window.confirm(confirmMsg)) {
+          return;
+        }
+      }
+    }
+    
     setRegistering(true);
     setRegisterError(null);
     setRegisterSuccess(null);
@@ -177,36 +198,47 @@ const Events = () => {
       const response = await registerForEvent(eventId);
       
       if (response.success) {
-        // Update the events list to mark as registered
-        setEvents(prevEvents => prevEvents.map(event => 
-          event.eventId === eventId ? { ...event, isRegistered: true } : event
-        ));
+        // Get the registration status from response (PENDING or WAITING)
+        const regStatus = response.data?.status || 'PENDING';
+        
+        // Update the events list with registration status and increment count if PENDING
+        setEvents(prevEvents => prevEvents.map(event => {
+          if (event.eventId === eventId) {
+            return {
+              ...event,
+              registrationStatus: regStatus,
+              currentParticipants: regStatus === 'PENDING' 
+                ? (event.currentParticipants || 0) + 1 
+                : event.currentParticipants
+            };
+          }
+          return event;
+        }));
+        
         // Update selected event if modal is open
         if (selectedEvent && selectedEvent.eventId === eventId) {
-          setSelectedEvent(prev => ({ ...prev, isRegistered: true }));
+          setSelectedEvent(prev => ({
+            ...prev,
+            registrationStatus: regStatus,
+            currentParticipants: regStatus === 'PENDING'
+              ? (prev.currentParticipants || 0) + 1
+              : prev.currentParticipants
+          }));
         }
-        // Show success message briefly
-        alert('Successfully registered for the event! Your registration is pending approval.');
+        
+        // Show appropriate message based on status
+        const message = regStatus === 'WAITING' 
+          ? '✅ You have been added to the waiting list!\n\nYou will be notified if a spot becomes available.'
+          : '✅ Registration successful!\n\nYour registration is pending manager approval. You will be notified once approved.';
+        alert(message);
       } else {
         setRegisterError(response.message || 'Failed to register for the event');
-        alert(response.message || 'Failed to register for the event');
+        alert('❌ ' + (response.message || 'Failed to register for the event'));
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'An error occurred while registering';
       setRegisterError(errorMessage);
-      
-      // Check if user already registered - update UI accordingly
-      if (errorMessage.toLowerCase().includes('already registered')) {
-        setEvents(prevEvents => prevEvents.map(event => 
-          event.eventId === eventId ? { ...event, isRegistered: true } : event
-        ));
-        if (selectedEvent && selectedEvent.eventId === eventId) {
-          setSelectedEvent(prev => ({ ...prev, isRegistered: true }));
-        }
-        alert('You have already registered for this event.');
-      } else {
-        alert(errorMessage);
-      }
+      alert('❌ ' + errorMessage);
     } finally {
       setRegistering(false);
     }
@@ -352,13 +384,42 @@ const Events = () => {
                     </div>
 
                     <div className="event-detail-item">
-                      <FaUsers className="detail-icon" />
-                      <span>Max {event.maxParticipants} participants</span>
-                    </div>
-
-                    <div className="event-detail-item">
                       <FaUser className="detail-icon" />
                       <span>By {event.creatorUsername}</span>
+                    </div>
+                  </div>
+
+                  {/* Participants Progress */}
+                  <div className="event-participants">
+                    <div className="participants-header">
+                      <FaUsers className="participants-icon" />
+                      <span className="participants-text">
+                        {event.currentParticipants || 0} / {event.maxParticipants} Participants
+                      </span>
+                      {(() => {
+                        const current = event.currentParticipants || 0;
+                        const max = event.maxParticipants;
+                        const percentage = (current / max) * 100;
+                        
+                        if (current >= max) {
+                          return <span className="availability-badge badge-full">Full</span>;
+                        } else if (percentage >= 80) {
+                          return <span className="availability-badge badge-almost-full">Almost Full</span>;
+                        } else if (percentage >= 50) {
+                          return <span className="availability-badge badge-filling">Filling Up</span>;
+                        }
+                        return <span className="availability-badge badge-available">Available</span>;
+                      })()}
+                    </div>
+                    <div className="participants-progress-bar">
+                      <div 
+                        className={`participants-progress-fill ${
+                          ((event.currentParticipants || 0) / event.maxParticipants) >= 1 ? 'full' :
+                          ((event.currentParticipants || 0) / event.maxParticipants) >= 0.8 ? 'almost-full' :
+                          ((event.currentParticipants || 0) / event.maxParticipants) >= 0.5 ? 'filling' : 'available'
+                        }`}
+                        style={{ width: `${Math.min(((event.currentParticipants || 0) / event.maxParticipants) * 100, 100)}%` }}
+                      ></div>
                     </div>
                   </div>
 
@@ -371,20 +432,41 @@ const Events = () => {
                       View Details
                     </button>
                     {event.status === 'ONGOING' && (
-                      event.isRegistered ? (
-                        <button 
-                          className="event-registered-button"
-                          disabled
-                        >
-                          <FaUsers />
-                          Registered
-                        </button>
+                      event.registrationStatus ? (
+                        // User has registered - show status badge
+                        <>
+                          {event.registrationStatus === 'APPROVED' && (
+                            <button className="event-registered-button" disabled>
+                              <FaCheckCircle />
+                              Registered
+                            </button>
+                          )}
+                          {event.registrationStatus === 'PENDING' && (
+                            <button className="event-pending-button" disabled>
+                              <FaClock />
+                              Pending Approval
+                            </button>
+                          )}
+                          {event.registrationStatus === 'WAITING' && (
+                            <button className="event-waiting-button" disabled>
+                              <FaHourglassHalf />
+                              Waiting List
+                            </button>
+                          )}
+                          {event.registrationStatus === 'REJECTED' && (
+                            <button className="event-rejected-button" disabled>
+                              <FaTimes />
+                              Rejected
+                            </button>
+                          )}
+                        </>
                       ) : (
+                        // User hasn't registered yet
                         <button 
                           className="event-register-button"
                           onClick={() => handleRegisterEvent(event.eventId)}
                         >
-                          <FaUsers />
+                          <FaSignInAlt />
                           Register
                         </button>
                       )
@@ -491,8 +573,20 @@ const Events = () => {
                   <div className="modal-detail-item">
                     <FaUsers className="modal-detail-icon" />
                     <div className="modal-detail-content">
-                      <div className="modal-detail-label">Max Participants</div>
-                      <div className="modal-detail-value">{selectedEvent.maxParticipants} people</div>
+                      <div className="modal-detail-label">Participants</div>
+                      <div className="modal-detail-value">
+                        {selectedEvent.currentParticipants || 0} / {selectedEvent.maxParticipants} registered
+                        {(() => {
+                          const current = selectedEvent.currentParticipants || 0;
+                          const max = selectedEvent.maxParticipants;
+                          if (current >= max) {
+                            return <span className="modal-availability-badge badge-full">Full</span>;
+                          } else if ((current / max) >= 0.8) {
+                            return <span className="modal-availability-badge badge-almost-full">Almost Full</span>;
+                          }
+                          return null;
+                        })()}
+                      </div>
                     </div>
                   </div>
 
@@ -503,6 +597,33 @@ const Events = () => {
                       <div className="modal-detail-value">{selectedEvent.creatorUsername}</div>
                     </div>
                   </div>
+                </div>
+
+                {/* Participants Progress in Modal */}
+                <div className="modal-participants-progress">
+                  <div className="participants-progress-bar">
+                    <div 
+                      className={`participants-progress-fill ${
+                        ((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) >= 1 ? 'full' :
+                        ((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) >= 0.8 ? 'almost-full' :
+                        ((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) >= 0.5 ? 'filling' : 'available'
+                      }`}
+                      style={{ width: `${Math.min(((selectedEvent.currentParticipants || 0) / selectedEvent.maxParticipants) * 100, 100)}%` }}
+                    ></div>
+                  </div>
+                  {(() => {
+                    const current = selectedEvent.currentParticipants || 0;
+                    const max = selectedEvent.maxParticipants;
+                    const remaining = max - current;
+                    if (current >= max) {
+                      return <p className="availability-message warning">⚠️ This event is full. You will be added to the waiting list.</p>;
+                    } else if (remaining <= 3) {
+                      return <p className="availability-message warning">⚠️ Only {remaining} spot(s) remaining! Register now.</p>;
+                    } else if ((current / max) >= 0.8) {
+                      return <p className="availability-message info">ℹ️ This event is filling up fast. {remaining} spots available.</p>;
+                    }
+                    return <p className="availability-message success">✅ {remaining} spots available</p>;
+                  })()}
                 </div>
 
                 {/* Description Section */}
