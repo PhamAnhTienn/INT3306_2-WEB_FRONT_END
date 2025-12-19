@@ -65,16 +65,11 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/my-events" element={<MyEvents />} />
         
-        {/* Main site routes (with main layout) */}
         <Route path="/*" element={
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/causes" element={<Causes />} />
               <Route path="/events" element={<Events />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />

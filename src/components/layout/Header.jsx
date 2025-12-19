@@ -53,7 +53,7 @@ const Header = () => {
               <ul className="nav-list">
                 {navItems.map((item, index) => (
                   <li key={index} className="nav-item">
-                    {/* Sử dụng a tag với href bắt đầu bằng # nếu muốn scroll trong trang Home */}
+                   
                     {item.path.startsWith('/#') ? (
                        <a href={item.path.substring(1)} className="nav-link">{item.name}</a>
                     ) : (
@@ -61,8 +61,7 @@ const Header = () => {
                     )}
                   </li>
                 ))}
-                
-                {/* Link Đăng nhập tách riêng ra khỏi list để dễ style */}
+
                 <li className="nav-item">
                     <Link to="/login" className="nav-link font-weight-bold">
                         Đăng nhập
@@ -70,7 +69,6 @@ const Header = () => {
                 </li>
               </ul>
 
-              {/* Button Đăng ký nổi bật thay thế cho Donate */}
               <div className="header-actions">
                 <Link to="/register" className="btn btn-primary">
                     Đăng ký ngay

@@ -18,7 +18,7 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear error when user starts typing
+
     if (error) setError('');
   };
 
@@ -29,15 +29,13 @@ const Login = () => {
 
     try {
       const response = await authAPI.login(formData);
-      
-      // Check if login was successful
+
       if (response.userResponse) {
         const user = response.userResponse;
 
         console.log('Logged in user:', user);
         console.log('User role:', user.role);
-        
-        // Navigate based on user role
+
         if (user.role === 'ADMIN') {
           navigate('/dashboard/admin');
         } else if (user.role === 'EVENT_MANAGER') {
@@ -48,20 +46,19 @@ const Login = () => {
           navigate('/');
         }
       } else {
-        setError('Login failed. Please try again.');
+        setError('Đăng nhập thất bại. Vui lòng thử lại.');
       }
     } catch (err) {
       console.error('Login error:', err);
-      
-      // Handle different error types
+
       if (err.response?.userResponse?.message) {
         setError(err.response.userResponse.message);
       } else if (err.response?.status === 401) {
-        setError('Invalid username or password');
+        setError('Tên đăng nhập hoặc mật khẩu không chính xác');
       } else if (err.response?.status === 500) {
-        setError('Server error. Please try again later.');
+        setError('Lỗi máy chủ. Vui lòng thử lại sau ít phút.');
       } else {
-        setError('Login failed. Please check your credentials and try again.');
+        setError('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
       }
     } finally {
       setLoading(false);
@@ -73,32 +70,18 @@ const Login = () => {
       authAPI.initiateGoogleSignIn();
     } catch (err) {
       console.error('Google sign-in error:', err);
-      setError('Failed to initiate Google sign-in. Please try again.');
+      setError('Không thể khởi tạo đăng nhập Google. Vui lòng thử lại.');
     }
   };
 
   return (
     <div className="login-page">
-      {/* Page Header */}
-      <div className="page-header">
-        <div className="container">
-          <h1 className="page-title">Login</h1>
-          <nav className="breadcrumb">
-            <Link to="/" className="breadcrumb-link">Home</Link>
-            <span className="breadcrumb-separator">»</span>
-            <span className="breadcrumb-current">Login</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* Login Form Section */}
       <div className="login-section">
         <div className="container">
           <div className="login-container">
             <div className="login-form-wrapper">
               <div className="login-header">
-                <h3 className="login-title">Login your account</h3>
-                <h2 className="login-subtitle">Join our community to help peoples</h2>
+                <h2 className="login-subtitle">Chào mừng bạn quay trở lại với cộng đồng tình nguyện</h2>
               </div>
 
               <form className="login-form" onSubmit={handleSubmit}>
@@ -120,7 +103,7 @@ const Login = () => {
                   <input
                     type="text"
                     name="username"
-                    placeholder="Enter user name"
+                    placeholder="Tên đăng nhập"
                     className="form-input"
                     value={formData.username}
                     onChange={handleChange}
@@ -133,7 +116,7 @@ const Login = () => {
                   <input
                     type="password"
                     name="password"
-                    placeholder="Enter password"
+                    placeholder="Mật khẩu"
                     className="form-input"
                     value={formData.password}
                     onChange={handleChange}
@@ -143,18 +126,16 @@ const Login = () => {
                 </div>
 
                 <button type="submit" className="login-btn" disabled={loading}>
-                  {loading ? 'Logging in...' : 'Login'}
+                  {loading ? 'Đang xử lý...' : 'Đăng nhập'}
                 </button>
               </form>
 
-              {/* Divider */}
               <div className="login-divider">
                 <span className="divider-line"></span>
-                <span className="divider-text">or</span>
+                <span className="divider-text">hoặc</span>
                 <span className="divider-line"></span>
               </div>
 
-              {/* Google Sign-in Button */}
               <button type="button" className="google-signin-btn" onClick={handleGoogleSignIn}>
                 <svg
                   className="google-icon"
@@ -179,15 +160,15 @@ const Login = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="google-text">Sign in with Google</span>
+                <span className="google-text">Đăng nhập với Google</span>
               </button>
 
               <div className="login-footer">
                 <p className="register-link" style={{ marginBottom: '8px' }}>
-                  <Link to="/forgot-password">Forgot your password?</Link>
+                  <Link to="/forgot-password">Quên mật khẩu?</Link>
                 </p>
                 <p className="register-link">
-                  Don't have an account? <Link to="/register">Register now</Link>
+                  Bạn chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
                 </p>
               </div>
             </div>

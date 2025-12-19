@@ -21,7 +21,7 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear error when user starts typing
+
     if (error) setError('');
   };
 
@@ -32,15 +32,13 @@ const Register = () => {
 
     try {
       const response = await authAPI.register(formData);
-      
-      // Check if registration was successful
+ 
       if (response.userResponse) {
         const user = response.userResponse;
 
         console.log('Logged in user:', user);
         console.log('User role:', user.role);
-        
-        // Navigate based on user role
+
         if (user.role === 'ADMIN') {
           navigate('/dashboard/admin');
         } else if (user.role === 'EVENT_MANAGER') {
@@ -51,22 +49,21 @@ const Register = () => {
           navigate('/');
         }
       } else {
-        setError('Registration failed. Please try again.');
+        setError('Đăng ký thất bại. Vui lòng thử lại.');
       }
     } catch (err) {
       console.error('Registration error:', err);
-      
-      // Handle different error types
+
       if (err.response?.userResponse?.message) {
         setError(err.response.userResponse.message);
       } else if (err.response?.status === 400) {
-        setError('Invalid registration data. Please check all fields.');
+        setError('Dữ liệu không hợp lệ. Vui lòng kiểm tra lại các trường thông tin.');
       } else if (err.response?.status === 409) {
-        setError('Username or email already exists');
+        setError('Tên đăng nhập hoặc Email đã tồn tại trong hệ thống.');
       } else if (err.response?.status === 500) {
-        setError('Server error. Please try again later.');
+        setError('Lỗi máy chủ. Vui lòng thử lại sau.');
       } else {
-        setError('Registration failed. Please try again.');
+        setError('Đăng ký thất bại. Vui lòng kiểm tra kết nối và thử lại.');
       }
     } finally {
       setLoading(false);
@@ -74,34 +71,19 @@ const Register = () => {
   };
 
   const handleGoogleSignIn = () => {
-    // Handle Google sign-in logic here
     console.log('Google sign-in clicked');
-    // This is where you would integrate with Google OAuth
     setError('Google sign-in is not yet implemented');
   };
 
   return (
     <div className="register-page">
-      {/* Page Header */}
-      <div className="page-header">
-        <div className="container">
-          <h1 className="page-title">Register</h1>
-          <nav className="breadcrumb">
-            <Link to="/" className="breadcrumb-link">Home</Link>
-            <span className="breadcrumb-separator">»</span>
-            <span className="breadcrumb-current">Register</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* Register Form Section */}
       <div className="register-section">
         <div className="container">
           <div className="register-container">
             <div className="register-form-wrapper">
               <div className="register-header">
-                <h3 className="register-title">Register your account</h3>
-                <h2 className="register-subtitle">Become a member and enhance your hand</h2>
+                <h3 className="register-title">Đăng ký tài khoản mới</h3>
+                <h2 className="register-subtitle">Bắt đầu hành trình tình nguyện của bạn thôi nào</h2>
               </div>
 
               <form className="register-form" onSubmit={handleSubmit}>
@@ -123,7 +105,7 @@ const Register = () => {
                   <input
                     type="text"
                     name="fullName"
-                    placeholder="Enter full name"
+                    placeholder="Họ và tên của bạn"
                     className="form-input"
                     value={formData.fullName}
                     onChange={handleChange}
@@ -136,7 +118,7 @@ const Register = () => {
                   <input
                     type="email"
                     name="email"
-                    placeholder="Enter email"
+                    placeholder="Địa chỉ Email"
                     className="form-input"
                     value={formData.email}
                     onChange={handleChange}
@@ -149,7 +131,7 @@ const Register = () => {
                   <input
                     type="text"
                     name="username"
-                    placeholder="Enter username"
+                    placeholder="Tên đăng nhập"
                     className="form-input"
                     value={formData.username}
                     onChange={handleChange}
@@ -162,7 +144,7 @@ const Register = () => {
                   <input
                     type="tel"
                     name="mobile"
-                    placeholder="Enter mobile number"
+                    placeholder="Số điện thoại"
                     className="form-input"
                     value={formData.mobile}
                     onChange={handleChange}
@@ -175,7 +157,7 @@ const Register = () => {
                   <input
                     type="password"
                     name="password"
-                    placeholder="Enter password"
+                    placeholder="Mật khẩu"
                     className="form-input"
                     value={formData.password}
                     onChange={handleChange}
@@ -185,18 +167,16 @@ const Register = () => {
                 </div>
 
                 <button type="submit" className="register-btn" disabled={loading}>
-                  {loading ? 'Registering...' : 'Register'}
+                  {loading ? 'Đang xử lý...' : 'Đăng ký'}
                 </button>
               </form>
 
-              {/* Divider */}
               <div className="register-divider">
                 <span className="divider-line"></span>
-                <span className="divider-text">or</span>
+                <span className="divider-text">hoặc</span>
                 <span className="divider-line"></span>
               </div>
 
-              {/* Google Sign-in Button */}
               <button type="button" className="google-signin-btn" onClick={handleGoogleSignIn}>
                 <svg
                   className="google-icon"
@@ -221,12 +201,12 @@ const Register = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="google-text">Sign up with Google</span>
+                <span className="google-text">Đăng ký bằng Google</span>
               </button>
 
               <div className="register-footer">
                 <p className="login-link">
-                  Already have an account? <Link to="/login">Login here</Link>
+                  Bạn đã có tài khoản? <Link to="/login">Đăng nhập tại đây</Link>
                 </p>
               </div>
             </div>
