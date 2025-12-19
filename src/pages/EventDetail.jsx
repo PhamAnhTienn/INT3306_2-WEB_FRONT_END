@@ -1,16 +1,84 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaInfoCircle } from 'react-icons/fa';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { FaArrowLeft, FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaInfoCircle, FaQrcode, FaTimes, FaSpinner, FaTrash } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
-import { getEventById } from '../services/events/eventsService';
+import { getEventById, getEventQRCode } from '../services/events/eventsService';
+import { managerAPI } from '../services/manager/managerService';
+import { useAuth } from '../hooks/useAuth';
 import './EventDetail.css';
 
 const EventDetail = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState(null);
+  const [loadingQR, setLoadingQR] = useState(false);
+  const [qrError, setQrError] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
+  // Check if user is manager
+  const isManager = () => {
+    // Check URL path first
+    if (location.pathname.includes('/manager/')) {
+      return true;
+    }
+    
+    // Check user role
+    if (user) {
+      const normalizeRole = (role) => {
+        if (!role) return '';
+        const str = String(role).replace(/^ROLE_/, '').toUpperCase().trim();
+        return str;
+      };
+      
+      const userRole = normalizeRole(user.role || user.activeRole);
+      return userRole === 'EVENT_MANAGER' || userRole === 'ADMIN';
+    }
+    
+    return false;
+  };
+
+  const handleShowQRCode = async () => {
+    setShowQRModal(true);
+    setQrError(null);
+    setLoadingQR(true);
+    
+    try {
+      const response = await getEventQRCode(eventId);
+      if (response.success && response.data) {
+        setQrCodeUrl(response.data);
+      } else {
+        setQrError(response.message || 'Failed to generate QR code');
+      }
+    } catch (err) {
+      const message = err.response?.data?.message || err.message || 'Failed to generate QR code';
+      setQrError(message);
+    } finally {
+      setLoadingQR(false);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!confirm(`Are you sure you want to delete the event "${event?.title}"? This action cannot be undone and all registered users will be notified.`)) {
+      return;
+    }
+
+    try {
+      setDeleting(true);
+      await managerAPI.deleteEvent(eventId);
+      alert('Event deleted successfully');
+      navigate('/manager/events');
+    } catch (err) {
+      alert(err.response?.data?.message || err.message || 'Failed to delete event');
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -211,6 +279,34 @@ const EventDetail = () => {
                   <FaInfoCircle />
                   View Event Feed
                 </button>
+                {isManager() && (
+                  <button
+                    className="btn-quick-action"
+                    onClick={handleShowQRCode}
+                  >
+                    <FaQrcode />
+                    Show QR Code
+                  </button>
+                )}
+                {isManager() && (
+                  <button
+                    className="btn-quick-action btn-danger"
+                    onClick={handleDeleteEvent}
+                    disabled={deleting}
+                  >
+                    {deleting ? (
+                      <>
+                        <FaSpinner className="spinning" />
+                        Deleting...
+                      </>
+                    ) : (
+                      <>
+                        <FaTrash />
+                        Delete Event
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
 
@@ -237,6 +333,53 @@ const EventDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* QR Code Modal */}
+      {showQRModal && (
+        <div className="qr-modal-overlay" onClick={() => setShowQRModal(false)}>
+          <div className="qr-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="qr-modal-header">
+              <h2>Event QR Code</h2>
+              <button
+                className="qr-modal-close"
+                onClick={() => setShowQRModal(false)}
+                aria-label="Close"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            <div className="qr-modal-body">
+              {loadingQR ? (
+                <div className="qr-loading">
+                  <FaSpinner className="spinning" />
+                  <p>Generating QR code...</p>
+                </div>
+              ) : qrError ? (
+                <div className="qr-error">
+                  <p>{qrError}</p>
+                  <button
+                    className="btn-retry"
+                    onClick={handleShowQRCode}
+                  >
+                    Retry
+                  </button>
+                </div>
+              ) : qrCodeUrl ? (
+                <div className="qr-code-container">
+                  <img
+                    src={qrCodeUrl}
+                    alt="Event QR Code"
+                    className="qr-code-image"
+                  />
+                  <p className="qr-code-hint">
+                    Scan this QR code to view event details
+                  </p>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 };

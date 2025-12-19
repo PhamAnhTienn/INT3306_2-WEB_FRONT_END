@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaEllipsisV, FaComment, FaLock, FaClock, FaUserTimes, FaUserCheck, FaExclamationTriangle } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaEllipsisV, FaComment, FaLock, FaClock, FaUserTimes, FaUserCheck, FaExclamationTriangle, FaQrcode, FaUpload, FaSpinner, FaCheckCircle } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import CreatePost from '../components/posts/CreatePost';
 import LikeButton from '../components/posts/LikeButton';
@@ -9,7 +9,7 @@ import CommentsList from '../components/comments/CommentsList';
 import PostMenu from '../components/posts/PostMenu';
 import EditPostModal from '../components/posts/EditPostModal';
 import { postsAPI } from '../services/posts/postsService';
-import { getEventById, getRegistrationStatus, registerForEvent } from '../services/events/eventsService';
+import { getEventById, getRegistrationStatus, registerForEvent, uploadEventQRCode, cancelRegistration } from '../services/events/eventsService';
 import { useAuth } from '../hooks/useAuth';
 import './EventFeed.css';
 
@@ -30,6 +30,10 @@ const EventFeed = () => {
   const [registering, setRegistering] = useState(false);
   const [lightbox, setLightbox] = useState({ open: false, items: [], index: 0 });
   const [editingPost, setEditingPost] = useState(null);
+  const [uploadingQR, setUploadingQR] = useState(false);
+  const [qrUploadSuccess, setQrUploadSuccess] = useState(false);
+  const [qrUploadError, setQrUploadError] = useState(null);
+  const [cancelling, setCancelling] = useState(false);
 
   // Determine user role from URL path or user context
   const getUserRole = () => {
@@ -211,9 +215,31 @@ const EventFeed = () => {
   };
 
   const handleRegister = async () => {
+    // Validate eventId
+    if (!eventId || (typeof eventId !== 'number' && typeof eventId !== 'string')) {
+      console.error('Invalid eventId in EventFeed:', eventId);
+      alert('❌ Invalid event ID. Please try again.');
+      return;
+    }
+
+    // Prevent multiple simultaneous registrations
+    if (registering) {
+      console.log('Already registering for event:', eventId);
+      return;
+    }
+
+    // Check if already registered
+    if (userRegistrationStatus) {
+      alert('You have already registered for this event.');
+      return;
+    }
+
     try {
       setRegistering(true);
+      console.log('Registering for event:', eventId);
       const response = await registerForEvent(eventId);
+      console.log('Registration response for event', eventId, ':', response);
+      
       if (response.success) {
         // Refresh registration status
         const registrationResponse = await getRegistrationStatus(eventId);
@@ -223,11 +249,107 @@ const EventFeed = () => {
         }
       }
     } catch (err) {
-      alert(err.message || 'Failed to register for event');
+      console.error('Error registering for event', eventId, ':', err);
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to register for event';
+      // Check if error is about already registered
+      if (errorMessage.includes('already registered')) {
+        // Refresh status to get current registration
+        try {
+          const registrationResponse = await getRegistrationStatus(eventId);
+          if (registrationResponse.success && registrationResponse.data) {
+            setUserRegistrationStatus(registrationResponse.data.status);
+            setRegistrationData(registrationResponse.data);
+          }
+        } catch (refreshErr) {
+          console.error('Error refreshing registration status:', refreshErr);
+        }
+      }
+      alert(errorMessage);
     } finally {
       setRegistering(false);
     }
   };
+
+  const handleCancelRegistration = async () => {
+    if (!confirm('Are you sure you want to cancel your registration for this event?')) {
+      return;
+    }
+
+    try {
+      setCancelling(true);
+      await cancelRegistration(eventId);
+      
+      // Clear registration status
+      setUserRegistrationStatus(null);
+      setRegistrationData(null);
+      
+      alert('✅ Registration cancelled successfully');
+      
+      // Navigate back to events page
+      navigate('/volunteer/events');
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to cancel registration';
+      alert('❌ ' + errorMessage);
+    } finally {
+      setCancelling(false);
+    }
+  };
+
+  /**
+   * Handle QR code upload from user
+   * User uploads the QR code image they captured/scanned from the event location
+   * Once uploaded successfully, registration is automatically marked as COMPLETED
+   */
+  const handleQRCodeUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type (must be image)
+    if (!file.type.startsWith('image/')) {
+      setQrUploadError('Please upload an image file (JPG, PNG, etc.)');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setQrUploadError('File size must be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploadingQR(true);
+      setQrUploadError(null);
+      setQrUploadSuccess(false);
+
+      // Upload QR code image - backend will automatically complete registration
+      const response = await uploadEventQRCode(eventId, file);
+      if (response.success) {
+        setQrUploadSuccess(true);
+        // Registration automatically updated to COMPLETED by backend
+        setUserRegistrationStatus('COMPLETED');
+        // Refresh registration data to get updated status
+        const registrationResponse = await getRegistrationStatus(eventId);
+        if (registrationResponse.success && registrationResponse.data) {
+          setRegistrationData(registrationResponse.data);
+        }
+        // Hide success message after 3 seconds
+        setTimeout(() => setQrUploadSuccess(false), 3000);
+      }
+    } catch (err) {
+      const message = err.response?.data?.message || err.message || 'Failed to upload QR code';
+      setQrUploadError(message);
+    } finally {
+      setUploadingQR(false);
+      // Reset file input
+      e.target.value = '';
+    }
+  };
+
+  // Check if can upload QR code (user has registration and not already COMPLETED)
+  // User uploads the QR code image they captured from the event location
+  const canUploadQR = !isManager && 
+                      userRegistrationStatus && 
+                      userRegistrationStatus !== 'COMPLETED';
 
   // Check if user can access feed
   const canAccessFeed = isManager || userRegistrationStatus === 'APPROVED';
@@ -323,12 +445,31 @@ const EventFeed = () => {
                       </p>
                     )}
                   </div>
-                  <button 
-                    className="btn-back-to-events"
-                    onClick={() => navigate('/volunteer/events')}
-                  >
-                    Back to My Events
-                  </button>
+                  <div className="registration-actions">
+                    <button 
+                      className="btn-back-to-events"
+                      onClick={() => navigate('/volunteer/events')}
+                    >
+                      Back to My Events
+                    </button>
+                    <button 
+                      className="btn-cancel-registration"
+                      onClick={handleCancelRegistration}
+                      disabled={cancelling}
+                    >
+                      {cancelling ? (
+                        <>
+                          <FaSpinner className="spinning" />
+                          Cancelling...
+                        </>
+                      ) : (
+                        <>
+                          <FaUserTimes />
+                          Cancel Registration
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </>
               ) : userRegistrationStatus === 'REJECTED' ? (
                 // Rejected
@@ -348,12 +489,31 @@ const EventFeed = () => {
                       </p>
                     )}
                   </div>
-                  <button 
-                    className="btn-back-to-events"
-                    onClick={() => navigate('/volunteer/events')}
-                  >
-                    Back to My Events
-                  </button>
+                  <div className="registration-actions">
+                    <button 
+                      className="btn-back-to-events"
+                      onClick={() => navigate('/volunteer/events')}
+                    >
+                      Back to My Events
+                    </button>
+                    <button 
+                      className="btn-cancel-registration"
+                      onClick={handleCancelRegistration}
+                      disabled={cancelling}
+                    >
+                      {cancelling ? (
+                        <>
+                          <FaSpinner className="spinning" />
+                          Cancelling...
+                        </>
+                      ) : (
+                        <>
+                          <FaUserTimes />
+                          Cancel Registration
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </>
               ) : userRegistrationStatus === 'WAITING' ? (
                 // Waiting list
@@ -373,12 +533,31 @@ const EventFeed = () => {
                       </p>
                     )}
                   </div>
-                  <button 
-                    className="btn-back-to-events"
-                    onClick={() => navigate('/volunteer/events')}
-                  >
-                    Back to My Events
-                  </button>
+                  <div className="registration-actions">
+                    <button 
+                      className="btn-back-to-events"
+                      onClick={() => navigate('/volunteer/events')}
+                    >
+                      Back to My Events
+                    </button>
+                    <button 
+                      className="btn-cancel-registration"
+                      onClick={handleCancelRegistration}
+                      disabled={cancelling}
+                    >
+                      {cancelling ? (
+                        <>
+                          <FaSpinner className="spinning" />
+                          Cancelling...
+                        </>
+                      ) : (
+                        <>
+                          <FaUserTimes />
+                          Cancel Registration
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </>
               ) : (
                 // Other status
@@ -425,6 +604,65 @@ const EventFeed = () => {
               </span>
             </div>
           </div>
+          {/* Cancel Registration Button - Only for volunteers who have registered */}
+          {!isManager && userRegistrationStatus && userRegistrationStatus !== 'REJECTED' && (
+            <button 
+              className="btn-cancel-registration-header"
+              onClick={handleCancelRegistration}
+              disabled={cancelling}
+            >
+              {cancelling ? (
+                <>
+                  <FaSpinner className="spinning" />
+                  Cancelling...
+                </>
+              ) : (
+                <>
+                  <FaUserTimes />
+                  Cancel Registration
+                </>
+              )}
+            </button>
+          )}
+          {/* Upload QR Code Button - Only for volunteers who have registration and not already COMPLETED */}
+          {/* User uploads the QR code image they captured from the event location */}
+          {canUploadQR && (
+            <div className="qr-upload-section">
+              <input
+                type="file"
+                id="qr-upload-input"
+                accept="image/*"
+                onChange={handleQRCodeUpload}
+                style={{ display: 'none' }}
+                disabled={uploadingQR || userRegistrationStatus === 'COMPLETED'}
+              />
+              <label
+                htmlFor="qr-upload-input"
+                className={`qr-upload-button ${uploadingQR ? 'uploading' : ''} ${qrUploadSuccess ? 'success' : ''} ${userRegistrationStatus === 'COMPLETED' ? 'completed' : ''}`}
+                title={userRegistrationStatus === 'COMPLETED' ? 'Event already completed' : 'Upload QR code image from event location'}
+              >
+                {uploadingQR ? (
+                  <>
+                    <FaSpinner className="spinning" />
+                    Uploading...
+                  </>
+                ) : qrUploadSuccess || userRegistrationStatus === 'COMPLETED' ? (
+                  <>
+                    <FaCheckCircle />
+                    Completed!
+                  </>
+                ) : (
+                  <>
+                    <FaQrcode />
+                    Upload QR Code
+                  </>
+                )}
+              </label>
+              {qrUploadError && (
+                <div className="qr-upload-error">{qrUploadError}</div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="event-feed-container">

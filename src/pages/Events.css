@@ -603,6 +603,26 @@
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* When there are 3 buttons, make them equal width */
+.event-card-actions > button {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* On smaller screens, stack buttons */
+@media (max-width: 640px) {
+  .event-card-actions {
+    flex-direction: column;
+  }
+  
+  .event-card-actions > button {
+    width: 100%;
+    min-width: unset;
+  }
 }
 
 /* View Details Button - Primary action (main CTA) */

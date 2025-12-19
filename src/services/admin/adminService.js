@@ -300,6 +300,20 @@ export const adminAPI = {
       throw error;
     }
   },
+
+  /**
+   * Delete an event (admin)
+   * @param {number} eventId
+   */
+  deleteEvent: async (eventId) => {
+    try {
+      const response = await api.delete(`/admin/events/${eventId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      throw error;
+    }
+  },
 };
 
 

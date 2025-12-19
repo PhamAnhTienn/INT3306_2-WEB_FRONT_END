@@ -82,16 +82,23 @@ export const registerForEvent = async (eventId) => {
 };
 
 /**
- * Unregister from an event
+ * Cancel registration (unregister from an event)
  */
-export const unregisterFromEvent = async (eventId) => {
+export const cancelRegistration = async (eventId) => {
   try {
-    const response = await api.delete(`/events/${eventId}/unregister`);
+    const response = await api.delete(`/registrations/events/${eventId}`);
     return response.data;
   } catch (error) {
-    console.error(`Error unregistering from event ${eventId}:`, error);
+    console.error(`Error canceling registration for event ${eventId}:`, error);
     throw error;
   }
+};
+
+/**
+ * Unregister from an event (deprecated - use cancelRegistration instead)
+ */
+export const unregisterFromEvent = async (eventId) => {
+  return cancelRegistration(eventId);
 };
 
 /**
@@ -150,6 +157,40 @@ export const createEvent = async (eventData) => {
     return response.data;
   } catch (error) {
     console.error('Error creating event:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get QR code URL for an event (manager only)
+ */
+export const getEventQRCode = async (eventId) => {
+  try {
+    const response = await api.get(`/events/${eventId}/qr-code`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching QR code for event ${eventId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Upload QR code image and complete registration (volunteer only)
+ * Only available when event status is ONGOING and registration is APPROVED
+ */
+export const uploadEventQRCode = async (eventId, qrCodeFile) => {
+  try {
+    const formData = new FormData();
+    formData.append('qrCode', qrCodeFile);
+    
+    const response = await api.post(`/registrations/events/${eventId}/upload-qr`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error uploading QR code for event ${eventId}:`, error);
     throw error;
   }
 };

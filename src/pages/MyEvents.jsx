@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt } from 'react-icons/fa';
-import { getMyEvents } from '../services/events/eventsService';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaUserTimes, FaSpinner } from 'react-icons/fa';
+import { getMyEvents, cancelRegistration, getRegistrationStatus } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
@@ -19,6 +19,8 @@ const MyEvents = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [registrationStatuses, setRegistrationStatuses] = useState({}); // Map eventId -> registration status
+  const [cancelling, setCancelling] = useState(null); // Track which event is being cancelled
 
   const statusFilters = [
     { label: 'All', value: '' },
@@ -67,6 +69,21 @@ const MyEvents = () => {
         setEvents(paginatedEvents);
         setTotalPages(totalPagesCalculated);
         setTotalElements(totalFiltered);
+
+        // Fetch registration statuses for all events
+        const statusMap = {};
+        for (const event of paginatedEvents) {
+          try {
+            const regResponse = await getRegistrationStatus(event.eventId);
+            if (regResponse.success && regResponse.data) {
+              statusMap[event.eventId] = regResponse.data.status;
+            }
+          } catch (err) {
+            // If no registration found, status is null
+            statusMap[event.eventId] = null;
+          }
+        }
+        setRegistrationStatuses(statusMap);
 
         // Reset to first page if current page exceeds total pages
         if (currentPage >= totalPagesCalculated && totalPagesCalculated > 0) {
@@ -162,6 +179,35 @@ const MyEvents = () => {
     setIsModalOpen(false);
     setSelectedEvent(null);
     document.body.style.overflow = 'auto'; // Restore scrolling
+  };
+
+  // Handle cancel registration
+  const handleCancelRegistration = async (eventId) => {
+    if (!confirm('Are you sure you want to cancel your registration for this event?')) {
+      return;
+    }
+
+    try {
+      setCancelling(eventId);
+      await cancelRegistration(eventId);
+      
+      // Update registration status
+      setRegistrationStatuses(prev => ({
+        ...prev,
+        [eventId]: null
+      }));
+      
+      // Remove event from list (since it's no longer registered)
+      setEvents(prevEvents => prevEvents.filter(event => event.eventId !== eventId));
+      setTotalElements(prev => Math.max(0, prev - 1));
+      
+      alert('✅ Registration cancelled successfully');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to cancel registration';
+      alert('❌ ' + errorMessage);
+    } finally {
+      setCancelling(null);
+    }
   };
 
   // Generate smart pagination with ellipses
@@ -358,6 +404,26 @@ const MyEvents = () => {
                       <FaSignInAlt />
                       Enter Event
                     </button>
+                    {/* Show Cancel Registration button if user has registered */}
+                    {registrationStatuses[event.eventId] && registrationStatuses[event.eventId] !== 'REJECTED' && (
+                      <button 
+                        className="event-cancel-button"
+                        onClick={() => handleCancelRegistration(event.eventId)}
+                        disabled={cancelling === event.eventId}
+                      >
+                        {cancelling === event.eventId ? (
+                          <>
+                            <FaSpinner className="spinning" />
+                            Cancelling...
+                          </>
+                        ) : (
+                          <>
+                            <FaUserTimes />
+                            Cancel Registration
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

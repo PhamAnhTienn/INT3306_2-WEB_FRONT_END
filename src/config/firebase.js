@@ -5,7 +5,7 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC-F6QotPkWpCgK4s81tfUVEBdqCpT1UXk",
+  apiKey: "AIzaSyBVQDGUhvco5b4dHkvMgWxs-xCLnHhzgqU",
   authDomain: "volunteer-web-push.firebaseapp.com",
   projectId: "volunteer-web-push",
   storageBucket: "volunteer-web-push.firebasestorage.app",

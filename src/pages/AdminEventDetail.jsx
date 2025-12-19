@@ -8,6 +8,7 @@ import {
   FaCheckCircle,
   FaTimesCircle,
   FaSpinner,
+  FaTrash,
 } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { adminAPI } from '../services/admin/adminService';
@@ -22,6 +23,7 @@ const AdminEventDetail = () => {
   const [actionLoading, setActionLoading] = useState(null);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetchEventDetails();
@@ -79,6 +81,23 @@ const AdminEventDetail = () => {
       alert(err.response?.data?.message || 'Failed to reject event');
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!confirm(`Are you sure you want to delete the event "${event?.title || event?.eventTitle}"? This action cannot be undone and all registered users will be notified.`)) {
+      return;
+    }
+
+    try {
+      setDeleting(true);
+      await adminAPI.deleteEvent(eventId);
+      alert('Event deleted successfully');
+      navigate('/dashboard/admin');
+    } catch (err) {
+      alert(err.response?.data?.message || err.message || 'Failed to delete event');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -162,36 +181,53 @@ const AdminEventDetail = () => {
               <h1>{event.title || event.eventTitle}</h1>
               {getStatusBadge(event.status)}
             </div>
-            {(canApprove || canReject) && (
-              <div className="event-actions">
-                {canApprove && (
-                  <button
-                    className="btn-action btn-approve"
-                    onClick={handleApprove}
-                    disabled={actionLoading === 'approving'}
-                  >
-                    {actionLoading === 'approving' ? (
-                      <>
-                        <FaSpinner className="spinning" /> Approving...
-                      </>
-                    ) : (
-                      <>
-                        <FaCheckCircle /> Approve Event
-                      </>
-                    )}
-                  </button>
+            <div className="event-actions">
+              {(canApprove || canReject) && (
+                <>
+                  {canApprove && (
+                    <button
+                      className="btn-action btn-approve"
+                      onClick={handleApprove}
+                      disabled={actionLoading === 'approving'}
+                    >
+                      {actionLoading === 'approving' ? (
+                        <>
+                          <FaSpinner className="spinning" /> Approving...
+                        </>
+                      ) : (
+                        <>
+                          <FaCheckCircle /> Approve Event
+                        </>
+                      )}
+                    </button>
+                  )}
+                  {canReject && (
+                    <button
+                      className="btn-action btn-reject"
+                      onClick={() => setShowRejectModal(true)}
+                      disabled={actionLoading}
+                    >
+                      <FaTimesCircle /> Reject Event
+                    </button>
+                  )}
+                </>
+              )}
+              <button
+                className="btn-action btn-delete"
+                onClick={handleDeleteEvent}
+                disabled={deleting || actionLoading}
+              >
+                {deleting ? (
+                  <>
+                    <FaSpinner className="spinning" /> Deleting...
+                  </>
+                ) : (
+                  <>
+                    <FaTrash /> Delete Event
+                  </>
                 )}
-                {canReject && (
-                  <button
-                    className="btn-action btn-reject"
-                    onClick={() => setShowRejectModal(true)}
-                    disabled={actionLoading}
-                  >
-                    <FaTimesCircle /> Reject Event
-                  </button>
-                )}
-              </div>
-            )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -352,6 +388,7 @@ const AdminEventDetail = () => {
 };
 
 export default AdminEventDetail;
+
 
 
 

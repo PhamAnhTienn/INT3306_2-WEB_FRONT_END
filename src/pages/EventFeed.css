@@ -96,6 +96,79 @@
   font-size: 0.9rem;
 }
 
+/* QR Upload Section */
+.qr-upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.qr-upload-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--primary-500, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.qr-upload-button:hover:not(.uploading):not(.success) {
+  background: var(--primary-600, #2563eb);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.qr-upload-button.uploading {
+  background: var(--neutral-400, #9ca3af);
+  cursor: not-allowed;
+}
+
+.qr-upload-button.success,
+.qr-upload-button.completed {
+  background: var(--success-500, #10b981);
+  cursor: default;
+}
+
+.qr-upload-button.completed {
+  opacity: 0.8;
+}
+
+.qr-upload-button .spinning {
+  animation: spin 1s linear infinite;
+}
+
+.qr-upload-error {
+  font-size: 0.75rem;
+  color: var(--error-600, #dc2626);
+  text-align: right;
+  max-width: 200px;
+}
+
+.qr-upload-disabled {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--neutral-200, #e5e7eb);
+  color: var(--text-secondary, #6b7280);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  cursor: not-allowed;
+}
+
+.qr-upload-disabled svg {
+  color: var(--text-secondary, #6b7280);
+}
+
 /* Container */
 .event-feed-container {
   max-width: 1100px;
@@ -763,6 +836,98 @@
   background: var(--primary-50);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 138, 0, 0.2);
+}
+
+/* Cancel Registration Button */
+.btn-cancel-registration,
+.btn-cancel-registration-header {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+  position: relative;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.btn-cancel-registration::before,
+.btn-cancel-registration-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-cancel-registration:hover:not(:disabled)::before,
+.btn-cancel-registration-header:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.btn-cancel-registration:hover:not(:disabled),
+.btn-cancel-registration-header:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+}
+
+.btn-cancel-registration:active:not(:disabled),
+.btn-cancel-registration-header:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.btn-cancel-registration:disabled,
+.btn-cancel-registration-header:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-cancel-registration svg,
+.btn-cancel-registration-header svg {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-cancel-registration:hover:not(:disabled) svg,
+.btn-cancel-registration-header:hover:not(:disabled) svg {
+  transform: scale(1.1);
+}
+
+.btn-cancel-registration .spinning,
+.btn-cancel-registration-header .spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* Header specific styling */
+.btn-cancel-registration-header {
+  margin-right: 1rem;
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+/* Button group for cancel and back buttons */
+.registration-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* Responsive */

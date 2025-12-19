@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
-import { getAllEvents, registerForEvent, getMyRegistrations } from '../services/events/eventsService';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaCheckCircle, FaHourglassHalf, FaSpinner } from 'react-icons/fa';
+import { getAllEvents, registerForEvent, getMyRegistrations, cancelRegistration } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
 
@@ -19,9 +19,10 @@ const Events = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [registering, setRegistering] = useState(false);
+  const [registering, setRegistering] = useState(new Set()); // Track which eventIds are being registered
   const [registerSuccess, setRegisterSuccess] = useState(null);
   const [registerError, setRegisterError] = useState(null);
+  const [cancelling, setCancelling] = useState(null); // Track which event is being cancelled
 
   const statusFilters = [
     { label: 'All', value: '' },
@@ -60,15 +61,88 @@ const Events = () => {
         // Map registrations to events with status
         if (myRegistrationsResponse.success && myRegistrationsResponse.data.content) {
           const registrationsMap = new Map();
+          console.log('=== MAPPING REGISTRATIONS TO EVENTS ===');
+          console.log('Total registrations:', myRegistrationsResponse.data.content.length);
+          console.log('Registrations data:', myRegistrationsResponse.data.content.map(r => ({ 
+            id: r.id, 
+            eventId: r.eventId, 
+            eventIdType: typeof r.eventId,
+            status: r.status 
+          })));
+          
           myRegistrationsResponse.data.content.forEach(reg => {
-            registrationsMap.set(reg.eventId, reg.status);
+            // Convert eventId to number to ensure consistent comparison
+            const regEventId = Number(reg.eventId);
+            if (!isNaN(regEventId) && regEventId > 0) {
+              // Check if there's already a registration for this eventId
+              if (registrationsMap.has(regEventId)) {
+                console.warn('⚠️ Duplicate registration found for eventId:', regEventId, 'Keeping first one');
+              } else {
+                registrationsMap.set(regEventId, reg.status);
+                console.log('✓ Mapped registration: eventId', regEventId, '(type:', typeof regEventId, ') -> status', reg.status);
+              }
+            } else {
+              console.warn('⚠️ Invalid registration eventId:', reg.eventId, '(type:', typeof reg.eventId, ')');
+            }
           });
           
+          console.log('Registration map contents:', Array.from(registrationsMap.entries()).map(([k, v]) => ({ eventId: k, status: v })));
+          console.log('Total events to map:', allEvents.length);
+          console.log('Events data:', allEvents.map(e => ({ 
+            eventId: e.eventId, 
+            eventIdType: typeof e.eventId,
+            title: e.title 
+          })));
+          
           // Add registration status to each event
-          allEvents = allEvents.map(event => ({
-            ...event,
-            registrationStatus: registrationsMap.get(event.eventId) || null
-          }));
+          allEvents = allEvents.map((event, index) => {
+            // Convert eventId to number for consistent comparison
+            const eventIdNum = Number(event.eventId);
+            
+            // Validate eventId
+            if (isNaN(eventIdNum) || eventIdNum <= 0) {
+              console.warn('⚠️ Invalid event eventId:', event.eventId, 'for event:', event.title);
+              return {
+                ...event,
+                registrationStatus: null
+              };
+            }
+            
+            // Get registration status ONLY if eventId matches exactly
+            const registrationStatus = registrationsMap.get(eventIdNum) || null;
+            
+            // Log every mapping to debug (limit to first 5 to avoid spam)
+            if (index < 5) {
+              if (registrationStatus) {
+                console.log(`✓ Event[${index}] eventId=${eventIdNum} (${typeof eventIdNum}) "${event.title?.substring(0, 20)}" matched with registration status: ${registrationStatus}`);
+              } else {
+                console.log(`✗ Event[${index}] eventId=${eventIdNum} (${typeof eventIdNum}) "${event.title?.substring(0, 20)}" has NO registration status`);
+              }
+            }
+            
+            // Create new object to avoid reference issues
+            return {
+              ...event,
+              registrationStatus: registrationStatus // Explicitly set, not using || null to avoid issues
+            };
+          });
+          
+          console.log('=== FINAL EVENTS WITH REGISTRATION STATUS ===');
+          const eventsWithStatus = allEvents.filter(e => e.registrationStatus);
+          const eventsWithoutStatus = allEvents.filter(e => !e.registrationStatus);
+          console.log(`Events WITH registration status (${eventsWithStatus.length}):`, 
+            eventsWithStatus.map(e => ({ 
+              eventId: e.eventId, 
+              title: e.title?.substring(0, 30), 
+              status: e.registrationStatus 
+            }))
+          );
+          console.log(`Events WITHOUT registration status (${eventsWithoutStatus.length}):`, 
+            eventsWithoutStatus.slice(0, 5).map(e => ({ 
+              eventId: e.eventId, 
+              title: e.title?.substring(0, 30)
+            }))
+          );
         }
         
         setEvents(allEvents);
@@ -170,61 +244,70 @@ const Events = () => {
 
   // Handle event registration
   const handleRegisterEvent = async (eventId) => {
-    // Find the event to check capacity
-    const event = events.find(e => e.eventId === eventId);
-    if (event) {
-      const current = event.currentParticipants || 0;
-      const max = event.maxParticipants;
-      
-      // Show warning if event is full or almost full
-      if (current >= max) {
-        const confirmMsg = `This event is currently full (${current}/${max} participants).\n\nYou will be added to the WAITING LIST and will be notified if a spot becomes available.\n\nDo you want to continue?`;
-        if (!window.confirm(confirmMsg)) {
-          return;
-        }
-      } else if (current >= max * 0.9) {
-        const confirmMsg = `This event is almost full (${current}/${max} participants).\n\nOnly ${max - current} spot(s) remaining!\n\nDo you want to register now?`;
-        if (!window.confirm(confirmMsg)) {
-          return;
-        }
+    // Validate and normalize eventId
+    const eventIdNum = Number(eventId);
+    if (!eventId || isNaN(eventIdNum)) {
+      console.error('Invalid eventId:', eventId);
+      alert('❌ Invalid event ID. Please try again.');
+      return;
+    }
+
+    // Prevent multiple simultaneous registrations for the same event
+    if (registering.has(eventIdNum)) {
+      console.log('Already registering for event:', eventIdNum);
+      return;
+    }
+
+    // Find the event to check capacity - compare as numbers
+    const event = events.find(e => Number(e.eventId) === eventIdNum);
+    if (!event) {
+      console.error('Event not found:', eventIdNum);
+      alert('❌ Event not found. Please refresh the page.');
+      return;
+    }
+
+    // Check if already registered
+    if (event.registrationStatus) {
+      alert('You have already registered for this event.');
+      return;
+    }
+
+    const current = event.currentParticipants || 0;
+    const max = event.maxParticipants;
+    
+    // Show warning if event is full or almost full
+    if (current >= max) {
+      const confirmMsg = `This event is currently full (${current}/${max} participants).\n\nYou will be added to the WAITING LIST and will be notified if a spot becomes available.\n\nDo you want to continue?`;
+      if (!window.confirm(confirmMsg)) {
+        return;
+      }
+    } else if (current >= max * 0.9) {
+      const confirmMsg = `This event is almost full (${current}/${max} participants).\n\nOnly ${max - current} spot(s) remaining!\n\nDo you want to register now?`;
+      if (!window.confirm(confirmMsg)) {
+        return;
       }
     }
     
-    setRegistering(true);
+    // Add eventId to registering set
+    setRegistering(prev => new Set(prev).add(eventIdNum));
     setRegisterError(null);
     setRegisterSuccess(null);
     
     try {
-      const response = await registerForEvent(eventId);
+      console.log('Registering for event:', eventIdNum);
+      const response = await registerForEvent(eventIdNum);
+      console.log('Registration response for event', eventIdNum, ':', response);
       
       if (response.success) {
         // Get the registration status from response (PENDING or WAITING)
         const regStatus = response.data?.status || 'PENDING';
+        const responseEventId = Number(response.data?.eventId || eventIdNum);
         
-        // Update the events list with registration status and increment count if PENDING
-        setEvents(prevEvents => prevEvents.map(event => {
-          if (event.eventId === eventId) {
-            return {
-              ...event,
-              registrationStatus: regStatus,
-              currentParticipants: regStatus === 'PENDING' 
-                ? (event.currentParticipants || 0) + 1 
-                : event.currentParticipants
-            };
-          }
-          return event;
-        }));
+        console.log('Registration successful. EventId:', responseEventId, 'Status:', regStatus);
         
-        // Update selected event if modal is open
-        if (selectedEvent && selectedEvent.eventId === eventId) {
-          setSelectedEvent(prev => ({
-            ...prev,
-            registrationStatus: regStatus,
-            currentParticipants: regStatus === 'PENDING'
-              ? (prev.currentParticipants || 0) + 1
-              : prev.currentParticipants
-          }));
-        }
+        // Refresh events from server to ensure data consistency
+        // This prevents issues where state might be out of sync
+        await fetchEvents();
         
         // Show appropriate message based on status
         const message = regStatus === 'WAITING' 
@@ -236,11 +319,73 @@ const Events = () => {
         alert('❌ ' + (response.message || 'Failed to register for the event'));
       }
     } catch (error) {
+      console.error('Error registering for event', eventId, ':', error);
       const errorMessage = error.response?.data?.message || error.message || 'An error occurred while registering';
       setRegisterError(errorMessage);
       alert('❌ ' + errorMessage);
     } finally {
-      setRegistering(false);
+      // Remove eventId from registering set
+      setRegistering(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(eventIdNum);
+        return newSet;
+      });
+    }
+  };
+
+  const handleCancelRegistration = async (eventId) => {
+    // Normalize eventId to number
+    const eventIdNum = Number(eventId);
+    if (!eventId || isNaN(eventIdNum)) {
+      console.error('Invalid eventId:', eventId);
+      alert('❌ Invalid event ID. Please try again.');
+      return;
+    }
+
+    if (!confirm('Are you sure you want to cancel your registration for this event?')) {
+      return;
+    }
+
+    try {
+      setCancelling(eventIdNum);
+      await cancelRegistration(eventIdNum);
+      
+      // Update the events list to remove registration status
+      // Use strict number comparison to ensure we only update the correct event
+      setEvents(prevEvents => prevEvents.map(evt => {
+        const evtIdNum = Number(evt.eventId);
+        if (evtIdNum === eventIdNum) {
+          return {
+            ...evt,
+            registrationStatus: null,
+            currentParticipants: evt.registrationStatus === 'PENDING' || evt.registrationStatus === 'APPROVED'
+              ? Math.max(0, (evt.currentParticipants || 0) - 1)
+              : evt.currentParticipants
+          };
+        }
+        return evt;
+      }));
+      
+      // Update selected event if modal is open
+      if (selectedEvent && Number(selectedEvent.eventId) === eventIdNum) {
+        setSelectedEvent(prev => ({
+          ...prev,
+          registrationStatus: null,
+          currentParticipants: prev.registrationStatus === 'PENDING' || prev.registrationStatus === 'APPROVED'
+            ? Math.max(0, (prev.currentParticipants || 0) - 1)
+            : prev.currentParticipants
+        }));
+      }
+      
+      alert('✅ Registration cancelled successfully');
+      
+      // Refresh events to get updated data from server
+      await fetchEvents();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to cancel registration';
+      alert('❌ ' + errorMessage);
+    } finally {
+      setCancelling(null);
     }
   };
 
@@ -433,25 +578,82 @@ const Events = () => {
                     </button>
                     {event.status === 'ONGOING' && (
                       event.registrationStatus ? (
-                        // User has registered - show status badge
+                        // User has registered - show status badge and cancel button
                         <>
                           {event.registrationStatus === 'APPROVED' && (
-                            <button className="event-registered-button" disabled>
-                              <FaCheckCircle />
-                              Registered
-                            </button>
+                            <>
+                              <button className="event-registered-button" disabled>
+                                <FaCheckCircle />
+                                Registered
+                              </button>
+                              <button 
+                                className="event-cancel-button"
+                                onClick={() => handleCancelRegistration(Number(event.eventId))}
+                                disabled={cancelling === Number(event.eventId)}
+                              >
+                                {cancelling === Number(event.eventId) ? (
+                                  <>
+                                    <FaSpinner className="spinning" />
+                                    Cancelling...
+                                  </>
+                                ) : (
+                                  <>
+                                    <FaTimes />
+                                    Cancel Registration
+                                  </>
+                                )}
+                              </button>
+                            </>
                           )}
                           {event.registrationStatus === 'PENDING' && (
-                            <button className="event-pending-button" disabled>
-                              <FaClock />
-                              Pending Approval
-                            </button>
+                            <>
+                              <button className="event-pending-button" disabled>
+                                <FaClock />
+                                Pending Approval
+                              </button>
+                              <button 
+                                className="event-cancel-button"
+                                onClick={() => handleCancelRegistration(Number(event.eventId))}
+                                disabled={cancelling === Number(event.eventId)}
+                              >
+                                {cancelling === Number(event.eventId) ? (
+                                  <>
+                                    <FaSpinner className="spinning" />
+                                    Cancelling...
+                                  </>
+                                ) : (
+                                  <>
+                                    <FaTimes />
+                                    Cancel Registration
+                                  </>
+                                )}
+                              </button>
+                            </>
                           )}
                           {event.registrationStatus === 'WAITING' && (
-                            <button className="event-waiting-button" disabled>
-                              <FaHourglassHalf />
-                              Waiting List
-                            </button>
+                            <>
+                              <button className="event-waiting-button" disabled>
+                                <FaHourglassHalf />
+                                Waiting List
+                              </button>
+                              <button 
+                                className="event-cancel-button"
+                                onClick={() => handleCancelRegistration(Number(event.eventId))}
+                                disabled={cancelling === Number(event.eventId)}
+                              >
+                                {cancelling === Number(event.eventId) ? (
+                                  <>
+                                    <FaSpinner className="spinning" />
+                                    Cancelling...
+                                  </>
+                                ) : (
+                                  <>
+                                    <FaTimes />
+                                    Cancel Registration
+                                  </>
+                                )}
+                              </button>
+                            </>
                           )}
                           {event.registrationStatus === 'REJECTED' && (
                             <button className="event-rejected-button" disabled>
@@ -464,10 +666,24 @@ const Events = () => {
                         // User hasn't registered yet
                         <button 
                           className="event-register-button"
-                          onClick={() => handleRegisterEvent(event.eventId)}
+                          onClick={() => {
+                            const evtIdNum = Number(event.eventId);
+                            console.log('Register button clicked for event:', evtIdNum, 'Event object:', event);
+                            handleRegisterEvent(evtIdNum);
+                          }}
+                          disabled={registering.has(Number(event.eventId))}
                         >
-                          <FaSignInAlt />
-                          Register
+                          {registering.has(event.eventId) ? (
+                            <>
+                              <FaSpinner className="spinning" />
+                              Registering...
+                            </>
+                          ) : (
+                            <>
+                              <FaSignInAlt />
+                              Register
+                            </>
+                          )}
                         </button>
                       )
                     )}

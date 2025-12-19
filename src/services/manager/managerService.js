@@ -167,6 +167,21 @@ export const getEventDetails = async (eventId) => {
   }
 };
 
+/**
+ * Delete an event
+ * @param {number} eventId - Event ID
+ * @returns {Promise} API response
+ */
+export const deleteEvent = async (eventId) => {
+  try {
+    const response = await api.delete(`/events/${eventId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting event ${eventId}:`, error);
+    throw error;
+  }
+};
+
 // Export as object for convenience
 export const managerAPI = {
   getManagerEvents,
@@ -177,6 +192,7 @@ export const managerAPI = {
   getRegistrationCount,
   getEventDetails,
   exportEventRegistrations,
+  deleteEvent,
 };
 
 export default managerAPI;
