@@ -8,16 +8,16 @@ const Footer = () => {
         <div className="container">
           <div className="newsletter-content">
             <div className="newsletter-text">
-              <span className="newsletter-label">Newsletter</span>
-              <h3>To get weekly & monthly news, <span className="highlight">Subscribe</span> to our newsletter.</h3>
+              <span className="newsletter-label">Nhận thông báo mới</span>
+              <h3>Đăng ký để không bỏ lỡ các <span className="highlight">sự kiện</span> ý nghĩa sắp tới.</h3>
             </div>
             <div className="newsletter-form">
               <input 
                 type="email" 
-                placeholder="Your mail address" 
+                placeholder="Nhập địa chỉ email của bạn..."
                 className="newsletter-input"
               />
-              <button className="btn btn-primary">Subscribe</button>
+              <button className="btn btn-primary">Đăng ký ngay</button>
             </div>
           </div>
         </div>
@@ -25,55 +25,43 @@ const Footer = () => {
 
       <div className="footer-main">
         <div className="container">
-          <div className="footer-grid">
+          <div className="footer-grid" style={{ gridTemplateColumns: '1.5fr 1fr 1fr' }}>
             <div className="footer-col">
               <div className="logo">
                 <img src="/logo.svg" alt="Voluntarius" className="logo-img" />
                 <span className="logo-text">Voluntarius</span>
               </div>
               <p className="footer-desc">
-                Lorem ipsum dolor sit amet consectetur elit sed eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Nền tảng kết nối tình nguyện viên và tổ chức xã hội hàng đầu. 
+                Chúng tôi cam kết minh bạch hóa mọi hoạt động và tạo ra môi trường tương tác văn minh cho cộng đồng.
               </p>
               <div className="footer-contact">
-                <p><strong>Address:</strong> 958 Walnuswood Ave. Webster, NY 14580</p>
-                <p><strong>Phone:</strong> +61 234-567-890</p>
-                <p><strong>Email:</strong> info@example.com</p>
+                <p><strong>Địa chỉ:</strong> Tầng 5, Tòa nhà Innovation, Q. Cầu Giấy, Hà Nội</p>
+                <p><strong>Hotline:</strong> 1900 1234 (8:00 - 17:00)</p>
+                <p><strong>Email:</strong> hotro@voluntarius.vn</p>
               </div>
             </div>
 
             <div className="footer-col">
-              <h4 className="footer-title">Quick links</h4>
+              <h4 className="footer-title">Khám phá</h4>
               <ul className="footer-links">
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">News</a></li>
-                <li><a href="#">Career</a></li>
+                <li><a href="#">Về chúng mình</a></li>
+                <li><a href="#">Danh sách sự kiện</a></li>
+                <li><a href="#">Bảng vàng thành tích</a></li>
+                <li><a href="#">Tin tức cộng đồng</a></li>
+                <li><a href="#">Dành cho nhà tổ chức</a></li>
               </ul>
             </div>
 
             <div className="footer-col">
-              <h4 className="footer-title">Support</h4>
+              <h4 className="footer-title">Hỗ trợ</h4>
               <ul className="footer-links">
-                <li><a href="#">Help & FAQ</a></li>
-                <li><a href="#">Causes</a></li>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">Contact us</a></li>
-                <li><a href="#">terms-service</a></li>
+                <li><a href="#">Trung tâm trợ giúp</a></li>
+                <li><a href="#">Quy định người dùng</a></li>
+                <li><a href="#">Chính sách bảo mật</a></li>
+                <li><a href="#">Hướng dẫn đăng ký</a></li>
+                <li><a href="#">Liên hệ hợp tác</a></li>
               </ul>
-            </div>
-
-            <div className="footer-col">
-              <h4 className="footer-title">Latest tweets</h4>
-              <div className="twitter-feed">
-                <p className="tweet-hashtag">#digitalmarketing</p>
-                <p className="tweet-text">
-                  Lorem ipsum dolor sit amet consectetur elit sed eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                  Sit amet consectetur elit sed eiusmod tempor
-                </p>
-                <a href="#" className="tweet-link">twitter.com//#puredrinkingwater</a>
-                <p className="tweet-date">December 13, 2021 04:20 PM</p>
-              </div>
             </div>
           </div>
         </div>
@@ -82,7 +70,7 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <div className="footer-bottom-content">
-            <p>Copyright © 2024 All Rights Reserved</p>
+            <p>© 2025 Voluntarius. Nền tảng phi lợi nhuận vì cộng đồng.</p>
             <div className="footer-social">
               <a href="#" className="social-link"><FaFacebookF /></a>
               <a href="#" className="social-link"><FaTwitter /></a>

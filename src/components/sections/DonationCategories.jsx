@@ -1,28 +1,32 @@
 import Card from '../ui/Card';
-import { FaBook, FaTint, FaHandHoldingMedical, FaUtensils } from 'react-icons/fa';
+import { FaTree, FaBook, FaHandHoldingHeart, FaLaptop } from 'react-icons/fa';
 import './DonationCategories.css';
 
 const DonationCategories = () => {
   const categories = [
     {
+      icon: <FaTree />,
+      title: 'Bảo vệ Môi trường',
+      bgColor: '#E8F5E9',
+      description: 'Trồng cây, dọn rác, tái chế'
+    },
+    {
       icon: <FaBook />,
-      title: 'Children education',
+      title: 'Giáo dục & Đào tạo',
       bgColor: '#E3F2FD',
+      description: 'Dạy học, gia sư, thư viện'
     },
     {
-      icon: <FaTint />,
-      title: 'Clean mineral water',
+      icon: <FaHandHoldingHeart />,
+      title: 'An sinh Xã hội',
       bgColor: '#FFF3E0',
+      description: 'Giúp người già, người nghèo'
     },
     {
-      icon: <FaHandHoldingMedical />,
-      title: 'Surgery & treatment',
-      bgColor: '#E0F2F1',
-    },
-    {
-      icon: <FaUtensils />,
-      title: 'Children education',
+      icon: <FaLaptop />,
+      title: 'Phổ cập Kỹ năng số',
       bgColor: '#F3E5F5',
+      description: 'Lớp học internet cho cộng đồng'
     },
   ];
 
@@ -36,9 +40,10 @@ const DonationCategories = () => {
                 <div className="category-icon">{category.icon}</div>
               </div>
               <div className="category-content">
-                <p className="category-label">Donate for</p>
+                <p className="category-label">Hoạt động</p>
                 <h3 className="category-title">{category.title}</h3>
-                <a href="#" className="category-link">More details...</a>
+                
+                <a href="#" className="category-link">Xem các sự kiện...</a>
               </div>
             </div>
           ))}

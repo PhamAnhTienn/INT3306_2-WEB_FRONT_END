@@ -1,75 +1,14 @@
-import { FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaBars, FaTimes } from 'react-icons/fa';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [dropdownTimeout, setDropdownTimeout] = useState(null);
-
-  const handleMouseEnter = (index) => {
-    if (dropdownTimeout) {
-      clearTimeout(dropdownTimeout);
-      setDropdownTimeout(null);
-    }
-    setActiveDropdown(index);
-  };
-
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 150); // 150ms delay before hiding
-    setDropdownTimeout(timeout);
-  };
-
-  const handleDropdownMouseEnter = () => {
-    if (dropdownTimeout) {
-      clearTimeout(dropdownTimeout);
-      setDropdownTimeout(null);
-    }
-  };
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (dropdownTimeout) {
-        clearTimeout(dropdownTimeout);
-      }
-    };
-  }, [dropdownTimeout]);
 
   const navItems = [
-    { name: 'Home', path: '/' },
-    { 
-      name: 'Causes', 
-      path: '/causes',
-      dropdown: ['All Causes', 'Education', 'Health', 'Food & Water']
-    },
-    { 
-      name: 'Events', 
-      path: '/events',
-      dropdown: ['Upcoming Events', 'Past Events']
-    },
-    { name: 'Gallery', path: '/gallery' },
-    { 
-      name: 'News', 
-      path: '/news',
-      dropdown: ['Latest News', 'Blog']
-    },
-    { 
-      name: 'Pages', 
-      path: '/pages',
-      dropdown: [
-        { name: 'About Us', path: '/about' },
-        { name: 'Our Team', path: '/team' },
-        { name: 'FAQ', path: '/faq' },
-        { name: 'Testimonials', path: '/testimonials' },
-        { name: 'Login', path: '/login' },
-        { name: 'Register', path: '/register' }
-      ]
-    },
-    { name: 'Contact', path: '/contact' }
+    { name: 'Trang chủ', path: '/' },
+    { name: 'Về dự án', path: '/#about' }
   ];
 
   return (
@@ -78,11 +17,11 @@ const Header = () => {
         <div className="container">
           <div className="header-top-content">
             <div className="header-contact">
-              <a href="mailto:contact@domain.com" className="contact-item">
-                <FaEnvelope /> contact@domain.com
+              <a href="mailto:hotro@voluntarius.vn" className="contact-item">
+                <FaEnvelope /> hotro@voluntarius.vn
               </a>
-              <a href="tel:+01234567890" className="contact-item">
-                <FaPhone /> +01 234 567 890
+              <a href="tel:+84123456789" className="contact-item">
+                <FaPhone /> 1900 1234
               </a>
             </div>
             <div className="header-social">
@@ -113,37 +52,30 @@ const Header = () => {
             <nav className={`nav ${mobileMenuOpen ? 'nav-open' : ''}`}>
               <ul className="nav-list">
                 {navItems.map((item, index) => (
-                  <li 
-                    key={index}
-                    className={`nav-item ${item.dropdown ? 'nav-item-dropdown' : ''}`}
-                    onMouseEnter={() => item.dropdown && handleMouseEnter(index)}
-                    onMouseLeave={() => item.dropdown && handleMouseLeave()}
-                  >
-                    <Link to={item.path} className="nav-link">
-                      {item.name}
-                      {item.dropdown && <FaChevronDown className="dropdown-icon" />}
-                    </Link>
-                    {item.dropdown && activeDropdown === index && (
-                      <ul 
-                        className="dropdown-menu"
-                        onMouseEnter={handleDropdownMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        {item.dropdown.map((subItem, subIndex) => (
-                          <li key={subIndex} className="dropdown-item">
-                            {typeof subItem === 'object' ? (
-                              <Link to={subItem.path} className="dropdown-link">{subItem.name}</Link>
-                            ) : (
-                              <a href="#" className="dropdown-link">{subItem}</a>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
+                  <li key={index} className="nav-item">
+                    {/* Sử dụng a tag với href bắt đầu bằng # nếu muốn scroll trong trang Home */}
+                    {item.path.startsWith('/#') ? (
+                       <a href={item.path.substring(1)} className="nav-link">{item.name}</a>
+                    ) : (
+                       <Link to={item.path} className="nav-link">{item.name}</Link>
                     )}
                   </li>
                 ))}
+                
+                {/* Link Đăng nhập tách riêng ra khỏi list để dễ style */}
+                <li className="nav-item">
+                    <Link to="/login" className="nav-link font-weight-bold">
+                        Đăng nhập
+                    </Link>
+                </li>
               </ul>
-              <button className="btn btn-primary">Donate now</button>
+
+              {/* Button Đăng ký nổi bật thay thế cho Donate */}
+              <div className="header-actions">
+                <Link to="/register" className="btn btn-primary">
+                    Đăng ký ngay
+                </Link>
+              </div>
             </nav>
           </div>
         </div>

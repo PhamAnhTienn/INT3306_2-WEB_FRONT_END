@@ -7,11 +7,11 @@ const CallToAction = () => {
       <div className="cta-overlay"></div>
       <div className="container">
         <div className="cta-content">
-          <span className="cta-label">We are here to stop poverty</span>
+          <span className="cta-label">Bạn đã sẵn sàng tạo nên sự thay đổi?</span>
           <h2 className="cta-title">
-            We are fundraising for the <span className="highlight">people</span> who are fighting against poverty
+            Đừng chờ đợi, hãy bắt đầu hành trình <span className="highlight">tình nguyện</span> của bạn ngay hôm nay
           </h2>
-          <Button variant="primary" size="large">Donate now</Button>
+          <Button variant="primary" size="large">Đăng ký tài khoản ngay</Button>
         </div>
       </div>
     </section>
