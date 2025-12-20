@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FaUsers, FaFileDownload, FaCheckCircle, FaTimesCircle, FaTrash } from 'react-icons/fa';
+import { FaUsers, FaFileDownload, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { getEventById } from '../services/events/eventsService';
 import {
   getEventRegistrations,
   approveRegistration,
   rejectRegistration,
-  deleteRegistration,
   exportEventRegistrations,
 } from '../services/manager/managerService';
 import './EventRegistrations.css';
@@ -24,6 +23,9 @@ const EventRegistrations = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectingRegistrationId, setRejectingRegistrationId] = useState(null);
+  const [rejectReason, setRejectReason] = useState('');
 
   const loadEvent = async () => {
     try {
@@ -81,28 +83,24 @@ const EventRegistrations = () => {
     }
   };
 
-  const handleReject = async (registrationId) => {
+  const handleReject = (registrationId) => {
+    setRejectingRegistrationId(registrationId);
+    setRejectReason('');
+    setShowRejectModal(true);
+  };
+
+  const handleConfirmReject = async () => {
+    if (!rejectingRegistrationId) return;
+    
     try {
-      await rejectRegistration(eventId, registrationId);
+      await rejectRegistration(eventId, rejectingRegistrationId, rejectReason.trim() || null);
+      setShowRejectModal(false);
+      setRejectingRegistrationId(null);
+      setRejectReason('');
       await loadRegistrations(page);
     } catch (err) {
       alert(
         err.response?.data?.message || err.message || 'Failed to reject registration. Please try again.',
-      );
-    }
-  };
-
-  const handleDelete = async (registrationId, volunteerName) => {
-    if (!window.confirm(`Are you sure you want to remove ${volunteerName} from this event?`)) {
-      return;
-    }
-    
-    try {
-      await deleteRegistration(registrationId);
-      await loadRegistrations(page);
-    } catch (err) {
-      alert(
-        err.response?.data?.message || err.message || 'Failed to remove registration. Please try again.',
       );
     }
   };
@@ -283,17 +281,6 @@ const EventRegistrations = () => {
                             </button>
                           </>
                         )}
-                        {reg.status !== 'CANCELLED' && (
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(reg.id, `${reg.userResponse?.firstName} ${reg.userResponse?.lastName}`)}
-                            className="btn-action-delete"
-                            title="Remove user from event"
-                          >
-                            <FaTrash style={{ marginRight: '0.25rem' }} />
-                            Remove
-                          </button>
-                        )}
                       </div>
                     </td>
                   </tr>
@@ -325,6 +312,56 @@ const EventRegistrations = () => {
             >
               Next
             </button>
+          </div>
+        )}
+
+        {/* Reject Modal */}
+        {showRejectModal && (
+          <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Reject Registration</h3>
+                <button
+                  className="modal-close"
+                  onClick={() => {
+                    setShowRejectModal(false);
+                    setRejectReason('');
+                    setRejectingRegistrationId(null);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>Please provide a reason for rejecting this registration:</p>
+                <textarea
+                  className="reject-reason-input"
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  placeholder="Enter reason for rejection (optional but recommended)..."
+                  rows={4}
+                />
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn-cancel"
+                  onClick={() => {
+                    setShowRejectModal(false);
+                    setRejectReason('');
+                    setRejectingRegistrationId(null);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-reject-confirm"
+                  onClick={handleConfirmReject}
+                >
+                  <FaTimesCircle style={{ marginRight: '0.5rem' }} />
+                  Reject Registration
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
