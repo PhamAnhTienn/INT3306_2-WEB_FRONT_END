@@ -34,20 +34,35 @@ const Profile = () => {
   };
 
   // Determine layout role based on active role OR available roles
-  // Priority: activeRole > check if user has ADMIN/EVENT_MANAGER in roles list > user context
+  // Priority: activeRole (if set) > user context > roles list fallback
   const getLayoutRole = () => {
-    // First, check activeRole from API
-    const activeRoleRaw = profile?.activeRole || rolesInfo?.activeRole;
+    // First, check activeRole from API - this is the CURRENT active role
+    const activeRoleRaw = profile?.activeRole || rolesInfo?.activeRole || user?.activeRole;
     const activeRole = normalizeRoleName(activeRoleRaw);
     
+    // If activeRole is explicitly set, use it (this respects the user's current role choice)
     if (activeRole === 'ADMIN') {
       return 'admin';
     } else if (activeRole === 'EVENT_MANAGER') {
       return 'manager';
+    } else if (activeRole === 'VOLUNTEER') {
+      return 'volunteer';
     }
     
-    // If activeRole is not set or is VOLUNTEER, check roles list
-    // to determine the highest privilege role available
+    // If activeRole is not set, check user context (from localStorage) - fallback
+    if (user) {
+      const userRole = normalizeRoleName(user.role || user.activeRole);
+      if (userRole === 'ADMIN') {
+        return 'admin';
+      } else if (userRole === 'EVENT_MANAGER') {
+        return 'manager';
+      } else if (userRole === 'VOLUNTEER') {
+        return 'volunteer';
+      }
+    }
+    
+    // Last resort: check roles list to determine the highest privilege role available
+    // Only use this if activeRole is truly not set
     const rolesList = rolesInfo?.roles || [];
     if (rolesList && rolesList.length > 0) {
       // Check if user has ADMIN role (highest priority)
@@ -65,16 +80,6 @@ const Profile = () => {
         return roleName === 'EVENT_MANAGER';
       });
       if (hasEventManager) {
-        return 'manager';
-      }
-    }
-    
-    // Also check from user context (from localStorage) - fallback
-    if (user) {
-      const userRole = normalizeRoleName(user.role || user.activeRole);
-      if (userRole === 'ADMIN') {
-        return 'admin';
-      } else if (userRole === 'EVENT_MANAGER') {
         return 'manager';
       }
     }
