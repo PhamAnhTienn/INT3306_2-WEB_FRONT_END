@@ -99,8 +99,8 @@ const EventFeed = () => {
         setUserRegistrationStatus(registrationStatus);
         setRegistrationData(registrationInfo);
 
-        // Only fetch posts if user has access (APPROVED or manager)
-        if (isManager || registrationStatus === 'APPROVED') {
+        // Only fetch posts if user has access (APPROVED, COMPLETED, or manager)
+        if (isManager || registrationStatus === 'APPROVED' || registrationStatus === 'COMPLETED') {
           await fetchPosts(0, true);
         }
       } catch (err) {
@@ -285,8 +285,8 @@ const EventFeed = () => {
       
       alert('✅ Registration cancelled successfully');
       
-      // Navigate back to events page
-      navigate('/volunteer/events');
+      // Navigate back to My Events page
+      navigate('/my-events');
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'Failed to cancel registration';
       alert('❌ ' + errorMessage);
@@ -332,6 +332,8 @@ const EventFeed = () => {
         if (registrationResponse.success && registrationResponse.data) {
           setRegistrationData(registrationResponse.data);
         }
+        // Refresh posts to ensure feed is accessible
+        await fetchPosts(0, true);
         // Hide success message after 3 seconds
         setTimeout(() => setQrUploadSuccess(false), 3000);
       }
@@ -351,8 +353,8 @@ const EventFeed = () => {
                       userRegistrationStatus && 
                       userRegistrationStatus !== 'COMPLETED';
 
-  // Check if user can access feed
-  const canAccessFeed = isManager || userRegistrationStatus === 'APPROVED';
+  // Check if user can access feed (APPROVED, COMPLETED, or manager)
+  const canAccessFeed = isManager || userRegistrationStatus === 'APPROVED' || userRegistrationStatus === 'COMPLETED';
   const canViewPosts = canAccessFeed; // Can view but not post if not approved
 
   if (loading) {
@@ -372,7 +374,7 @@ const EventFeed = () => {
         <div className="event-feed-error">
           <p>⚠️ {error || 'Event not found'}</p>
           <button 
-            onClick={() => navigate(isManager ? '/manager/events' : '/volunteer/events')} 
+            onClick={() => navigate(isManager ? '/manager/events' : '/my-events')} 
             className="btn-back"
           >
             Go Back
@@ -448,7 +450,7 @@ const EventFeed = () => {
                   <div className="registration-actions">
                     <button 
                       className="btn-back-to-events"
-                      onClick={() => navigate('/volunteer/events')}
+                      onClick={() => navigate('/my-events')}
                     >
                       Back to My Events
                     </button>
@@ -492,27 +494,11 @@ const EventFeed = () => {
                   <div className="registration-actions">
                     <button 
                       className="btn-back-to-events"
-                      onClick={() => navigate('/volunteer/events')}
+                      onClick={() => navigate('/my-events')}
                     >
                       Back to My Events
                     </button>
-                    <button 
-                      className="btn-cancel-registration"
-                      onClick={handleCancelRegistration}
-                      disabled={cancelling}
-                    >
-                      {cancelling ? (
-                        <>
-                          <FaSpinner className="spinning" />
-                          Cancelling...
-                        </>
-                      ) : (
-                        <>
-                          <FaUserTimes />
-                          Cancel Registration
-                        </>
-                      )}
-                    </button>
+                    {/* No Cancel Registration button for REJECTED status */}
                   </div>
                 </>
               ) : userRegistrationStatus === 'WAITING' ? (
@@ -536,7 +522,7 @@ const EventFeed = () => {
                   <div className="registration-actions">
                     <button 
                       className="btn-back-to-events"
-                      onClick={() => navigate('/volunteer/events')}
+                      onClick={() => navigate('/my-events')}
                     >
                       Back to My Events
                     </button>
@@ -569,7 +555,7 @@ const EventFeed = () => {
                   <p>You don't have permission to access this event feed.</p>
                   <button 
                     className="btn-back-to-events"
-                    onClick={() => navigate('/volunteer/events')}
+                    onClick={() => navigate('/my-events')}
                   >
                     Back to My Events
                   </button>
@@ -668,8 +654,8 @@ const EventFeed = () => {
         <div className="event-feed-container">
           <div className="event-feed-layout">
             <div className="feed-main">
-              {/* Create Post Section - Only show if registration is approved */}
-              {userRegistrationStatus === 'APPROVED' ? (
+              {/* Create Post Section - Only show if registration is approved or completed */}
+              {(userRegistrationStatus === 'APPROVED' || userRegistrationStatus === 'COMPLETED') ? (
                 <>
                   {!showCreatePost ? (
                     <div className="create-post-card">

@@ -191,17 +191,11 @@ const MyEvents = () => {
       setCancelling(eventId);
       await cancelRegistration(eventId);
       
-      // Update registration status
-      setRegistrationStatuses(prev => ({
-        ...prev,
-        [eventId]: null
-      }));
-      
-      // Remove event from list (since it's no longer registered)
-      setEvents(prevEvents => prevEvents.filter(event => event.eventId !== eventId));
-      setTotalElements(prev => Math.max(0, prev - 1));
-      
       alert('✅ Registration cancelled successfully');
+      
+      // Refresh events from server to ensure data consistency
+      // Backend now filters out CANCELLED registrations, so event will not appear
+      await fetchEvents();
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Failed to cancel registration';
       alert('❌ ' + errorMessage);

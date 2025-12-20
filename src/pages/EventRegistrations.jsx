@@ -238,7 +238,6 @@ const EventRegistrations = () => {
                   <th>Email</th>
                   <th>Status</th>
                   <th>Registered At</th>
-                  <th>Completed</th>
                   <th className="text-right">Actions</th>
                 </tr>
               </thead>
@@ -260,13 +259,6 @@ const EventRegistrations = () => {
                       <span className={getStatusBadgeClass(reg.status)}>{reg.status}</span>
                     </td>
                     <td>{formatDate(reg.registeredAt)}</td>
-                    <td>
-                      {reg.eventCompleted ? (
-                        <span className="completed-badge completed-yes">Yes</span>
-                      ) : (
-                        <span className="completed-badge completed-no">No</span>
-                      )}
-                    </td>
                     <td>
                       <div className="actions-group">
                         {reg.status === 'PENDING' && (
