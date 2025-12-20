@@ -1,18 +1,18 @@
 .create-event-page {
-  padding: 2rem;
+  padding: var(--space-8);
   max-width: 900px;
   margin: 0 auto;
 }
 
 .create-event-container {
   background: var(--white, #ffffff);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
   overflow: hidden;
 }
 
 .create-event-header {
-  padding: 2rem;
+  padding: var(--space-8);
   border-bottom: 1px solid var(--border-light, #e5e7eb);
   background: var(--primary-500);
   color: white;
@@ -21,12 +21,12 @@
 .btn-back {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding: var(--space-2) var(--space-4);
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -40,7 +40,7 @@
 .create-event-header h1 {
   font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--space-2) 0;
 }
 
 .create-event-header p {
@@ -50,31 +50,31 @@
 }
 
 .create-event-form {
-  padding: 2rem;
+  padding: var(--space-8);
 }
 
 .form-error {
   background: var(--error-50, #fef2f2);
   border: 1px solid var(--error-200, #fecaca);
   color: var(--error-700, #b91c1c);
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
   font-size: 0.9375rem;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .form-group label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-dark, #1f2937);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .form-group label svg {
@@ -88,9 +88,9 @@
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border-medium, #d1d5db);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.9375rem;
   color: var(--text-dark, #1f2937);
   outline: none;
@@ -124,29 +124,29 @@
   text-align: right;
   font-size: 0.75rem;
   color: var(--text-secondary, #6b7280);
-  margin-top: 0.25rem;
+  margin-top: var(--space-1);
 }
 
 .field-error {
   display: block;
   color: var(--error-500, #ef4444);
   font-size: 0.875rem;
-  margin-top: 0.25rem;
+  margin-top: var(--space-1);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: var(--space-3);
+  padding: var(--space-4);
   border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: var(--neutral-50, #f9fafb);
   min-height: 60px;
 }
@@ -154,8 +154,8 @@
 .tags-loading {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: var(--space-2);
+  padding: var(--space-4);
   color: var(--text-secondary, #6b7280);
   font-size: 0.875rem;
 }
@@ -165,10 +165,10 @@
 }
 
 .tag-chip {
-  padding: 0.5rem 1rem;
+  padding: var(--space-2) var(--space-4);
   background: var(--white, #ffffff);
   border: 1px solid var(--border-medium, #d1d5db);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-dark, #1f2937);
@@ -198,18 +198,18 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
   border-top: 1px solid var(--border-light, #e5e7eb);
 }
 
 .btn-cancel {
-  padding: 0.75rem 1.5rem;
+  padding: var(--space-3) var(--space-6);
   background: transparent;
   border: 1px solid var(--border-medium, #d1d5db);
   color: var(--text-dark, #1f2937);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
@@ -228,12 +228,12 @@
 .btn-submit {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-8);
   background: var(--primary-500, #3b82f6);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -264,7 +264,7 @@
 
 @media (max-width: 768px) {
   .create-event-page {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .form-row {

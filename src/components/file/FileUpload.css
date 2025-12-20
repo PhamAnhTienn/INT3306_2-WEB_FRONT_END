@@ -1,7 +1,7 @@
 .file-upload {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .file-upload-label {
@@ -11,8 +11,8 @@
 
 .file-upload-dropzone {
   border: 2px dashed #cbd5e0;
-  border-radius: 6px;
-  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
   text-align: center;
   background-color: #f7fafc;
   cursor: pointer;
@@ -31,7 +31,7 @@
 .file-upload-icon {
   font-size: 2rem;
   color: #667eea;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .file-upload-text {
@@ -45,11 +45,11 @@
 }
 
 .file-upload-list {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   background-color: #ffffff;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid #e2e8f0;
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
 }
 
 .file-upload-list-header {
@@ -58,12 +58,12 @@
   align-items: center;
   font-size: 0.9rem;
   color: #2d3748;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .file-upload-list-header svg {
   color: #38a169;
-  margin-right: 0.25rem;
+  margin-right: var(--space-1);
 }
 
 .file-upload-clear {
@@ -72,7 +72,7 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: var(--space-1);
   font-size: 0.85rem;
   color: #e53e3e;
 }

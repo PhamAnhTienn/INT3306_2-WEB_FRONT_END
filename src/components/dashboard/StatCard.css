@@ -1,7 +1,7 @@
 .stat-card {
   background: var(--bg-white);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   border: 1px solid var(--border-light);
   transition: all 0.3s ease;
   height: 100%;
@@ -69,13 +69,13 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .stat-icon {
   width: 56px;
   height: 56px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,7 +123,7 @@
 }
 
 .stat-value {
-  margin: 0.5rem 0 0 0;
+  margin: var(--space-2) 0 0 0;
   font-size: 2rem;
   font-weight: 700;
   line-height: 1.2;
@@ -135,8 +135,8 @@
 }
 
 .stat-footer {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   text-align: center;
 }
@@ -157,8 +157,8 @@
 .stat-card[class*="gradient-"] .percentage.positive {
   color: var(--white);
   background: rgba(255, 255, 255, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
   display: inline-block;
 }
 
@@ -169,8 +169,8 @@
 .stat-card[class*="gradient-"] .percentage.negative {
   color: var(--white);
   background: rgba(255, 255, 255, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
   display: inline-block;
 }
 
@@ -189,7 +189,7 @@
 
 @media (max-width: 767px) {
   .stat-card {
-    padding: 1.25rem;
+    padding: var(--space-5);
   }
   
   .stat-icon {
@@ -209,11 +209,11 @@
 
 @media (max-width: 575px) {
   .stat-card {
-    padding: 1rem;
+    padding: var(--space-4);
   }
   
   .stat-card-content {
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
   
   .stat-icon {

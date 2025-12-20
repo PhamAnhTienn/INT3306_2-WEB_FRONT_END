@@ -1,18 +1,18 @@
 .manager-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-8);
 }
 
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .dashboard-row {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .dashboard-col-4 {
@@ -33,14 +33,14 @@
 
 .dashboard-card {
   background: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   border: 1px solid var(--border-light);
   height: 100%;
 }
 
 .card-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .card-title {
@@ -60,13 +60,13 @@
 .events-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .event-item {
-  padding: 1rem;
+  padding: var(--space-4);
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   transition: all 0.15s ease;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .event-info {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .event-title {
@@ -88,7 +88,7 @@
 
 .event-meta {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-6);
   font-size: 0.875rem;
   color: #67748e;
 }
@@ -97,13 +97,13 @@
 .event-location {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .event-progress {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .progress-info {
@@ -118,13 +118,13 @@
   width: 100%;
   height: 6px;
   background: #e9ecef;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   transition: width 0.6s ease;
 }
 
@@ -148,17 +148,17 @@
 .registrations-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .registration-item {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
+  gap: var(--space-4);
+  padding: var(--space-4);
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   transition: all 0.15s ease;
 }
 
@@ -190,8 +190,8 @@
 }
 
 .registration-status {
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -217,16 +217,16 @@
 .registration-stats-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .registration-stat-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
+  gap: var(--space-4);
+  padding: var(--space-5);
   background: var(--neutral-50, #f9fafb);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-light, #e5e7eb);
   transition: all 0.3s ease;
 }
@@ -239,7 +239,7 @@
 .stat-icon {
   width: 48px;
   height: 48px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -289,7 +289,7 @@
 .activities-timeline {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
   max-height: 400px;
   overflow-y: auto;
 }
@@ -298,11 +298,11 @@
 .event-pending-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.75rem;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
   background: rgba(251, 207, 51, 0.2);
   color: #f59e0b;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -310,10 +310,10 @@
 .event-full-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
+  padding: var(--space-1) var(--space-3);
   background: rgba(245, 57, 57, 0.2);
   color: #f53939;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -324,7 +324,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--space-8);
   text-align: center;
 }
 
@@ -338,7 +338,7 @@
   justify-content: center;
   font-size: 1.5rem;
   color: var(--neutral-400, #9ca3af);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .empty-state-title {
@@ -358,13 +358,13 @@
 .status-distribution {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .status-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .status-info {
@@ -429,7 +429,7 @@
 
   .event-meta {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
   
   .registration-stats-grid {
@@ -437,7 +437,7 @@
   }
   
   .registration-stat-item {
-    padding: 1rem;
+    padding: var(--space-4);
   }
   
   .stat-value {

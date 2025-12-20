@@ -1,13 +1,13 @@
 .tag-selector {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .tag-selector-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-weight: 600;
   color: #2d3748;
 }
@@ -24,10 +24,10 @@
 .tag-selector-loading {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   background-color: #f7fafc;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   color: #4a5568;
   font-size: 0.9rem;
 }
@@ -48,7 +48,7 @@
 .tag-selector-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .tag-selector-empty {
@@ -58,8 +58,8 @@
 
 .tag-chip {
   border: 1px solid #e2e8f0;
-  border-radius: 999px;
-  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
   font-size: 0.85rem;
   background-color: #f7fafc;
   color: #2d3748;
@@ -83,12 +83,12 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .tag-selector-search-icon {
   position: absolute;
-  left: 0.75rem;
+  left: var(--space-3);
   color: #718096;
   font-size: 0.875rem;
   pointer-events: none;
@@ -96,9 +96,9 @@
 
 .tag-selector-search-input {
   width: 100%;
-  padding: 0.5rem 2.5rem 0.5rem 2.25rem;
+  padding: var(--space-2) var(--space-10) var(--space-2) var(--space-8);
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: #2d3748;
   background-color: #ffffff;
@@ -117,12 +117,12 @@
 
 .tag-selector-search-clear {
   position: absolute;
-  right: 0.5rem;
+  right: var(--space-2);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--space-6);
+  height: var(--space-6);
   border: none;
   background: transparent;
   color: #718096;
@@ -139,7 +139,7 @@
 }
 
 .tag-selector-count {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   font-size: 0.75rem;
   color: #718096;
   text-align: right;

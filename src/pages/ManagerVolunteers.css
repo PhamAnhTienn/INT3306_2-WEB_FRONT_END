@@ -1,19 +1,19 @@
 .manager-volunteers {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 /* Event Selector */
 .event-selector-card {
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
   overflow: hidden;
 }
 
 .event-selector-header {
-  padding: 1rem 1.5rem;
+  padding: var(--space-4) var(--space-6);
   border-bottom: 1px solid #F3F4F6;
 }
 
@@ -24,7 +24,7 @@
   color: #1F2937;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .event-selector-header h3 svg {
@@ -32,14 +32,14 @@
 }
 
 .event-selector-body {
-  padding: 1.5rem;
+  padding: var(--space-6);
 }
 
 .event-select {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border: 1px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: #1F2937;
   background: #FFFFFF;
@@ -63,23 +63,23 @@
 .volunteer-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .stat-card {
   background: #FFFFFF;
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   border: 1px solid var(--border-light);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .stat-card .stat-icon {
   width: 48px;
   height: 48px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,22 +87,22 @@
 }
 
 .stat-total .stat-icon {
-  background: var(--neutral-100) 0%, rgba(59, 130, 246, 0.25) 100%);
+  background: linear-gradient(135deg, var(--neutral-100) 0%, rgba(59, 130, 246, 0.25) 100%);
   color: #3B82F6;
 }
 
 .stat-approved .stat-icon {
-  background: var(--neutral-100) 0%, rgba(5, 150, 105, 0.25) 100%);
+  background: linear-gradient(135deg, var(--neutral-100) 0%, rgba(5, 150, 105, 0.25) 100%);
   color: #10B981;
 }
 
 .stat-pending .stat-icon {
-  background: var(--neutral-100) 0%, rgba(217, 119, 6, 0.25) 100%);
+  background: linear-gradient(135deg, var(--neutral-100) 0%, rgba(217, 119, 6, 0.25) 100%);
   color: #F59E0B;
 }
 
 .stat-rejected .stat-icon {
-  background: var(--neutral-100) 0%, rgba(220, 38, 38, 0.25) 100%);
+  background: linear-gradient(135deg, var(--neutral-100) 0%, rgba(220, 38, 38, 0.25) 100%);
   color: #EF4444;
 }
 
@@ -127,7 +127,7 @@
 /* Filters */
 .volunteers-filters {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -139,9 +139,9 @@
 
 .search-box input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
   border: 1px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   background: #FFFFFF;
   transition: border-color 0.15s ease;
@@ -155,7 +155,7 @@
 
 .search-icon {
   position: absolute;
-  left: 0.875rem;
+  left: var(--space-3);
   top: 50%;
   transform: translateY(-50%);
   color: #6B7280;
@@ -168,9 +168,9 @@
 
 .filter-box select {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
   border: 1px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   background: #FFFFFF;
   cursor: pointer;
@@ -186,7 +186,7 @@
 
 .filter-icon {
   position: absolute;
-  left: 0.875rem;
+  left: var(--space-3);
   top: 50%;
   transform: translateY(-50%);
   color: #6B7280;
@@ -196,13 +196,13 @@
 /* Volunteers Card */
 .volunteers-card {
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
   overflow: hidden;
 }
 
 .volunteers-card-header {
-  padding: 1.25rem 1.5rem;
+  padding: var(--space-5) var(--space-6);
   border-bottom: 1px solid #F3F4F6;
   display: flex;
   justify-content: space-between;
@@ -216,7 +216,7 @@
   color: #1F2937;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .volunteers-card-header h3 svg {
@@ -241,7 +241,7 @@
 
 .volunteers-table th,
 .volunteers-table td {
-  padding: 1rem 1.5rem;
+  padding: var(--space-4) var(--space-6);
   text-align: left;
   border-bottom: 1px solid #E5E7EB;
 }
@@ -267,7 +267,7 @@
 .volunteer-cell {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .volunteer-avatar {
@@ -303,7 +303,7 @@
 .email-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   color: #FF8A00;
   text-decoration: none;
   transition: color 0.15s ease;
@@ -317,9 +317,9 @@
 .volunteer-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 4px;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -344,19 +344,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
   border-top: 1px solid #E5E7EB;
 }
 
 .pagination-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
   background: #F9FAFB;
   border: 1px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   color: #1F2937;
@@ -384,14 +384,14 @@
 /* Empty State */
 .empty-state {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
 }
 
 .empty-state-icon {
   width: 80px;
   height: 80px;
-  margin: 0 auto 1.5rem;
-  background: var(--neutral-100) 0%, rgba(236, 72, 153, 0.1) 100%);
+  margin: 0 auto var(--space-6);
+  background: linear-gradient(135deg, var(--neutral-100) 0%, rgba(236, 72, 153, 0.1) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -404,7 +404,7 @@
 }
 
 .empty-state h3 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
   font-size: 1.125rem;
   font-weight: 700;
   color: #1F2937;
@@ -422,7 +422,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
 }
 
 .loading-spinner {
@@ -441,7 +441,7 @@
 }
 
 .loading-container p {
-  margin-top: 1rem;
+  margin-top: var(--space-4);
   color: #6B7280;
   font-size: 0.875rem;
 }
@@ -449,26 +449,26 @@
 /* Error Container */
 .error-container {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
 }
 
 .error-icon {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .error-container h3 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
   font-size: 1.25rem;
   font-weight: 700;
   color: #1F2937;
 }
 
 .error-container p {
-  margin: 0 0 1.5rem;
+  margin: 0 0 var(--space-6);
   font-size: 0.875rem;
   color: #6B7280;
 }
@@ -477,10 +477,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -521,17 +521,17 @@
   .volunteers-card-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .volunteers-table th,
   .volunteers-table td {
-    padding: 0.75rem 1rem;
+    padding: var(--space-3) var(--space-4);
   }
 
   .volunteer-cell {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 }

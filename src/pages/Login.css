@@ -8,7 +8,7 @@
 .page-header {
   background: var(--secondary-color);
   color: white;
-  padding: 80px 0 100px;
+  padding: var(--space-20) 0 var(--space-20);
   text-align: center;
   position: relative;
 }
@@ -19,7 +19,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: var(--space-16);
   background: var(--secondary-color);
   clip-path: polygon(0 0, 100% 0, 100% 60%, 0 100%);
 }
@@ -63,10 +63,10 @@
 
 /* Login Section */
 .login-section {
-  padding: 120px 0 80px;
+  padding: calc(var(--space-20) * 1.5) 0 var(--space-20);
   background-color: var(--bg-light);
   position: relative;
-  margin-top: -60px;
+  margin-top: calc(var(--space-16) * -1);
 }
 
 .login-container {
@@ -76,9 +76,9 @@
 
 .login-form-wrapper {
   background: white;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 2px solid var(--border-light);
-  padding: 60px 50px;
+  padding: var(--space-16) var(--space-12);
   max-width: 600px;
   width: 100%;
   position: relative;
@@ -117,9 +117,9 @@
 
 .form-input {
   width: 100%;
-  padding: 18px 25px;
+  padding: var(--space-5) var(--space-6);
   border: 2px solid var(--border-light);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.3s ease;
@@ -141,11 +141,11 @@
 
 .login-btn {
   width: 100%;
-  padding: 18px 20px;
+  padding: var(--space-5) var(--space-5);
   background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 1.1rem;
   font-weight: 600;
   font-family: inherit;
@@ -194,11 +194,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 16px 20px;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
   background: white;
   border: 2px solid var(--border-medium);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
@@ -264,13 +264,13 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--space-5);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .page-header {
-    padding: 60px 0 80px;
+    padding: var(--space-16) 0 var(--space-20);
   }
   
   .page-title {
@@ -278,13 +278,13 @@
   }
   
   .login-section {
-    padding: 80px 0 60px;
-    margin-top: -40px;
+    padding: var(--space-20) 0 var(--space-16);
+    margin-top: calc(var(--space-10) * -1);
   }
   
   .login-form-wrapper {
-    padding: 40px 30px;
-    margin: 0 15px;
+    padding: var(--space-10) var(--space-8);
+    margin: 0 var(--space-4);
   }
   
   .login-subtitle {
@@ -298,7 +298,7 @@
 
 @media (max-width: 480px) {
   .login-form-wrapper {
-    padding: 30px 20px;
+    padding: var(--space-8) var(--space-5);
   }
   
   .page-title {
@@ -314,6 +314,6 @@
   }
   
   .form-input, .login-btn {
-    padding: 15px 20px;
+    padding: var(--space-4) var(--space-5);
   }
 }

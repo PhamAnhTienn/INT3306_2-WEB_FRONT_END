@@ -4,28 +4,28 @@
 .events-page {
   /* min-height: 100vh; */
   background: var(--neutral-50);
-  padding: 4rem 0;
+  padding: var(--space-16) 0;
 }
 
 .events-container {
   max-width: 1400px; /* Increased for better 3-column layout */
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--space-8);
   width: 100%; /* Ensure full width utilization */
 }
 
 /* Header Section */
 .events-header {
   text-align: center;
-  margin-bottom: 2rem; /* Reduced margin */
+  margin-bottom: var(--space-8); /* Reduced margin */
 }
 
 .events-title {
-  font-size: 2rem; /* Reduced size since DashboardNavbar has the main title */
-  font-weight: 700;
+  font-size: 2.5rem; /* Increased for emphasis */
+  font-weight: 700; /* Bold weight for hierarchy */
   color: var(--neutral-900); /* Neutral for text */
-  margin-bottom: 0.5rem;
-  font-family: 'Dancing Script', cursive;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.02em; /* Tighter spacing for display text */
 }
 
 .events-subtitle {
@@ -33,12 +33,13 @@
   color: var(--text-secondary); /* Neutral-500 for secondary text */
   max-width: 600px;
   margin: 0 auto;
+  white-space: nowrap; /* Prevent text wrapping to keep phrase on one line */
 }
 
 /* Search Bar */
 .events-search {
   max-width: 600px;
-  margin: 0 auto 2.5rem;
+  margin: 0 auto var(--space-10);
 }
 
 .search-input-wrapper {
@@ -48,7 +49,7 @@
 
 .search-icon {
   position: absolute;
-  left: 1.25rem;
+  left: var(--space-5);
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-light); /* Neutral-400 for icons */
@@ -58,9 +59,9 @@
 
 .search-input {
   width: 100%;
-  padding: 1rem 1.25rem 1rem 3.5rem;
+  padding: var(--space-4) var(--space-5) var(--space-4) 3.5rem;
   border: 2px solid var(--border-light); /* Neutral-200 for borders */
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 1rem;
   color: var(--text-dark); /* Neutral-800 for input text */
   background: var(--white); /* White background */
@@ -81,15 +82,15 @@
 .events-filters {
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 2.5rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-10);
   flex-wrap: wrap;
 }
 
 .filter-button {
-  padding: 0.75rem 2rem;
+  padding: var(--space-3) var(--space-8);
   border: 2px solid var(--border-light);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-primary); /* Neutral-700 for text */
@@ -138,7 +139,7 @@
 /* Date Filter */
 .date-filter-container {
   max-width: 600px;
-  margin: 0 auto 2rem;
+  margin: 0 auto var(--space-8);
   position: relative;
 }
 
@@ -146,10 +147,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
   border: 2px solid var(--border-light);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--text-primary);
@@ -188,18 +189,18 @@
   color: var(--white);
   font-size: 0.625rem;
   font-weight: 700;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-lg);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 2px solid var(--error-400);
 }
 
 .date-filter-panel {
-  margin-top: 1rem;
+  margin-top: var(--space-4);
   background: var(--white);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   border: 2px solid var(--border-medium);
   border: 1px solid var(--border-light);
   animation: slideDown 0.3s ease;
@@ -219,20 +220,20 @@
 .date-filter-inputs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .date-input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .date-input-group label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -244,9 +245,9 @@
 }
 
 .date-input-group input[type="date"] {
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border: 2px solid var(--border-light);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.9375rem;
   color: var(--text-primary);
   background: var(--white);
@@ -272,14 +273,14 @@
 
 .date-filter-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   justify-content: flex-end;
 }
 
 .date-filter-clear,
 .date-filter-apply {
-  padding: 0.625rem 1.5rem;
-  border-radius: 999px;
+  padding: 0.625rem var(--space-6);
+  border-radius: var(--radius-full);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -313,7 +314,7 @@
   text-align: center;
   color: var(--text-secondary); /* Neutral-500 for secondary text */
   font-size: 0.875rem;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
 }
 
 /* Loading State */
@@ -322,7 +323,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   color: var(--text-secondary); /* Neutral-500 for secondary text */
 }
 
@@ -333,7 +334,7 @@
   border-top-color: var(--primary-500); /* Primary-500 for spinner (main action) */
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 @keyframes spin {
@@ -345,12 +346,12 @@
 /* Error State */
 .events-error {
   text-align: center;
-  padding: 2rem;
+  padding: var(--space-8);
   background: var(--error-50); /* Semantic Error-50 for background */
   border: 1px solid var(--error-200); /* Semantic Error-200 for border */
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   color: var(--error-700); /* Semantic Error-700 for text */
-  margin: 2rem 0;
+  margin: var(--space-8) 0;
 }
 
 /* Events Grid - Inspired by Feane's card layout */
@@ -358,15 +359,15 @@
 .events-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* Always 3 columns on desktop/tablet */
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
   width: 100%; /* Ensure grid uses full container width */
 }
 
 /* Event Card - Similar to Feane's menu card structure */
 .event-card-item {
   background: var(--white); /* White background */
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 2px solid var(--border-light); /* Standard shadow from design tokens */
   transition: all 0.3s ease;
@@ -406,10 +407,10 @@
 
 .event-status-badge {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -470,7 +471,7 @@
 
 /* Event Content - Light background for better readability */
 .event-content {
-  padding: 1.5rem;
+  padding: var(--space-6);
   background: var(--white); /* White background for better readability */
   color: var(--text-dark); /* Dark text for contrast */
   flex-grow: 1;
@@ -483,7 +484,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--neutral-800); /* Dark color for title readability */
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
   line-height: 1.4;
 }
 
@@ -491,15 +492,15 @@
 .event-details {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
   flex-grow: 1;
 }
 
 .event-detail-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
   font-size: 0.875rem;
   color: var(--text-secondary); /* Neutral-500 for readable detail text */
 }
@@ -512,18 +513,18 @@
 
 /* Participants Section */
 .event-participants {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
   background: var(--neutral-50);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
 }
 
 .participants-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
   flex-wrap: wrap;
 }
 
@@ -540,8 +541,8 @@
 }
 
 .availability-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 8px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-lg);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -572,14 +573,14 @@
   width: 100%;
   height: 0.5rem;
   background: var(--neutral-200);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
 .participants-progress-fill {
   height: 100%;
   transition: width 0.3s ease, background-color 0.3s ease;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
 }
 
 .participants-progress-fill.available {
@@ -601,7 +602,7 @@
 /* Event Card Actions Container */
 .event-card-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
@@ -630,14 +631,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 120px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--primary-500); /* Primary-500 for main action button */
   color: var(--white); /* White text on primary */
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -659,14 +660,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 120px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--success-500);
   color: var(--white);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -688,14 +689,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 120px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--success-500, #10b981);
   color: var(--white);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -707,14 +708,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 150px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--warning-500, #f59e0b);
   color: var(--white);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -726,14 +727,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 140px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--info-500, #3b82f6);
   color: var(--white);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -745,14 +746,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 120px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--error-500, #ef4444);
   color: var(--white);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -764,14 +765,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 120px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--secondary-500); /* Secondary color for differentiation */
   color: var(--white);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -793,14 +794,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex: 1;
   min-width: 120px;
-  padding: 0.875rem 1rem;
+  padding: 0.875rem var(--space-4);
   background: var(--neutral-50);
   color: #991b1b;
   border: 2px solid #ef4444;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -873,20 +874,20 @@
 /* Empty State */
 .events-empty {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   color: var(--text-secondary); /* Neutral-500 for secondary text */
 }
 
 .empty-icon {
   font-size: 4rem;
   color: var(--neutral-300); /* Neutral-300 for icon */
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .events-empty h3 {
   font-size: 1.5rem;
   color: var(--text-primary); /* Neutral-700 for heading */
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .events-empty p {
@@ -899,14 +900,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 3rem;
+  gap: var(--space-4);
+  margin-top: var(--space-12);
 }
 
 .pagination-button {
-  padding: 0.75rem 1.5rem;
+  padding: var(--space-3) var(--space-6);
   border: 2px solid var(--border-medium); /* Neutral-300 for borders */
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--white); /* White background */
   color: var(--text-primary); /* Neutral-700 for text */
   font-size: 0.9375rem;
@@ -929,7 +930,7 @@
 
 .pagination-pages {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .pagination-page {
@@ -974,11 +975,11 @@
 /* Mobile: 1 column */
 @media (max-width: 768px) {
   .events-page {
-    padding: 2rem 0;
+    padding: var(--space-8) 0;
   }
 
   .events-container {
-    padding: 0 1rem;
+    padding: 0 var(--space-4);
   }
 
   .events-title {
@@ -991,7 +992,7 @@
 
   .events-grid {
     grid-template-columns: 1fr; /* 1 column on mobile */
-    gap: 1.5rem;
+    gap: var(--space-6);
   }
 
   .event-image {
@@ -1010,11 +1011,11 @@
   }
 
   .events-filters {
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .filter-button {
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem var(--space-5);
     font-size: 0.875rem;
   }
 
@@ -1023,11 +1024,11 @@
   }
 
   .event-content {
-    padding: 1.25rem;
+    padding: var(--space-5);
   }
 
   .pagination-button {
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem var(--space-5);
     font-size: 0.875rem;
   }
 
@@ -1056,13 +1057,13 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 1rem;
+  padding: var(--space-4);
   /* No overflow - modal content handles its own scrolling */
 }
 
 .modal-content {
   background: var(--white);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   max-width: 700px;
   width: 100%;
   max-height: 90vh;
@@ -1087,7 +1088,7 @@
   position: relative;
   height: 250px;
   background: var(--neutral-50);
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1095,8 +1096,8 @@
 
 .modal-close-button {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: var(--space-4);
+  right: var(--space-4);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -1126,10 +1127,10 @@
 
 .modal-status-badge {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  padding: 0.625rem 1.25rem;
-  border-radius: 999px;
+  top: var(--space-4);
+  left: var(--space-4);
+  padding: 0.625rem var(--space-5);
+  border-radius: var(--radius-full);
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -1138,31 +1139,31 @@
 }
 
 .modal-body {
-  padding: 2rem;
+  padding: var(--space-8);
 }
 
 .modal-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--neutral-900);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
   line-height: 1.3;
 }
 
 .modal-details-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
 }
 
 .modal-detail-item {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
+  gap: var(--space-4);
+  padding: var(--space-4);
   background: var(--neutral-50);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
 }
 
@@ -1183,7 +1184,7 @@
   text-transform: uppercase;
   color: var(--text-secondary);
   letter-spacing: 0.5px;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-1);
 }
 
 .modal-detail-value {
@@ -1192,13 +1193,13 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 
 .modal-availability-badge {
-  padding: 0.25rem 0.625rem;
-  border-radius: 8px;
+  padding: var(--space-1) 0.625rem;
+  border-radius: var(--radius-lg);
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -1206,19 +1207,19 @@
 }
 
 .modal-participants-progress {
-  margin: 1.5rem 0;
-  padding: 1rem;
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
   background: var(--neutral-50);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
 }
 
 .availability-message {
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
   font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
 }
 
 .availability-message.success {
@@ -1237,17 +1238,17 @@
 }
 
 .modal-section {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
 }
 
 .modal-section-title {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--neutral-800);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .modal-section-icon {
@@ -1260,23 +1261,23 @@
   line-height: 1.7;
   color: var(--text-primary);
   background: var(--neutral-50);
-  padding: 1.5rem;
-  border-radius: 6px;
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
   border-left: 4px solid var(--primary-400);
 }
 
 .modal-footer {
-  padding: 1.5rem 2rem;
+  padding: var(--space-6) var(--space-8);
   background: var(--neutral-50);
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   justify-content: flex-end;
 }
 
 .modal-action-button {
-  padding: 0.875rem 2rem;
-  border-radius: 999px;
+  padding: 0.875rem var(--space-8);
+  border-radius: var(--radius-full);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -1284,7 +1285,7 @@
   border: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .modal-action-button.primary {
@@ -1366,12 +1367,12 @@
 @media (max-width: 768px) {
   .modal-content {
     max-height: 95vh;
-    border-radius: 8px;
+    border-radius: var(--radius-lg);
   }
 
   .modal-header {
     height: 200px;
-    border-radius: 8px 8px 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
   .modal-header-icon {
@@ -1379,7 +1380,7 @@
   }
 
   .modal-body {
-    padding: 1.5rem;
+    padding: var(--space-6);
   }
 
   .modal-title {
@@ -1388,11 +1389,11 @@
 
   .modal-details-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .modal-footer {
-    padding: 1rem 1.5rem;
+    padding: var(--space-4) var(--space-6);
     flex-direction: column;
   }
 
@@ -1416,7 +1417,7 @@
 
 /* Registration Status Badge */
 .event-registration-status {
-  margin: 1rem 0;
+  margin: var(--space-4) 0;
   display: flex;
   justify-content: center;
 }
@@ -1424,9 +1425,9 @@
 .registration-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: capitalize;

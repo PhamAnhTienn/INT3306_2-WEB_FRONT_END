@@ -1,11 +1,11 @@
 .footer {
   background: var(--bg-light);
-  margin-top: 80px;
+  margin-top: var(--space-20);
 }
 
 .newsletter-section {
   background: var(--white);
-  padding: 40px 0;
+  padding: var(--space-10) 0;
   border-top: 1px solid var(--border-light);
 }
 
@@ -13,7 +13,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 40px;
+  gap: var(--space-10);
 }
 
 .newsletter-text {
@@ -29,7 +29,7 @@
 
 .newsletter-text h3 {
   font-size: 1.8rem;
-  margin-top: 5px;
+  margin-top: var(--space-1);
   color: var(--text-dark);
 }
 
@@ -42,9 +42,9 @@
 
 .newsletter-input {
   flex: 1;
-  padding: 15px 20px;
+  padding: var(--space-4) var(--space-5);
   border: 1px solid #ddd;
-  border-radius: 6px 0 0 6px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
   font-size: 1rem;
   outline: none;
 }
@@ -54,27 +54,27 @@
 }
 
 .newsletter-form .btn {
-  border-radius: 0 6px 6px 0;
-  padding: 15px 30px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: var(--space-4) var(--space-8);
 }
 
 .footer-main {
-  padding: 60px 0 40px;
+  padding: var(--space-16) 0 var(--space-10);
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
-  gap: 40px;
+  gap: var(--space-10);
 }
 
 .footer-col .logo {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
 }
 
 .footer-desc {
   color: var(--text-light);
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
   line-height: 1.8;
 }
 
@@ -89,7 +89,7 @@
 
 .footer-title {
   font-size: 1.2rem;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
   color: var(--text-dark);
 }
 
@@ -98,7 +98,7 @@
 }
 
 .footer-links li {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 .footer-links a {
@@ -109,7 +109,7 @@
 
 .footer-links a:hover {
   color: var(--primary-color);
-  padding-left: 5px;
+  padding-left: var(--space-1);
 }
 
 .twitter-feed {
@@ -119,18 +119,18 @@
 .tweet-hashtag {
   color: var(--accent-blue);
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 
 .tweet-text {
   line-height: 1.8;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 
 .tweet-link {
   color: var(--accent-blue);
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 
 .tweet-date {
@@ -141,7 +141,7 @@
 .footer-bottom {
   background: var(--primary-color);
   color: var(--white);
-  padding: 20px 0;
+  padding: var(--space-5) 0;
 }
 
 .footer-bottom-content {
@@ -152,17 +152,17 @@
 
 .footer-social {
   display: flex;
-  gap: 15px;
+  gap: var(--space-4);
 }
 
 .footer-social .social-link {
-  width: 36px;
-  height: 36px;
+  width: var(--space-10);
+  height: var(--space-10);
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   color: var(--white);
   transition: all 0.3s;
 }
@@ -194,7 +194,7 @@
 
   .footer-bottom-content {
     flex-direction: column;
-    gap: 15px;
+    gap: var(--space-4);
     text-align: center;
   }
 }

@@ -5,7 +5,7 @@
 .about-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: var(--space-20);
   align-items: center;
 }
 
@@ -16,33 +16,33 @@
 .about-img-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: var(--space-5);
 }
 
 .about-img {
   width: 100%;
   height: 300px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
 }
 
 .about-img-1 {
-  margin-top: 40px;
+  margin-top: var(--space-10);
 }
 
 .decorative-dots {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
+  bottom: var(--space-5);
+  left: var(--space-5);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: var(--space-3);
   z-index: -1;
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
+  width: var(--space-3);
+  height: var(--space-3);
   background: var(--primary-color);
   border-radius: 50%;
   opacity: 0.5;
@@ -54,9 +54,9 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 15px;
+  margin-bottom: var(--space-4);
   position: relative;
-  padding-left: 40px;
+  padding-left: var(--space-10);
 }
 
 .section-label::before {
@@ -74,30 +74,30 @@
   color: var(--primary-color);
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
 }
 
 .about-description {
-  margin: 25px 0;
+  margin: var(--space-6) 0;
 }
 
 .about-description p {
   color: var(--text-light);
   line-height: 1.8;
-  margin-bottom: 15px;
+  margin-bottom: var(--space-4);
 }
 
 .about-actions {
   display: flex;
   align-items: center;
-  gap: 30px;
-  margin-top: 35px;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
 }
 
 .play-button {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: var(--space-4);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -150,7 +150,7 @@
 @media (max-width: 768px) {
   .about-content {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: var(--space-10);
   }
 
   .about-img {

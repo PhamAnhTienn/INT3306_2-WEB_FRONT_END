@@ -1,6 +1,6 @@
 .card {
   background: var(--white);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border-light);
   transition: all 0.3s ease;
@@ -23,30 +23,30 @@
 
 .card-badge {
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: var(--space-4);
+  left: var(--space-4);
   background: var(--primary-color);
   color: var(--white);
-  padding: 6px 15px;
-  border-radius: 4px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .card-body {
-  padding: 25px;
+  padding: var(--space-6);
 }
 
 .card-title {
   font-size: 1.3rem;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
   color: var(--text-dark);
   line-height: 1.4;
 }
 
 .card-text {
   color: var(--text-light);
-  margin-bottom: 15px;
+  margin-bottom: var(--space-4);
   line-height: 1.6;
 }
 
@@ -54,14 +54,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 25px;
+  padding: var(--space-5) var(--space-6);
   border-top: 1px solid var(--bg-light);
 }
 
 .card-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   color: var(--text-light);
   font-size: 0.9rem;
 }

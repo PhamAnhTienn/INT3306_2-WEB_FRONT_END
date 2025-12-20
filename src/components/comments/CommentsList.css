@@ -1,6 +1,6 @@
 .comments-list {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
   border-top: 1px solid var(--border-light, #e5e7eb);
 }
 
@@ -9,24 +9,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--space-8);
   color: var(--text-secondary, #6b7280);
 }
 
 .comments-list-loading .spinning {
   font-size: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
   color: var(--primary-500, #3b82f6);
 }
 
 .comments-header {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .comments-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--text-dark, #1f2937);
@@ -41,26 +41,26 @@
   background: var(--error-50, #fef2f2);
   border: 1px solid var(--error-200, #fecaca);
   color: var(--error-700, #b91c1c);
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .comments-items {
-  margin-top: 1rem;
+  margin-top: var(--space-4);
 }
 
 .comments-empty {
   text-align: center;
-  padding: 2rem;
+  padding: var(--space-8);
   color: var(--text-secondary, #6b7280);
 }
 
 .comments-empty .empty-icon {
   font-size: 2.5rem;
   color: var(--neutral-300, #d1d5db);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .comments-empty p {
@@ -72,13 +72,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   width: 100%;
-  padding: 0.75rem;
-  margin-top: 1rem;
+  padding: var(--space-3);
+  margin-top: var(--space-4);
   background: var(--neutral-100, #f3f4f6);
   border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: var(--text-dark, #1f2937);
   font-size: 0.875rem;
   font-weight: 500;

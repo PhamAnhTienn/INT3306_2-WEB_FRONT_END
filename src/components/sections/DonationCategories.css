@@ -7,12 +7,12 @@
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
+  gap: var(--space-6);
 }
 
 .category-card {
-  padding: 30px;
-  border-radius: 8px;
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
   border: 2px solid var(--border-light);
   position: relative;
   z-index: 1;
@@ -70,13 +70,13 @@
 .category-label {
   font-size: 0.9rem;
   color: var(--text-light);
-  margin-bottom: 5px;
+  margin-bottom: var(--space-1);
 }
 
 .category-title {
   font-size: 1.2rem;
   color: var(--text-dark);
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
   font-weight: 700;
 }
 

@@ -1,6 +1,6 @@
 .comment-replies {
-  margin-top: 1rem;
-  padding-left: 1.5rem;
+  margin-top: var(--space-4);
+  padding-left: var(--space-6);
   border-left: 2px solid var(--border-light, #e5e7eb);
 }
 
@@ -20,8 +20,8 @@
 .comment-replies-loading {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: var(--space-2);
+  padding: var(--space-4);
   color: var(--text-secondary, #6b7280);
   font-size: 0.875rem;
 }
@@ -35,23 +35,23 @@
   background: var(--error-50, #fef2f2);
   border: 1px solid var(--error-200, #fecaca);
   color: var(--error-700, #b91c1c);
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
-  margin: 1rem 0;
+  margin: var(--space-4) 0;
 }
 
 .btn-load-more-replies {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
+  padding: var(--space-2);
+  margin-top: var(--space-2);
   background: transparent;
   border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: var(--text-secondary, #6b7280);
   font-size: 0.8125rem;
   font-weight: 500;

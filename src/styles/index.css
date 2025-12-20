@@ -5,6 +5,36 @@
 }
 
 :root {
+  /* ===== SPACING SYSTEM (8px base) ===== */
+  /* Item spacing (tight, within components) */
+  --space-1: 4px;   /* 0.5x - Minimal spacing */
+  --space-2: 8px;   /* 1x - Base unit, item spacing */
+  --space-3: 12px;  /* 1.5x - Compact spacing */
+  --space-4: 16px;  /* 2x - Standard item spacing */
+  
+  /* Group spacing (between related elements) */
+  --space-5: 20px;  /* 2.5x - Group spacing small */
+  --space-6: 24px;  /* 3x - Standard group spacing */
+  --space-8: 32px;  /* 4x - Large group spacing */
+  
+  /* Section spacing (between major sections) */
+  --space-10: 40px; /* 5x - Section spacing small */
+  --space-12: 48px; /* 6x - Standard section spacing */
+  --space-16: 64px; /* 8x - Large section spacing */
+  --space-20: 80px; /* 10x - Extra large section spacing */
+  
+  /* ===== BORDER RADIUS HIERARCHY ===== */
+  /* Buttons and form elements */
+  --radius-sm: 4px;   /* Small elements, badges */
+  --radius-md: 6px;   /* Buttons, inputs, form elements */
+  
+  /* Cards */
+  --radius-lg: 8px;   /* Cards, small containers */
+  --radius-xl: 12px;  /* Large cards, modals */
+  
+  /* Special */
+  --radius-full: 999px; /* Pills, avatars, circular elements */
+  
   /* ===== PRIMARY COLORS (Warm Orange - Community & Energy) ===== */
   --primary-50: #FFF4E6;
   --primary-100: #FFE8CC;
@@ -141,9 +171,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-dark);
@@ -153,29 +181,29 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--space-6);
 }
 
 .section {
-  padding: 80px 0;
+  padding: var(--space-20) 0;
 }
 
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
   line-height: 1.2;
 }
 
 .section-subtitle {
   color: var(--text-light);
   font-size: 1.1rem;
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-12);
 }
 
 .highlight {
   background: var(--accent-yellow);
-  padding: 0 8px;
+  padding: 0 var(--space-2);
   position: relative;
   z-index: 1;
 }
@@ -205,7 +233,7 @@ button {
 /* Responsive */
 @media (max-width: 768px) {
   .section {
-    padding: 60px 0;
+    padding: var(--space-16) 0;
   }
 
   .section-title {

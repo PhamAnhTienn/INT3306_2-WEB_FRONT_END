@@ -1,7 +1,7 @@
 .manager-events {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 /* Header - scoped to manager-events */
@@ -10,10 +10,10 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1.25rem;
-  padding: 1.5rem 2rem;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-8);
   background: var(--neutral-50);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
   border: 1px solid rgba(255, 138, 0, 0.05);
 }
@@ -26,9 +26,9 @@
 
 .manager-events .me-search-box input {
   width: 100%;
-  padding: 0.875rem 1.125rem 0.875rem 2.875rem;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
   border: 2px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.9375rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   background: #FFFFFF;
@@ -48,7 +48,7 @@
 
 .manager-events .me-search-icon {
   position: absolute;
-  left: 1rem;
+  left: var(--space-4);
   top: 50%;
   transform: translateY(-50%);
   color: #9CA3AF;
@@ -64,28 +64,28 @@
 .manager-events .me-header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .manager-events .me-events-count {
   font-size: 0.9375rem;
   color: #4B5563;
   font-weight: 600;
-  padding: 0.625rem 1.125rem;
+  padding: var(--space-2) var(--space-4);
   background: rgba(255, 138, 0, 0.05);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid rgba(255, 138, 0, 0.1);
 }
 
 .manager-events .me-btn-create {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.875rem 1.75rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
   background: var(--neutral-50);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -135,12 +135,12 @@
 .manager-events .me-events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 1.75rem;
+  gap: var(--space-6);
 }
 
 .manager-events .me-event-card {
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -171,13 +171,13 @@
 }
 
 .manager-events .me-event-card-header {
-  padding: 1.5rem 1.5rem 1.25rem;
+  padding: var(--space-6) var(--space-6) var(--space-5);
   background: var(--neutral-50);
   border-bottom: 1px solid rgba(243, 244, 246, 0.8);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .manager-events .me-event-card-title {
@@ -192,17 +192,17 @@
 }
 
 .manager-events .me-event-card-body {
-  padding: 1.5rem;
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
   background: #FAFBFC;
 }
 
 .manager-events .me-event-detail {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: var(--space-3);
   font-size: 0.9375rem;
   color: #4B5563;
   transition: color 0.2s ease;
@@ -228,24 +228,24 @@
 }
 
 .manager-events .me-event-card-footer {
-  padding: 1.25rem 1.5rem;
+  padding: var(--space-5) var(--space-6);
   border-top: 1px solid rgba(243, 244, 246, 0.8);
   background: var(--neutral-50);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .manager-events .me-btn-registrations {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.625rem;
-  padding: 0.75rem 1.25rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
   background: var(--neutral-50);
   color: #374151;
   border: 1.5px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -299,12 +299,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.625rem;
-  padding: 0.75rem 1.25rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
   background: var(--neutral-50);
   color: #4F46E5;
   border: 1.5px solid #C7D2FE;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -358,8 +358,8 @@
 .manager-events .me-status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.375rem 0.875rem;
-  border-radius: 6px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -402,10 +402,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -473,21 +473,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+  gap: var(--space-4);
+  padding: var(--space-4);
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
 }
 
 .manager-events .me-pagination-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
   background: #F9FAFB;
   border: 1px solid #E5E7EB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   color: #1F2937;
@@ -524,12 +524,12 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 2rem;
+  padding: var(--space-8);
 }
 
 .manager-events .me-modal-content {
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   width: 100%;
   max-width: 900px;
   max-height: 80vh;
@@ -540,7 +540,7 @@
 }
 
 .manager-events .me-modal-header {
-  padding: 1.5rem;
+  padding: var(--space-6);
   border-bottom: 1px solid #E5E7EB;
   display: flex;
   justify-content: space-between;
@@ -575,7 +575,7 @@
 }
 
 .manager-events .me-modal-body {
-  padding: 1.5rem;
+  padding: var(--space-6);
   overflow-y: auto;
   flex: 1;
 }
@@ -592,7 +592,7 @@
 
 .manager-events .me-registrations-table th,
 .manager-events .me-registrations-table td {
-  padding: 1rem;
+  padding: var(--space-4);
   text-align: left;
   border-bottom: 1px solid #E5E7EB;
 }
@@ -618,7 +618,7 @@
 .manager-events .me-user-cell {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .manager-events .me-user-avatar {
@@ -639,9 +639,9 @@
 .manager-events .me-reg-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 4px;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -664,16 +664,16 @@
 /* Action Buttons - scoped */
 .manager-events .me-action-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .manager-events .me-btn-action {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -706,26 +706,26 @@
 }
 
 .manager-events .me-modal-pagination {
-  margin-top: 1rem;
-  padding: 0.75rem;
+  margin-top: var(--space-4);
+  padding: var(--space-3);
   background: #F9FAFB;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 }
 
 /* Empty State - scoped */
 .manager-events .me-empty-state {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   background: var(--neutral-50);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 2px dashed #E5E7EB;
-  margin: 2rem 0;
+  margin: var(--space-8) 0;
 }
 
 .manager-events .me-empty-state-icon {
   width: 100px;
   height: 100px;
-  margin: 0 auto 1.75rem;
+  margin: 0 auto var(--space-6);
   background: var(--neutral-50);
   border-radius: 50%;
   display: flex;
@@ -753,7 +753,7 @@
 }
 
 .manager-events .me-empty-state h3 {
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--space-3);
   font-size: 1.375rem;
   font-weight: 700;
   color: #111827;
@@ -775,7 +775,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
 }
 
 .manager-events .me-loading-spinner {
@@ -794,7 +794,7 @@
 }
 
 .manager-events .me-loading-container p {
-  margin-top: 1rem;
+  margin-top: var(--space-4);
   color: #6B7280;
   font-size: 0.875rem;
 }
@@ -802,26 +802,26 @@
 /* Error Container - scoped */
 .manager-events .me-error-container {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   background: #FFFFFF;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
 }
 
 .manager-events .me-error-icon {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .manager-events .me-error-container h3 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
   font-size: 1.25rem;
   font-weight: 700;
   color: #1F2937;
 }
 
 .manager-events .me-error-container p {
-  margin: 0 0 1.5rem;
+  margin: 0 0 var(--space-6);
   font-size: 0.875rem;
   color: #6B7280;
 }
@@ -842,7 +842,7 @@
   }
 
   .manager-events .me-modal-overlay {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .manager-events .me-modal-content {
@@ -855,7 +855,7 @@
 
   .manager-events .me-registrations-table th,
   .manager-events .me-registrations-table td {
-    padding: 0.75rem 0.5rem;
+    padding: var(--space-3) var(--space-2);
   }
 
   .manager-events .me-action-buttons {

@@ -15,7 +15,7 @@
 
 .dashboard-content {
   flex: 1;
-  padding: 2rem;
+  padding: var(--space-8);
   overflow: visible; /* avoid nested scrollbars */
 }
 
@@ -34,12 +34,12 @@
 
 @media (max-width: 767px) {
   .dashboard-content {
-    padding: 1.5rem;
+    padding: var(--space-6);
   }
 }
 
 @media (max-width: 575px) {
   .dashboard-content {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 }

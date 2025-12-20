@@ -3,7 +3,7 @@
   min-width: 320px;
   max-width: 400px;
   background: white;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   border: 2px solid var(--border-medium);
   z-index: 10000;
   cursor: pointer;
@@ -32,15 +32,15 @@
 .toast-content {
   display: flex;
   align-items: flex-start;
-  padding: 16px;
-  gap: 12px;
+  padding: var(--space-4);
+  gap: var(--space-3);
   position: relative;
 }
 
 .toast-icon-wrapper {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: var(--space-10);
+  height: var(--space-10);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@
   font-weight: 600;
   font-size: 14px;
   color: #1c1e21;
-  margin-bottom: 4px;
+  margin-bottom: var(--space-1);
   line-height: 1.4;
 }
 
@@ -87,8 +87,8 @@
 
 .toast-close-btn {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: var(--space-6);
+  height: var(--space-6);
   border: none;
   background: transparent;
   color: #8a8d91;
