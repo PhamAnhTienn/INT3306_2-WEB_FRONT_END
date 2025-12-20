@@ -2,13 +2,13 @@
   background: var(--white);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
   transition: all 0.3s ease;
 }
 
 .card-hover:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-hover);
+  border-color: var(--border-dark);
 }
 
 .card-header {

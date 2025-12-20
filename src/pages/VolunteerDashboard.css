@@ -47,7 +47,7 @@
   background: var(--bg-white);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
   height: 100%;
   border: 1px solid var(--border-light);
   transition: all 0.3s ease;
@@ -55,7 +55,7 @@
 }
 
 .dashboard-card:hover {
-  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-medium);
   border-color: var(--border-medium);
 }
 
@@ -195,7 +195,7 @@
 .history-item:hover {
   border-color: var(--primary-300);
   background: var(--primary-50);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   transform: translateY(-2px);
   z-index: 10;
 }
@@ -211,7 +211,7 @@
   color: var(--white);
   font-size: 1.125rem;
   flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .history-info {
@@ -327,13 +327,13 @@
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .empty-state-action:hover {
   background: var(--primary-600);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-medium);
   color: var(--white);
 }
 

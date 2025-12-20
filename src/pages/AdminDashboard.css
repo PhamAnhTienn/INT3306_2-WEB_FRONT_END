@@ -35,7 +35,7 @@
   background: #fff;
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
   height: 100%;
 }
 
@@ -80,7 +80,7 @@
 .user-stat-item:hover,
 .event-stat-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-medium);
 }
 
 .stat-icon {
@@ -166,7 +166,7 @@
 
 .registration-stat-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-medium);
 }
 
 .stat-icon-pending {
@@ -274,8 +274,8 @@
 }
 
 .pending-event-item:hover {
-  border-color: rgba(121, 40, 202, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: rgba(121, 40, 202, 0.3);
+  border-width: 2px;
 }
 
 .pending-event-info {
@@ -358,7 +358,7 @@
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(121, 40, 202, 0.4);
+  border: 2px solid rgba(121, 40, 202, 0.6);
 }
 
 .btn-success {
@@ -368,7 +368,7 @@
 
 .btn-success:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(23, 173, 55, 0.4);
+  border: 2px solid rgba(23, 173, 55, 0.6);
 }
 
 .btn-danger {
@@ -378,7 +378,7 @@
 
 .btn-danger:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(234, 6, 6, 0.4);
+  border: 2px solid rgba(234, 6, 6, 0.6);
 }
 
 /* Activities Timeline */

@@ -24,7 +24,7 @@
 
 .create-comment-input:focus {
   border-color: var(--primary-500, #3b82f6);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-width: 2px;
 }
 
 .create-comment-input::placeholder {
@@ -173,21 +173,19 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.14);
 }
 
 .btn-submit-comment:hover:not(:disabled) {
   background: #0f172a;
   border-color: #0f172a;
   transform: translateY(-1px);
-  box-shadow: 0 12px 26px rgba(17, 24, 39, 0.18);
+  border-width: 2px;
 }
 
 .btn-submit-comment:disabled {
   background: #d4d7e0;
   border-color: #d4d7e0;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 .btn-submit-comment svg {

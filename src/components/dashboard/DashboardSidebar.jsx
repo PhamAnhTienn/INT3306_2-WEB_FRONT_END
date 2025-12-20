@@ -10,7 +10,6 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
   const managerMenuItems = [
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/manager' },
     { id: 'my-events', icon: <FaClipboardList />, label: 'My Events', path: '/manager/events' },
-    // Removed Volunteers and Browse Events from manager sidebar as requested
     { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/profile' },
   ];
 
@@ -18,7 +17,6 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
     { id: 'dashboard', icon: <FaHome />, label: 'Dashboard', path: '/dashboard/volunteer' },
     { id: 'events', icon: <FaCalendarAlt />, label: 'Browse Events', path: '/events' },
     { id: 'my-events', icon: <FaUsers />, label: 'My Events', path: '/my-events' },
-    // Settings should open the Profile page
     { id: 'settings', icon: <FaCog />, label: 'Settings', path: '/profile' },
   ];
 
@@ -27,14 +25,12 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      // Call logout API
       await authAPI.logout();
-      
-      // Redirect to home page
+
       navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
-      // Even if API call fails, clear local storage and redirect
+
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       navigate('/');
@@ -48,7 +44,7 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
       <div className="sidebar-header">
         <div className="sidebar-logo">
           <img src="/logo.svg" alt="Logo" />
-          <span>Volunteer Platform</span>
+          <span>Voluntarius</span>
         </div>
       </div>
 
@@ -58,13 +54,13 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
         <ul className="sidebar-menu">
           {menuItems.map((item) => (
             <li key={item.id} className={activeItem === item.id ? 'active' : ''}>
-              <a href={item.path} onClick={(e) => {
-                e.preventDefault();
-                onNavigate(item.id, item.path);
-              }}>
+              <button 
+                className="menu-button"
+                onClick={() => onNavigate(item.id, item.path)}
+              >
                 <span className="menu-icon">{item.icon}</span>
                 <span className="menu-label">{item.label}</span>
-              </a>
+              </button>
             </li>
           ))}
         </ul>

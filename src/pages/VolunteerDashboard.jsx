@@ -30,7 +30,6 @@ const VolunteerDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // Fetch from API
       const response = await dashboardAPI.getVolunteerDashboard();
       
       if (response.success && response.data) {
@@ -40,7 +39,6 @@ const VolunteerDashboard = () => {
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      // Set empty data structure if API fails
       setDashboardData({
         recentActivityDTOS: [],
         registeredEventDTOS: [],
@@ -78,7 +76,7 @@ const VolunteerDashboard = () => {
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
-    const diff = Math.floor((now - date) / 1000); // seconds
+    const diff = Math.floor((now - date) / 1000);
 
     if (diff < 60) return `${diff} seconds ago`;
     if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
@@ -109,7 +107,6 @@ const VolunteerDashboard = () => {
       breadcrumbs={['Pages', 'Dashboard']}
     >
       <div className="volunteer-dashboard">
-        {/* Stats Overview */}
         <div className="dashboard-stats">
           <div className="stat-col">
             <StatCard
@@ -148,9 +145,8 @@ const VolunteerDashboard = () => {
           </div>
         </div>
 
-        {/* Main Content Row */}
         <div className="dashboard-row">
-          {/* Recent Activities */}
+
           <div className="dashboard-col-4">
             <div className="dashboard-card">
               <div className="card-header">
@@ -186,7 +182,6 @@ const VolunteerDashboard = () => {
             </div>
           </div>
 
-          {/* Registered Events */}
           <div className="dashboard-col-8">
             <div className="dashboard-card">
               <div className="card-header">
@@ -216,7 +211,6 @@ const VolunteerDashboard = () => {
           </div>
         </div>
 
-        {/* Upcoming Events */}
         <div className="dashboard-row">
           <div className="dashboard-col-12">
             <div className="dashboard-card">
@@ -247,7 +241,6 @@ const VolunteerDashboard = () => {
           </div>
         </div>
 
-        {/* Event History & Recommendations */}
         <div className="dashboard-row">
           <div className="dashboard-col-6">
             <div className="dashboard-card">

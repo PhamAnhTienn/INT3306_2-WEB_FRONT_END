@@ -86,7 +86,7 @@
 }
 
 .notification-item-wrapper:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-light);
   border-color: var(--primary-color, #007bff);
 }
 

@@ -19,8 +19,8 @@ const MyEvents = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [registrationStatuses, setRegistrationStatuses] = useState({}); // Map eventId -> registration status
-  const [cancelling, setCancelling] = useState(null); // Track which event is being cancelled
+  const [registrationStatuses, setRegistrationStatuses] = useState({});
+  const [cancelling, setCancelling] = useState(null);
 
   const statusFilters = [
     { label: 'All', value: '' },

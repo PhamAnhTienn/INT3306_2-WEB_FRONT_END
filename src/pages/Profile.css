@@ -11,7 +11,7 @@
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
-  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  border: 1px solid var(--border-light);
 }
 
 .profile-loading .spinner {
@@ -31,7 +31,7 @@
   background: var(--bg-white, #ffffff);
   border-radius: 1rem;
   padding: 1.5rem 2rem;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .profile-avatar {
@@ -92,7 +92,7 @@
   background: var(--bg-white, #ffffff);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .profile-card h2 {
@@ -179,7 +179,7 @@
   background: var(--primary-500, #ff8a00);
   border-color: var(--primary-500, #ff8a00);
   color: #fff;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .empty-text {

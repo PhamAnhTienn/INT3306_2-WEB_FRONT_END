@@ -6,7 +6,7 @@
   max-height: 420px;
   background: var(--bg-white, #ffffff);
   border-radius: 0.75rem;
-  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  border: 2px solid var(--border-dark);
   padding: 0.75rem 0.75rem 0.5rem;
   z-index: 1000;
   display: flex;

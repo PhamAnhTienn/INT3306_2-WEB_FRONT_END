@@ -31,7 +31,7 @@
   padding: 1rem;
   background: var(--white, #ffffff);
   border-radius: 0.75rem;
-  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  border: 1px solid var(--border-light);
 }
 
 .filter-group {
@@ -59,7 +59,7 @@
 .filter-select:focus {
   outline: none;
   border-color: var(--primary-500, #3b82f6);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-width: 2px;
 }
 
 .filter-checkbox-group {
@@ -110,7 +110,7 @@
   background: var(--white, #ffffff);
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  border: 1px solid var(--border-light);
 }
 
 .registrations-table {
@@ -322,7 +322,7 @@
   padding: 1rem;
   background: var(--white, #ffffff);
   border-radius: 0.75rem;
-  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  border: 1px solid var(--border-light);
 }
 
 .pagination-info {

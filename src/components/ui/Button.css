@@ -17,7 +17,7 @@
 .btn-primary:hover {
   background: var(--primary-600);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+  border: 1px solid var(--primary-700);
 }
 
 .btn-secondary {

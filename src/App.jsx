@@ -1,13 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
-import Causes from './pages/Causes';
 import Events from './pages/Events';
 import MyEvents from './pages/MyEvents';
 import EventFeed from './pages/EventFeed';
-import Gallery from './pages/Gallery';
-import News from './pages/News';
-import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';

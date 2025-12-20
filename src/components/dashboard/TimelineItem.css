@@ -33,7 +33,7 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .timeline-icon-primary {

@@ -46,12 +46,10 @@ const ManagerDashboard = () => {
       }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
-      
-      // Extract error message from different error formats
+
       let errorMessage = 'Failed to load dashboard data';
       
       if (error.response) {
-        // Server responded with error status
         const status = error.response.status;
         const data = error.response.data;
         
@@ -67,10 +65,8 @@ const ManagerDashboard = () => {
           errorMessage = `Server error (${status}). Please try again later.`;
         }
       } else if (error.request) {
-        // Request was made but no response received
         errorMessage = 'Network error. Please check your connection and try again.';
       } else if (error.message) {
-        // Error message from axios or other source
         errorMessage = error.message;
       }
       
@@ -103,7 +99,7 @@ const ManagerDashboard = () => {
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
-    const diff = Math.floor((now - date) / 1000); // seconds
+    const diff = Math.floor((now - date) / 1000); 
 
     if (diff < 60) return `${diff} seconds ago`;
     if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
@@ -132,8 +128,7 @@ const ManagerDashboard = () => {
         breadcrumbs={['Pages', 'Dashboard']}
       >
         <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading dashboard data...</p>
+          <p>Loading dashboard...</p>
         </div>
       </DashboardLayout>
     );
@@ -195,7 +190,6 @@ const ManagerDashboard = () => {
       breadcrumbs={['Pages', 'Dashboard']}
     >
       <div className="manager-dashboard">
-        {/* Stats Overview */}
         <div className="dashboard-stats">
           <div className="stat-col">
             <StatCard
@@ -234,7 +228,6 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        {/* Registration Statistics */}
         <div className="dashboard-row">
           <div className="dashboard-col-12">
             <div className="dashboard-card">
@@ -298,7 +291,6 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        {/* Events Needing Approval & Recent Activities */}
         <div className="dashboard-row">
           <div className="dashboard-col-8">
             <div className="dashboard-card">
@@ -387,7 +379,6 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        {/* Upcoming Events Needing Preparation */}
         {dashboardData.upcomingEventsNeedPreparation && dashboardData.upcomingEventsNeedPreparation.length > 0 && (
           <div className="dashboard-row">
             <div className="dashboard-col-12">
@@ -416,7 +407,6 @@ const ManagerDashboard = () => {
           </div>
         )}
 
-        {/* Attendance Reports */}
         {dashboardData.attendanceReports && dashboardData.attendanceReports.length > 0 && (
           <div className="dashboard-row">
             <div className="dashboard-col-12">

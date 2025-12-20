@@ -38,7 +38,7 @@
   padding: 1rem;
   background: var(--bg-white, #ffffff);
   border-radius: 0.5rem;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .filter-group {
@@ -65,13 +65,13 @@
 .filter-select:focus {
   outline: none;
   border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+  border-width: 2px;
 }
 
 .users-table-container {
   background: var(--bg-white);
   border-radius: 0.5rem;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   overflow-x: auto;
 }
 
@@ -202,7 +202,7 @@
 
 .btn-icon:hover {
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-medium);
 }
 
 .btn-icon.btn-view {
@@ -261,7 +261,7 @@
 .modal-content {
   background: var(--bg-white);
   border-radius: 0.5rem;
-  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--border-medium);
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
@@ -333,7 +333,7 @@
 .modal-body textarea:focus {
   outline: none;
   border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+  border-width: 2px;
 }
 
 .modal-body textarea {
@@ -407,7 +407,7 @@
   padding: 3rem;
   background: var(--bg-white);
   border-radius: 0.5rem;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
 }
 
 .spinner {

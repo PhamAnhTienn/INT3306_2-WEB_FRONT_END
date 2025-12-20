@@ -2,7 +2,7 @@
   background: var(--bg-white);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
   transition: all 0.3s ease;
   height: 100%;
   display: flex;
@@ -30,7 +30,7 @@
 
 .stat-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
+  border-color: var(--border-dark);
 }
 
 .stat-card.gradient-primary {
@@ -95,12 +95,12 @@
 .stat-card:not([class*="gradient-"]) .stat-icon {
   background: var(--primary-50);
   color: var(--primary-500);
-  box-shadow: 0 0 0 4px var(--primary-100);
+  border: 2px solid var(--primary-200);
 }
 
 .stat-card[class*="gradient-"] .stat-icon {
   color: var(--white);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .stat-info {

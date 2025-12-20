@@ -8,7 +8,7 @@
 .event-selector-card {
   background: #FFFFFF;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
   overflow: hidden;
 }
 
@@ -44,13 +44,13 @@
   color: #1F2937;
   background: #FFFFFF;
   cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
 }
 
 .event-select:focus {
   outline: none;
   border-color: #FF8A00;
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+  border-width: 2px;
 }
 
 .no-events-message {
@@ -70,7 +70,7 @@
   background: #FFFFFF;
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -144,13 +144,13 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   background: #FFFFFF;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
 }
 
 .search-box input:focus {
   outline: none;
   border-color: #FF8A00;
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+  border-width: 2px;
 }
 
 .search-icon {
@@ -174,14 +174,14 @@
   font-size: 0.875rem;
   background: #FFFFFF;
   cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
   appearance: none;
 }
 
 .filter-box select:focus {
   outline: none;
   border-color: #FF8A00;
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+  border-width: 2px;
 }
 
 .filter-icon {
@@ -197,7 +197,7 @@
 .volunteers-card {
   background: #FFFFFF;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
   overflow: hidden;
 }
 
@@ -452,7 +452,7 @@
   padding: 4rem 2rem;
   background: #FFFFFF;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
 }
 
 .error-icon {
@@ -494,7 +494,7 @@
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.4);
+  border: 2px solid var(--primary-600);
 }
 
 /* Responsive */

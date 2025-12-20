@@ -14,7 +14,7 @@
   padding: 1.5rem 2rem;
   background: linear-gradient(135deg, #FFFFFF 0%, #FAFBFC 100%);
   border-radius: 1.25rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-light);
   border: 1px solid rgba(255, 138, 0, 0.05);
 }
 
@@ -42,7 +42,7 @@
 .manager-events .me-search-box input:focus {
   outline: none;
   border-color: #FF8A00;
-  box-shadow: 0 0 0 4px rgba(255, 138, 0, 0.1), 0 4px 12px rgba(255, 138, 0, 0.08);
+  border: 2px solid var(--primary-300);
   background: #FFFFFF;
 }
 
@@ -90,7 +90,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(255, 138, 0, 0.25);
+  border: 2px solid var(--primary-500);
   position: relative;
   overflow: hidden;
 }
@@ -116,7 +116,7 @@
 .manager-events .me-btn-create:hover {
   background: linear-gradient(135deg, #FFA133 0%, #FF8A00 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 138, 0, 0.35);
+  border: 2px solid var(--primary-600);
 }
 
 .manager-events .me-btn-create:active {
@@ -141,7 +141,7 @@
 .manager-events .me-event-card {
   background: #FFFFFF;
   border-radius: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 138, 0, 0.08);
@@ -162,7 +162,7 @@
 
 .manager-events .me-event-card:hover {
   transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 2px solid var(--border-medium);
   border-color: rgba(255, 138, 0, 0.2);
 }
 
@@ -278,7 +278,7 @@
   border-color: #D1D5DB;
   color: #1F2937;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-light);
 }
 
 .manager-events .me-btn-registrations:active {
@@ -337,7 +337,7 @@
   border-color: #A5B4FC;
   color: #4338CA;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  border: 2px solid rgba(79, 70, 229, 0.4);
 }
 
 .manager-events .me-btn-posts:active {
@@ -364,7 +364,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
@@ -421,7 +421,7 @@
   letter-spacing: 0.01em;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(255, 138, 0, 0.25);
+  border: 2px solid var(--primary-500);
 }
 
 .manager-events .me-btn-view::before {
@@ -437,7 +437,7 @@
 
 .manager-events .me-btn-view:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 138, 0, 0.35);
+  border: 2px solid var(--primary-600);
   animation: gradient-shift 3s ease infinite;
 }
 
@@ -465,7 +465,7 @@
 
 .manager-events .me-btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.4);
+  border: 2px solid var(--primary-600);
 }
 
 /* Pagination - scoped */
@@ -477,7 +477,7 @@
   padding: 1rem;
   background: #FFFFFF;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
 }
 
 .manager-events .me-pagination-btn {
@@ -536,7 +536,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 3px solid var(--border-dark);
 }
 
 .manager-events .me-modal-header {
@@ -731,18 +731,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 16px rgba(255, 138, 0, 0.15);
+  border: 2px solid var(--primary-400);
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 8px 16px rgba(255, 138, 0, 0.15);
+    border: 2px solid var(--primary-400);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 12px 24px rgba(255, 138, 0, 0.2);
+    border: 2px solid var(--primary-500);
   }
 }
 
@@ -805,7 +805,7 @@
   padding: 4rem 2rem;
   background: #FFFFFF;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
 }
 
 .manager-events .me-error-icon {

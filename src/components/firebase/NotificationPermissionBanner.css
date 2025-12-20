@@ -5,7 +5,7 @@
   max-width: 400px;
   background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid var(--border-dark);
   border: 1px solid rgba(255, 138, 0, 0.2);
   z-index: 1000;
   animation: slideInUp 0.3s ease-out;
@@ -41,12 +41,12 @@
   justify-content: center;
   color: white;
   font-size: 1.5rem;
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+  border: 2px solid var(--primary-500);
 }
 
 .notification-permission-icon.blocked-icon {
   background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  border: 2px solid var(--error-500);
 }
 
 .notification-permission-text {
@@ -91,7 +91,7 @@
 
 .notification-permission-enable:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.4);
+  border: 2px solid var(--primary-600);
 }
 
 .notification-permission-enable:disabled {

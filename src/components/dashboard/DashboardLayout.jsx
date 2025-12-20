@@ -4,18 +4,18 @@ import DashboardSidebar from './DashboardSidebar';
 import DashboardNavbar from './DashboardNavbar';
 import './DashboardLayout.css';
 
-const DashboardLayout = ({ children, userRole, title, breadcrumbs }) => {
+const DashboardLayout = ({ children, userRole }) => {
   const [activeItem, setActiveItem] = useState('dashboard');
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Update active item based on current route
   useEffect(() => {
     const path = location.pathname;
-    
-    // Map routes to menu item IDs
+
     if (path.includes('/admin/users')) {
       setActiveItem('users');
+    } else if (path.includes('/manager/events')) {
+      setActiveItem('my-events');
     } else if (path.includes('/volunteer/events') || path.includes('/events')) {
       setActiveItem('events');
     } else if (path.includes('/my-events')) {
@@ -45,7 +45,7 @@ const DashboardLayout = ({ children, userRole, title, breadcrumbs }) => {
       />
       
       <main className="dashboard-main">
-        <DashboardNavbar title={title} breadcrumbs={breadcrumbs} />
+        <DashboardNavbar />
         
         <div className="dashboard-content">
           {children}

@@ -70,7 +70,7 @@
 
 .search-input:focus {
   border-color: var(--primary-400); /* Primary for focus state (main actions) */
-  box-shadow: 0 0 0 4px var(--primary-50); /* Primary-50 for glow */
+  border: 2px solid var(--primary-200); /* Primary-50 for glow */
 }
 
 .search-input::placeholder {
@@ -96,7 +96,7 @@
   background: var(--white); /* White background */
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm); /* Subtle shadow */
+  border: 1px solid var(--border-light);
 }
 
 .filter-button:hover {
@@ -104,14 +104,14 @@
   color: var(--primary-600); /* Primary-600 for hover text */
   border-color: var(--primary-300);
   transform: translateY(-2px);
-  box-shadow: var(--shadow); /* Standard shadow on hover */
+  border: 2px solid var(--border-medium);
 }
 
 .filter-button.active {
   background: var(--primary-500); /* Primary for active filter */
   color: var(--white); /* White text */
   border-color: var(--primary-500);
-  box-shadow: var(--shadow-md); /* Emphasized shadow */
+  border: 2px solid var(--border-dark);
 }
 
 /* Status-specific filter button colors when active */
@@ -156,7 +156,7 @@
   background: var(--white);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   margin: 0 auto;
   position: relative;
 }
@@ -166,14 +166,14 @@
   color: var(--primary-600);
   border-color: var(--primary-300);
   transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  border: 2px solid var(--border-light);
 }
 
 .date-filter-toggle.active {
   background: var(--primary-500);
   color: var(--white);
   border-color: var(--primary-500);
-  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-medium);
 }
 
 .date-filter-toggle svg {
@@ -192,7 +192,7 @@
   border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  border: 2px solid var(--error-400);
 }
 
 .date-filter-panel {
@@ -200,7 +200,7 @@
   background: var(--white);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-medium);
   border: 1px solid var(--border-light);
   animation: slideDown 0.3s ease;
 }
@@ -257,7 +257,7 @@
 .date-input-group input[type="date"]:focus {
   outline: none;
   border-color: var(--primary-400);
-  box-shadow: 0 0 0 4px var(--primary-50);
+  border: 2px solid var(--primary-200);
 }
 
 .date-input-group input[type="date"]::-webkit-calendar-picker-indicator {
@@ -305,7 +305,7 @@
 .date-filter-apply:hover {
   background: var(--primary-600);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
+  border: 2px solid var(--primary-500);
 }
 
 /* Results Count */
@@ -368,7 +368,7 @@
   background: var(--white); /* White background */
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: var(--shadow); /* Standard shadow from design tokens */
+  border: 2px solid var(--border-light); /* Standard shadow from design tokens */
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -378,7 +378,7 @@
 
 .event-card-item:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-lg); /* Large shadow on hover */
+  border: 2px solid var(--border-dark); /* Large shadow on hover */
   border-color: var(--primary-300); /* Primary accent on hover */
 }
 
@@ -647,7 +647,7 @@
 .event-view-button:hover {
   background: var(--primary-600); /* Primary-600 on hover */
   transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(255, 138, 0, 0.3); /* Primary color glow */
+  border: 2px solid var(--primary-500); /* Primary color glow */
 }
 
 .event-view-button:active {
@@ -676,7 +676,7 @@
 .event-register-button:hover {
   background: var(--success-600);
   transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+  border: 2px solid var(--success-500);
 }
 
 .event-register-button:active {
@@ -781,7 +781,7 @@
 .event-enter-button:hover {
   background: var(--secondary-600);
   transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(0, 173, 155, 0.3);
+  border: 2px solid var(--secondary-500);
 }
 
 .event-enter-button:active {
@@ -831,7 +831,7 @@
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: var(--white);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+  border: 2px solid var(--error-500);
   border-color: #dc2626;
 }
 
@@ -1067,7 +1067,7 @@
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: var(--shadow-xl);
+  border: 3px solid var(--border-dark);
   position: relative;
   animation: modalSlideIn 0.3s ease;
 }
@@ -1109,7 +1109,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  box-shadow: var(--shadow);
+  border: 2px solid var(--border-light);
   z-index: 10;
 }
 
@@ -1295,7 +1295,7 @@
 .modal-action-button.primary:hover {
   background: var(--primary-600);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-medium);
 }
 
 .modal-action-button.secondary {
@@ -1339,7 +1339,7 @@
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: var(--white);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+  border: 2px solid var(--error-500);
   border-color: #dc2626;
 }
 

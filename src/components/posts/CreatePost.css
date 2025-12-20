@@ -1,9 +1,8 @@
 .create-post {
   background: linear-gradient(135deg, var(--white) 0%, var(--neutral-50) 100%);
   border-radius: 16px;
-  border: 2px solid var(--primary-100);
+  border: 2px solid var(--primary-200);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.08);
 }
 
 .create-post-header {
@@ -179,9 +178,9 @@
 .btn-add-files:hover:not(:disabled) {
   background: var(--primary-500);
   color: var(--white);
-  border-color: var(--primary-500);
+  border-color: var(--primary-600);
+  border-width: 2px;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
 }
 
 .btn-add-files:disabled {
@@ -244,24 +243,24 @@
   padding: 0.75rem 2rem;
   background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
   color: white;
-  border: none;
+  border: 1px solid var(--primary-700);
   border-radius: 10px;
   font-size: 0.9375rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 138, 0, 0.3);
 }
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(255, 138, 0, 0.4);
+  border-width: 2px;
+  border-color: var(--primary-800);
 }
 
 .btn-submit:disabled {
   background: var(--neutral-300);
   cursor: not-allowed;
-  box-shadow: none;
+  border-color: var(--neutral-400);
 }
 
 .spinning {

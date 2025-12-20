@@ -14,7 +14,7 @@
   width: min(720px, 95vw);
   background: #fff;
   border-radius: 14px;
-  box-shadow: 0 16px 48px rgba(17, 24, 39, 0.16);
+  border: 2px solid var(--border-medium);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@
 
 .edit-post-body textarea:focus {
   border-color: #111827;
-  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+  border-width: 2px;
 }
 
 .edit-post-error {
@@ -169,7 +169,7 @@
 .btn-primary {
   padding: 0.6rem 1.25rem;
   border-radius: 10px;
-  border: 1px solid #111827;
+  border: 2px solid #111827;
   background: #111827;
   color: #fff;
   font-weight: 700;
@@ -177,7 +177,6 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.14);
 }
 
 .btn-primary:hover {
@@ -189,7 +188,6 @@
 .btn-secondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 .spinning {
