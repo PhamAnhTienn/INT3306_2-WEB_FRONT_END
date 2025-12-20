@@ -18,8 +18,6 @@ import {
   FaMapMarkerAlt,
   FaInfoCircle,
   FaPlus,
-  FaComment,
-  FaTrash,
 } from 'react-icons/fa';
 
 const ManagerEvents = () => {
@@ -30,7 +28,6 @@ const ManagerEvents = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [deletingEventId, setDeletingEventId] = useState(null);
 
   const fetchEvents = useCallback(async () => {
     try {
@@ -60,28 +57,6 @@ const ManagerEvents = () => {
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
-
-  const handleViewRegistrations = async (event) => {
-    navigate(`/manager/events/${event.id || event.eventId}/registrations`);
-  };
-
-  const handleDeleteEvent = async (event) => {
-    const eventId = event.id || event.eventId;
-    if (!confirm(`Are you sure you want to delete the event "${event.title}"? This action cannot be undone and all registered users will be notified.`)) {
-      return;
-    }
-
-    try {
-      setDeletingEventId(eventId);
-      await managerAPI.deleteEvent(eventId);
-      alert('Event deleted successfully');
-      fetchEvents(); // Refresh the list
-    } catch (err) {
-      alert(err.response?.data?.message || err.message || 'Failed to delete event');
-    } finally {
-      setDeletingEventId(null);
-    }
-  };
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -230,32 +205,6 @@ const ManagerEvents = () => {
                     onClick={() => navigate(`/manager/events/${event.id || event.eventId}`)}
                   >
                     <FaEye /> View Details
-                  </button>
-                  <button
-                    className="me-btn me-btn-registrations"
-                    onClick={() => handleViewRegistrations(event)}
-                  >
-                    <FaUsers /> Registrations
-                  </button>
-                  <button
-                    className="me-btn me-btn-posts"
-                    onClick={() => navigate(`/manager/events/${event.id || event.eventId}/feed`)}
-                  >
-                    <FaComment /> View Posts
-                  </button>
-                  <button
-                    className="me-btn me-btn-delete"
-                    onClick={() => handleDeleteEvent(event)}
-                    disabled={deletingEventId === (event.id || event.eventId)}
-                    title="Delete Event"
-                  >
-                    {deletingEventId === (event.id || event.eventId) ? (
-                      <>Loading...</>
-                    ) : (
-                      <>
-                        <FaTrash /> Delete
-                      </>
-                    )}
                   </button>
                 </div>
               </div>
