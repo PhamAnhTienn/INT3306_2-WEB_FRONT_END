@@ -12,7 +12,7 @@
 
 .category-card {
   padding: 30px;
-  border-radius: 12px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +30,7 @@
   left: 0;
   right: 0;
   height: 0;
-  background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), rgba(42, 157, 143, 0.1));
+  background: rgba(230, 57, 70, 0.05);
   transition: height 0.3s ease;
 }
 

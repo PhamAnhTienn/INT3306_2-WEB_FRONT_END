@@ -34,7 +34,7 @@
   margin-top: 0.25rem;
   background: var(--white);
   border: 1px solid var(--border-medium);
-  border-radius: 10px;
+  border-radius: 6px;
   min-width: 140px;
   z-index: 1000;
   overflow: hidden;

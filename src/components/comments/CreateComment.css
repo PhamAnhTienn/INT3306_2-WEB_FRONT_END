@@ -12,7 +12,7 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   font-size: 0.9375rem;
   color: var(--text-dark, #1f2937);
   outline: none;
@@ -128,7 +128,7 @@
   border: 1px solid var(--error-200, #fecaca);
   color: var(--error-700, #b91c1c);
   padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.875rem;
 }
 
@@ -144,7 +144,7 @@
   background: #f9fafb;
   border: 1px solid var(--border-medium, #d1d5db);
   color: var(--text-dark, #1f2937);
-  border-radius: 0.65rem;
+  border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -168,7 +168,7 @@
   background: #111827;
   color: white;
   border: 1px solid #111827;
-  border-radius: 0.65rem;
+  border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;

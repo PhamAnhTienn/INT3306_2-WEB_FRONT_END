@@ -3,7 +3,7 @@
 
 .events-page {
   /* min-height: 100vh; */
-  background: linear-gradient(to bottom, var(--neutral-50) 0%, var(--white) 100%);
+  background: var(--neutral-50);
   padding: 4rem 0;
 }
 
@@ -60,7 +60,7 @@
   width: 100%;
   padding: 1rem 1.25rem 1rem 3.5rem;
   border: 2px solid var(--border-light); /* Neutral-200 for borders */
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 1rem;
   color: var(--text-dark); /* Neutral-800 for input text */
   background: var(--white); /* White background */
@@ -89,7 +89,7 @@
 .filter-button {
   padding: 0.75rem 2rem;
   border: 2px solid var(--border-light);
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-primary); /* Neutral-700 for text */
@@ -149,7 +149,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid var(--border-light);
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--text-primary);
@@ -189,7 +189,7 @@
   font-size: 0.625rem;
   font-weight: 700;
   padding: 0.25rem 0.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 2px solid var(--error-400);
@@ -198,7 +198,7 @@
 .date-filter-panel {
   margin-top: 1rem;
   background: var(--white);
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 2px solid var(--border-medium);
   border: 1px solid var(--border-light);
@@ -246,7 +246,7 @@
 .date-input-group input[type="date"] {
   padding: 0.75rem 1rem;
   border: 2px solid var(--border-light);
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.9375rem;
   color: var(--text-primary);
   background: var(--white);
@@ -279,7 +279,7 @@
 .date-filter-clear,
 .date-filter-apply {
   padding: 0.625rem 1.5rem;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -348,7 +348,7 @@
   padding: 2rem;
   background: var(--error-50); /* Semantic Error-50 for background */
   border: 1px solid var(--error-200); /* Semantic Error-200 for border */
-  border-radius: 1rem;
+  border-radius: 8px;
   color: var(--error-700); /* Semantic Error-700 for text */
   margin: 2rem 0;
 }
@@ -366,7 +366,7 @@
 /* Event Card - Similar to Feane's menu card structure */
 .event-card-item {
   background: var(--white); /* White background */
-  border-radius: 1rem;
+  border-radius: 8px;
   overflow: hidden;
   border: 2px solid var(--border-light); /* Standard shadow from design tokens */
   transition: all 0.3s ease;
@@ -387,7 +387,7 @@
   position: relative;
   width: 100%;
   height: 220px;
-  background: linear-gradient(135deg, var(--primary-50) 0%, var(--secondary-50) 100%);
+  background: var(--neutral-50);
   overflow: hidden;
 }
 
@@ -409,7 +409,7 @@
   top: 1rem;
   right: 1rem;
   padding: 0.5rem 1rem;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -515,7 +515,7 @@
   margin-bottom: 1.5rem;
   padding: 1rem;
   background: var(--neutral-50);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   border: 1px solid var(--border-light);
 }
 
@@ -541,7 +541,7 @@
 
 .availability-badge {
   padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -572,14 +572,14 @@
   width: 100%;
   height: 0.5rem;
   background: var(--neutral-200);
-  border-radius: 1rem;
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .participants-progress-fill {
   height: 100%;
   transition: width 0.3s ease, background-color 0.3s ease;
-  border-radius: 1rem;
+  border-radius: 8px;
 }
 
 .participants-progress-fill.available {
@@ -637,7 +637,7 @@
   background: var(--primary-500); /* Primary-500 for main action button */
   color: var(--white); /* White text on primary */
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -666,7 +666,7 @@
   background: var(--success-500);
   color: var(--white);
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -695,7 +695,7 @@
   background: var(--success-500, #10b981);
   color: var(--white);
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -714,7 +714,7 @@
   background: var(--warning-500, #f59e0b);
   color: var(--white);
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -733,7 +733,7 @@
   background: var(--info-500, #3b82f6);
   color: var(--white);
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -752,7 +752,7 @@
   background: var(--error-500, #ef4444);
   color: var(--white);
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: not-allowed;
@@ -771,7 +771,7 @@
   background: var(--secondary-500); /* Secondary color for differentiation */
   color: var(--white);
   border: none;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -797,10 +797,10 @@
   flex: 1;
   min-width: 120px;
   padding: 0.875rem 1rem;
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: var(--neutral-50);
   color: #991b1b;
   border: 2px solid #ef4444;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -828,7 +828,7 @@
 }
 
 .event-cancel-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: var(--neutral-50);
   color: var(--white);
   transform: translateY(-2px);
   border: 2px solid var(--error-500);
@@ -906,7 +906,7 @@
 .pagination-button {
   padding: 0.75rem 1.5rem;
   border: 2px solid var(--border-medium); /* Neutral-300 for borders */
-  border-radius: 50px;
+  border-radius: 999px;
   background: var(--white); /* White background */
   color: var(--text-primary); /* Neutral-700 for text */
   font-size: 0.9375rem;
@@ -1062,7 +1062,7 @@
 
 .modal-content {
   background: var(--white);
-  border-radius: 1.5rem;
+  border-radius: 8px;
   max-width: 700px;
   width: 100%;
   max-height: 90vh;
@@ -1086,8 +1086,8 @@
 .modal-header {
   position: relative;
   height: 250px;
-  background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-200) 100%);
-  border-radius: 1.5rem 1.5rem 0 0;
+  background: var(--neutral-50);
+  border-radius: 8px 8px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1129,7 +1129,7 @@
   top: 1rem;
   left: 1rem;
   padding: 0.625rem 1.25rem;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -1162,7 +1162,7 @@
   gap: 1rem;
   padding: 1rem;
   background: var(--neutral-50);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   border: 1px solid var(--border-light);
 }
 
@@ -1198,7 +1198,7 @@
 
 .modal-availability-badge {
   padding: 0.25rem 0.625rem;
-  border-radius: 1rem;
+  border-radius: 8px;
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -1209,7 +1209,7 @@
   margin: 1.5rem 0;
   padding: 1rem;
   background: var(--neutral-50);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   border: 1px solid var(--border-light);
 }
 
@@ -1218,7 +1218,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: 6px;
 }
 
 .availability-message.success {
@@ -1261,14 +1261,14 @@
   color: var(--text-primary);
   background: var(--neutral-50);
   padding: 1.5rem;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   border-left: 4px solid var(--primary-400);
 }
 
 .modal-footer {
   padding: 1.5rem 2rem;
   background: var(--neutral-50);
-  border-radius: 0 0 1.5rem 1.5rem;
+  border-radius: 0 0 8px 8px;
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
@@ -1276,7 +1276,7 @@
 
 .modal-action-button {
   padding: 0.875rem 2rem;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -1310,7 +1310,7 @@
 }
 
 .modal-action-button.danger {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: var(--neutral-50);
   color: #991b1b;
   border: 2px solid #ef4444;
   position: relative;
@@ -1336,7 +1336,7 @@
 }
 
 .modal-action-button.danger:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: var(--neutral-50);
   color: var(--white);
   transform: translateY(-2px);
   border: 2px solid var(--error-500);
@@ -1366,12 +1366,12 @@
 @media (max-width: 768px) {
   .modal-content {
     max-height: 95vh;
-    border-radius: 1rem;
+    border-radius: 8px;
   }
 
   .modal-header {
     height: 200px;
-    border-radius: 1rem 1rem 0 0;
+    border-radius: 8px 8px 0 0;
   }
 
   .modal-header-icon {
@@ -1426,7 +1426,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: capitalize;
@@ -1438,31 +1438,31 @@
 }
 
 .registration-pending {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  background: var(--neutral-50);
   color: #92400e;
   border: 1px solid #fbbf24;
 }
 
 .registration-approved {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  background: var(--neutral-50);
   color: #065f46;
   border: 1px solid #10b981;
 }
 
 .registration-rejected {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: var(--neutral-50);
   color: #991b1b;
   border: 1px solid #ef4444;
 }
 
 .registration-waiting {
-  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  background: var(--neutral-50);
   color: #3730a3;
   border: 1px solid #6366f1;
 }
 
 .registration-cancelled {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: var(--neutral-50);
   color: #374151;
   border: 1px solid #9ca3af;
 }

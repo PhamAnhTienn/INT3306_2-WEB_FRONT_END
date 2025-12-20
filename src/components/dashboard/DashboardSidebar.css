@@ -72,7 +72,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   transition: all 0.15s ease;
-  border-radius: 0.5rem;
+  border-radius: 4px;
   margin: 0 0.75rem;
   width: calc(100% - 1.5rem);
   background: transparent;
@@ -90,7 +90,7 @@
 
 .sidebar-menu li.active a,
 .sidebar-menu li.active .menu-button {
-  background: var(--gradient-primary);
+  background: var(--primary-500);
   color: var(--white);
   border: 1px solid var(--primary-600);
 }
@@ -120,7 +120,7 @@
   padding: 0.75rem 1rem;
   background: transparent;
   border: 1px solid var(--border-medium);
-  border-radius: 0.5rem;
+  border-radius: 4px;
   color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 600;

@@ -33,7 +33,7 @@
 
 .dashboard-card {
   background: #fff;
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid var(--border-light);
   height: 100%;
@@ -66,7 +66,7 @@
 .event-item {
   padding: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
@@ -129,19 +129,19 @@
 }
 
 .progress-bar-info {
-  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+  background: var(--info);
 }
 
 .progress-bar-success {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .progress-bar-warning {
-  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+  background: var(--warning);
 }
 
 .progress-bar-danger {
-  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  background: var(--error);
 }
 
 /* Registrations List */
@@ -158,7 +158,7 @@
   gap: 1rem;
   padding: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
@@ -191,7 +191,7 @@
 
 .registration-status {
   padding: 0.25rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -226,7 +226,7 @@
   gap: 1rem;
   padding: 1.25rem;
   background: var(--neutral-50, #f9fafb);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   border: 1px solid var(--border-light, #e5e7eb);
   transition: all 0.3s ease;
 }
@@ -239,7 +239,7 @@
 .stat-icon {
   width: 48px;
   height: 48px;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -248,23 +248,23 @@
 }
 
 .stat-icon-total {
-  background: linear-gradient(310deg, #7928ca 0%, #ff0080 100%);
+  background: var(--primary-500);
 }
 
 .stat-icon-pending {
-  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+  background: var(--warning);
 }
 
 .stat-icon-approved {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .stat-icon-rejected {
-  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  background: var(--error);
 }
 
 .stat-icon-rate {
-  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+  background: var(--info);
 }
 
 .stat-content {
@@ -302,7 +302,7 @@
   padding: 0.25rem 0.75rem;
   background: rgba(251, 207, 51, 0.2);
   color: #f59e0b;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -313,7 +313,7 @@
   padding: 0.25rem 0.75rem;
   background: rgba(245, 57, 57, 0.2);
   color: #f53939;
-  border-radius: 50px;
+  border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
 }

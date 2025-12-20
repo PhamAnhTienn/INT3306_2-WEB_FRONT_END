@@ -72,7 +72,7 @@
 }
 
 .comment-media-item {
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
   background: var(--neutral-100);
   border: 1px solid #e5e7ef;
@@ -96,7 +96,7 @@
   gap: 0.25rem;
   padding: 0.3rem 0.55rem;
   margin-bottom: 0.25rem;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   background: var(--primary-50, #fff4e6);
   color: var(--primary-700, #995200);
   font-size: 0.78rem;
@@ -107,7 +107,7 @@
   display: inline-block;
   max-width: 100%;
   padding: 0.4rem 0.65rem;
-  border-radius: 0.65rem;
+  border-radius: 6px;
   background: var(--neutral-100, #f3f4f6);
   color: var(--text-dark, #1f2937);
   line-height: 1.45;
@@ -142,7 +142,7 @@
 .comment-actions .like-button {
   flex: 0 0 auto;
   padding: 0.35rem 0.6rem;
-  border-radius: 10px;
+  border-radius: 6px;
   border: 1px solid #e5e7ef;
   background: #ffffff;
   gap: 0.3rem;
@@ -167,7 +167,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 

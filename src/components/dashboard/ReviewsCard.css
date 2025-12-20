@@ -1,6 +1,6 @@
 .reviews-card {
   background: #fff;
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid var(--border-light);
   height: 100%;
@@ -62,17 +62,17 @@
 }
 
 .progress-bar-success {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .progress-bar-info {
-  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+  background: var(--info);
 }
 
 .progress-bar-warning {
-  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+  background: var(--warning);
 }
 
 .progress-bar-danger {
-  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  background: var(--error);
 }

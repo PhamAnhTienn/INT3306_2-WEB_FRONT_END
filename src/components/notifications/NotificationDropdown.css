@@ -5,7 +5,7 @@
   width: 320px;
   max-height: 420px;
   background: var(--bg-white, #ffffff);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   border: 2px solid var(--border-dark);
   padding: 0.75rem 0.75rem 0.5rem;
   z-index: 1000;
@@ -70,7 +70,7 @@
   padding: 0.5rem;
   width: 100%;
   background: var(--neutral-100, #f3f4f6);
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.8rem;
   color: var(--text-dark, #1f2937);
   display: flex;

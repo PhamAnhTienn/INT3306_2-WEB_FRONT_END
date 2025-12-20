@@ -11,7 +11,7 @@
 
 .file-upload-dropzone {
   border: 2px dashed #cbd5e0;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   padding: 1.5rem;
   text-align: center;
   background-color: #f7fafc;
@@ -47,7 +47,7 @@
 .file-upload-list {
   margin-top: 0.5rem;
   background-color: #ffffff;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   border: 1px solid #e2e8f0;
   padding: 0.75rem 1rem;
 }

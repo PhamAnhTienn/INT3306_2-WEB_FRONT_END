@@ -25,7 +25,7 @@
 .timeline-icon {
   width: 40px;
   height: 40px;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,27 +37,27 @@
 }
 
 .timeline-icon-primary {
-  background: var(--gradient-primary);
+  background: var(--primary-500);
   color: var(--white);
 }
 
 .timeline-icon-success {
-  background: var(--gradient-success);
+  background: var(--success);
   color: var(--white);
 }
 
 .timeline-icon-info {
-  background: var(--gradient-cool);
+  background: var(--secondary-500);
   color: var(--white);
 }
 
 .timeline-icon-warning {
-  background: linear-gradient(310deg, var(--warning) 0%, var(--warning-dark) 100%);
+  background: var(--warning);
   color: var(--white);
 }
 
 .timeline-icon-dark {
-  background: linear-gradient(310deg, var(--neutral-900) 0%, var(--neutral-700) 100%);
+  background: var(--neutral-800);
   color: var(--white);
 }
 

@@ -13,7 +13,7 @@
 .edit-post-modal {
   width: min(720px, 95vw);
   background: #fff;
-  border-radius: 14px;
+  border-radius: 8px;
   border: 2px solid var(--border-medium);
   overflow: hidden;
   display: flex;
@@ -57,7 +57,7 @@
 .edit-post-body textarea {
   width: 100%;
   border: 1px solid #e5e7ef;
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 0.85rem 1rem;
   font-size: 0.95rem;
   resize: vertical;
@@ -85,7 +85,7 @@
 .edit-post-media-item {
   position: relative;
   border: 1px solid #e5e7ef;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   background: #f9fafb;
   aspect-ratio: 4 / 3;
@@ -129,7 +129,7 @@
   gap: 0.5rem;
   padding: 0.6rem 1rem;
   border: 1.5px dashed #d1d5db;
-  border-radius: 10px;
+  border-radius: 6px;
   color: #374151;
   cursor: pointer;
   width: fit-content;
@@ -154,7 +154,7 @@
 
 .btn-secondary {
   padding: 0.55rem 1.1rem;
-  border-radius: 10px;
+  border-radius: 6px;
   border: 1px solid #e5e7ef;
   background: #f9fafb;
   color: #111827;
@@ -168,7 +168,7 @@
 
 .btn-primary {
   padding: 0.6rem 1.25rem;
-  border-radius: 10px;
+  border-radius: 6px;
   border: 2px solid #111827;
   background: #111827;
   color: #fff;

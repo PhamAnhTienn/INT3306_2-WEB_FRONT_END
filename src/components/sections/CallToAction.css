@@ -12,7 +12,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(29, 53, 87, 0.9), rgba(42, 157, 143, 0.8));
+  background: rgba(29, 53, 87, 0.85);
 }
 
 .cta-content {

@@ -3,7 +3,7 @@
   min-width: 320px;
   max-width: 400px;
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 2px solid var(--border-medium);
   z-index: 10000;
   cursor: pointer;
@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-500);
 }
 
 .toast-icon {
@@ -54,15 +54,15 @@
 }
 
 .toast-success .toast-icon-wrapper {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background: var(--primary-500);
 }
 
 .toast-error .toast-icon-wrapper {
-  background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+  background: var(--primary-500);
 }
 
 .toast-info .toast-icon-wrapper {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-500);
 }
 
 .toast-text {
@@ -111,17 +111,17 @@
   bottom: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-500);
   width: 100%;
   animation: progressBar 5s linear forwards;
 }
 
 .toast-success .toast-progress-bar {
-  background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+  background: var(--primary-500);
 }
 
 .toast-error .toast-progress-bar {
-  background: linear-gradient(90deg, #eb3349 0%, #f45c43 100%);
+  background: var(--primary-500);
 }
 
 @keyframes slideInRight {

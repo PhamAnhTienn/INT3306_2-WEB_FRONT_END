@@ -33,7 +33,7 @@
 
 .dashboard-card {
   background: #fff;
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid var(--border-light);
   height: 100%;
@@ -73,7 +73,7 @@
   gap: 1rem;
   padding: 1rem;
   background: #f8f9fa;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
@@ -86,7 +86,7 @@
 .stat-icon {
   width: 48px;
   height: 48px;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,39 +95,39 @@
 }
 
 .stat-icon-volunteer {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .stat-icon-manager {
-  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+  background: var(--info);
 }
 
 .stat-icon-admin {
-  background: linear-gradient(310deg, #7928ca 0%, #ff0080 100%);
+  background: var(--primary-500);
 }
 
 .stat-icon-enabled {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .stat-icon-disabled {
-  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  background: var(--error);
 }
 
 .stat-icon-planned {
-  background: linear-gradient(310deg, #2152ff 0%, #21d4fd 100%);
+  background: var(--info);
 }
 
 .stat-icon-ongoing {
-  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+  background: var(--warning);
 }
 
 .stat-icon-completed {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .stat-icon-cancelled {
-  background: linear-gradient(310deg, #627594 0%, #a8b8d8 100%);
+  background: var(--secondary-500);
 }
 
 .stat-content {
@@ -160,7 +160,7 @@
   gap: 1rem;
   padding: 1.25rem;
   background: #f8f9fa;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
@@ -170,15 +170,15 @@
 }
 
 .stat-icon-pending {
-  background: linear-gradient(310deg, #f53939 0%, #fbcf33 100%);
+  background: var(--warning);
 }
 
 .stat-icon-approved {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
 }
 
 .stat-icon-rejected {
-  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  background: var(--error);
 }
 
 /* Time Statistics */
@@ -191,7 +191,7 @@
 .time-stats-section {
   padding: 1.5rem;
   background: #f8f9fa;
-  border-radius: 0.75rem;
+  border-radius: 6px;
 }
 
 .section-title {
@@ -241,7 +241,7 @@
   gap: 0.25rem;
   font-size: 0.75rem;
   padding: 0.125rem 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: 4px;
 }
 
 .growth-indicator.positive {
@@ -269,7 +269,7 @@
   align-items: flex-start;
   padding: 1.25rem;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   transition: all 0.15s ease;
 }
 
@@ -339,7 +339,7 @@
   gap: 0.375rem;
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
@@ -352,7 +352,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(310deg, #7928ca 0%, #ff0080 100%);
+  background: var(--primary-500);
   color: #fff;
 }
 
@@ -362,7 +362,7 @@
 }
 
 .btn-success {
-  background: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+  background: var(--success);
   color: #fff;
 }
 
@@ -372,7 +372,7 @@
 }
 
 .btn-danger {
-  background: linear-gradient(310deg, #ea0606 0%, #ff667c 100%);
+  background: var(--error);
   color: #fff;
 }
 
@@ -448,7 +448,7 @@
 
 .role-badge {
   padding: 0.25rem 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: 4px;
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -472,7 +472,7 @@
 
 .status-badge {
   padding: 0.25rem 0.75rem;
-  border-radius: 0.375rem;
+  border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
 }

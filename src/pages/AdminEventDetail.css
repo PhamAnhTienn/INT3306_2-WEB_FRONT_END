@@ -179,7 +179,7 @@
   padding: 0.25rem 0.75rem;
   background: var(--primary-color, #007bff);
   color: white;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 0.875rem;
 }
 
@@ -223,7 +223,7 @@
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
 }

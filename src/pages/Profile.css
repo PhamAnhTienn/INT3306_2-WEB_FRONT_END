@@ -8,7 +8,7 @@
 .profile-loading,
 .profile-error {
   background: var(--bg-white, #ffffff);
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 2rem;
   text-align: center;
   border: 1px solid var(--border-light);
@@ -29,7 +29,7 @@
   align-items: center;
   gap: 1.5rem;
   background: var(--bg-white, #ffffff);
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem 2rem;
   border: 1px solid var(--border-light);
 }
@@ -90,7 +90,7 @@
 
 .profile-card {
   background: var(--bg-white, #ffffff);
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid var(--border-light);
 }
@@ -122,7 +122,7 @@
 .info-icon {
   width: 36px;
   height: 36px;
-  border-radius: 0.75rem;
+  border-radius: 6px;
   background: var(--neutral-100, #f3f4f6);
   display: flex;
   align-items: center;

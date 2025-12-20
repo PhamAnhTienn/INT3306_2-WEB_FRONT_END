@@ -44,7 +44,7 @@
   border: 1px solid #e5e7ef;
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +84,7 @@
   gap: 0.5rem;
   padding: 0.5rem 0.85rem;
   background: #f4f6fb;
-  border-radius: 18px;
+  border-radius: 8px;
   color: #374151;
   border: 1px solid #e5e7ef;
 }
@@ -110,7 +110,7 @@
   background: var(--primary-500, #3b82f6);
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -157,7 +157,7 @@
   padding: 0.625rem 1.25rem;
   background: var(--neutral-200, #e5e7eb);
   color: var(--text-secondary, #6b7280);
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.875rem;
   white-space: nowrap;
   cursor: not-allowed;
@@ -196,7 +196,7 @@
 .sidebar-card {
   background: #ffffff;
   border: 2px solid #e5e7ef;
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 0.9rem 1rem;
 }
 
@@ -226,7 +226,7 @@
 /* Create Post Card */
 .create-post-card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 1.2rem;
   margin-bottom: 1.25rem;
   border: 2px solid #e5e7ef;
@@ -249,7 +249,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+  background: var(--primary-500) 0%, var(--primary-600) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -271,7 +271,7 @@
   flex: 1;
   padding: 0.875rem 1.25rem;
   border: 2px solid var(--primary-100);
-  border-radius: 24px;
+  border-radius: 8px;
   background: var(--white);
   color: var(--text-secondary);
   cursor: pointer;
@@ -287,9 +287,9 @@
 
 /* Registration Notice */
 .registration-notice {
-  background: linear-gradient(135deg, var(--warning-100) 0%, var(--warning-50) 100%);
+  background: var(--primary-500) 0%, var(--warning-50) 100%);
   border: 2px solid var(--warning-500);
-  border-radius: 16px;
+  border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -310,8 +310,8 @@
 }
 
 .no-posts {
-  background: linear-gradient(135deg, var(--white) 0%, var(--secondary-50) 100%);
-  border-radius: 20px;
+  background: var(--primary-500) 0%, var(--secondary-50) 100%);
+  border-radius: 8px;
   padding: 4rem 2rem;
   text-align: center;
   border: 2px solid var(--secondary-300);
@@ -344,7 +344,7 @@
 /* Post Card */
 .post-card {
   background: #ffffff;
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 1.25rem;
   border: 2px solid #e5e7ef;
   transition: transform 0.2s ease, border-color 0.2s ease;
@@ -374,7 +374,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--secondary-400) 0%, var(--secondary-600) 100%);
+  background: var(--primary-500) 0%, var(--secondary-600) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -407,7 +407,7 @@
 .btn-post-menu {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: 6px;
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -447,7 +447,7 @@
   color: #fff;
   border: 1px solid #111827;
   padding: 0.7rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -479,7 +479,7 @@
   display: grid;
   gap: 0.5rem;
   margin-top: 1rem;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -501,7 +501,7 @@
 }
 
 .post-image {
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--neutral-100);
   position: relative;
@@ -524,7 +524,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: rgba(0, 0, 0, 0.05) 100%);
   pointer-events: none;
 }
 
@@ -573,7 +573,7 @@
   max-width: 90vw;
   max-height: 90vh;
   background: #0b0b0b;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   padding: 2.5rem 3rem;
   display: flex;
@@ -667,7 +667,7 @@
   padding: 0.75rem 0.875rem;
   background: transparent;
   border: none;
-  border-radius: 10px;
+  border-radius: 6px;
   color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 700;
@@ -702,8 +702,8 @@
 }
 
 .access-restriction-card {
-  background: linear-gradient(135deg, var(--white) 0%, var(--neutral-50) 100%);
-  border-radius: 24px;
+  background: var(--primary-500) 0%, var(--neutral-50) 100%);
+  border-radius: 8px;
   padding: 3rem 2rem;
   text-align: center;
   border: 3px solid var(--border-medium);
@@ -722,27 +722,27 @@
 }
 
 .restriction-icon.not-registered {
-  background: linear-gradient(135deg, var(--warning-400) 0%, var(--warning-600) 100%);
+  background: var(--primary-500) 0%, var(--warning-600) 100%);
   color: var(--white);
 }
 
 .restriction-icon.pending {
-  background: linear-gradient(135deg, var(--info-400) 0%, var(--info-600) 100%);
+  background: var(--primary-500) 0%, var(--info-600) 100%);
   color: var(--white);
 }
 
 .restriction-icon.rejected {
-  background: linear-gradient(135deg, var(--error-400) 0%, var(--error-600) 100%);
+  background: var(--primary-500) 0%, var(--error-600) 100%);
   color: var(--white);
 }
 
 .restriction-icon.waiting {
-  background: linear-gradient(135deg, var(--secondary-400) 0%, var(--secondary-600) 100%);
+  background: var(--primary-500) 0%, var(--secondary-600) 100%);
   color: var(--white);
 }
 
 .restriction-icon.default {
-  background: linear-gradient(135deg, var(--neutral-400) 0%, var(--neutral-600) 100%);
+  background: var(--primary-500) 0%, var(--neutral-600) 100%);
   color: var(--white);
 }
 
@@ -761,8 +761,8 @@
 }
 
 .registration-info {
-  background: linear-gradient(135deg, var(--primary-50) 0%, var(--secondary-50) 100%);
-  border-radius: 12px;
+  background: var(--primary-500) 0%, var(--secondary-50) 100%);
+  border-radius: 8px;
   padding: 1.5rem;
   margin: 1.5rem 0;
   text-align: left;
@@ -783,11 +783,11 @@
 }
 
 .btn-register-event {
-  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+  background: var(--primary-500) 0%, var(--primary-600) 100%);
   color: var(--white);
   border: none;
   padding: 1rem 2.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
@@ -811,7 +811,7 @@
   color: var(--primary-600);
   border: 2px solid var(--primary-500);
   padding: 0.875rem 2rem;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 0.9375rem;
   font-weight: 700;
   cursor: pointer;
@@ -828,11 +828,11 @@
 /* Cancel Registration Button */
 .btn-cancel-registration,
 .btn-cancel-registration-header {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: var(--primary-500);
   color: white;
   border: 2px solid #dc2626;
   padding: 0.875rem 1.75rem;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -853,7 +853,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: rgba(255, 255, 255, 0.1), transparent);
   transition: left 0.5s ease;
 }
 
@@ -864,7 +864,7 @@
 
 .btn-cancel-registration:hover:not(:disabled),
 .btn-cancel-registration-header:hover:not(:disabled) {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  background: var(--primary-500);
   transform: translateY(-2px);
   border-width: 3px;
 }

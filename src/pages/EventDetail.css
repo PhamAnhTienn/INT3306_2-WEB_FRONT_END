@@ -45,7 +45,7 @@
   padding: 0.5rem 1rem;
   background: var(--neutral-100, #f3f4f6);
   border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 0.5rem;
+  border-radius: 6px;
   color: var(--text-dark, #1f2937);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -88,7 +88,7 @@
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   border: 1px solid var(--border-medium, #d1d5db);
-  border-radius: 0.5rem;
+  border-radius: 6px;
   background: var(--white, #ffffff);
   color: var(--text-dark, #1f2937);
   font-size: 0.875rem;
@@ -124,7 +124,7 @@
 
 .event-detail-card {
   background: var(--white, #ffffff);
-  border-radius: 1rem;
+  border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid var(--border-light);
 }
@@ -219,7 +219,7 @@
   padding: 0.375rem 0.75rem;
   background: var(--primary-50, #eff6ff);
   color: var(--primary-700, #1d4ed8);
-  border-radius: 1rem;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -245,7 +245,7 @@
   background: var(--primary-500, #3b82f6);
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
@@ -288,7 +288,7 @@
 
 .status-badge {
   padding: 0.375rem 0.75rem;
-  border-radius: 1rem;
+  border-radius: 8px;
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -337,7 +337,7 @@
 
 .qr-modal-content {
   background: var(--white, #ffffff);
-  border-radius: 1rem;
+  border-radius: 8px;
   max-width: 500px;
   width: 100%;
   max-height: 90vh;
@@ -370,7 +370,7 @@
   background: transparent;
   color: var(--text-secondary, #6b7280);
   cursor: pointer;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
@@ -423,7 +423,7 @@
   background: var(--primary-500, #3b82f6);
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -446,7 +446,7 @@
   max-width: 300px;
   height: auto;
   border: 1px solid var(--border-light, #e5e7eb);
-  border-radius: 0.5rem;
+  border-radius: 6px;
   padding: 1rem;
   background: var(--white, #ffffff);
 }

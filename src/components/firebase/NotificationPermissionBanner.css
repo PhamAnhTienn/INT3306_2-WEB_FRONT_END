@@ -3,8 +3,8 @@
   bottom: 20px;
   right: 20px;
   max-width: 400px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
-  border-radius: 12px;
+  background: var(--primary-500);
+  border-radius: 8px;
   border: 3px solid var(--border-dark);
   border: 1px solid rgba(255, 138, 0, 0.2);
   z-index: 1000;
@@ -34,8 +34,8 @@
   width: 48px;
   height: 48px;
   min-width: 48px;
-  background: linear-gradient(135deg, #FF8A00 0%, #FFA133 100%);
-  border-radius: 12px;
+  background: var(--primary-500);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +45,7 @@
 }
 
 .notification-permission-icon.blocked-icon {
-  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  background: var(--primary-500);
   border: 2px solid var(--error-500);
 }
 
@@ -78,7 +78,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1rem;
-  background: linear-gradient(135deg, #FF8A00 0%, #FFA133 100%);
+  background: var(--primary-500);
   color: white;
   border: none;
   border-radius: 8px;
