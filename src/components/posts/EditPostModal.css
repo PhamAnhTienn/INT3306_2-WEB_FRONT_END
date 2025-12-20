@@ -56,7 +56,7 @@
 
 .edit-post-body textarea {
   width: 100%;
-  border: 1px solid #e5e7ef;
+  border: 2px solid #e5e7ef;
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
   font-size: 0.95rem;
@@ -67,7 +67,6 @@
 
 .edit-post-body textarea:focus {
   border-color: #111827;
-  border-width: 2px;
 }
 
 .edit-post-error {

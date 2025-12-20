@@ -28,7 +28,7 @@ const Footer = () => {
           <div className="footer-grid" style={{ gridTemplateColumns: '1.5fr 1fr 1fr' }}>
             <div className="footer-col">
               <div className="logo">
-                <img src="/logo.svg" alt="Voluntarius" className="logo-img" />
+                <img src="/logo.png" alt="Voluntarius" className="logo-img" />
                 <span className="logo-text">Voluntarius</span>
               </div>
               <p className="footer-desc">

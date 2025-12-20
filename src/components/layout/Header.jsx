@@ -38,7 +38,7 @@ const Header = () => {
         <div className="container">
           <div className="header-main-content">
             <Link to="/" className="logo">
-              <img src="/logo.svg" alt="Voluntarius" className="logo-img" />
+              <img src="/logo.png" alt="Voluntarius" className="logo-img" />
               <span className="logo-text">Voluntarius</span>
             </Link>
 

@@ -360,7 +360,7 @@
 .form-control {
   width: 100%;
   padding: var(--space-3);
-  border: 1px solid var(--border-color, #e0e0e0);
+  border: 2px solid var(--border-color, #e0e0e0);
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 1rem;
@@ -369,7 +369,6 @@
 .form-control:focus {
   outline: none;
   border-color: var(--primary-color, #007bff);
-  border-width: 2px;
 }
 
 .btn {

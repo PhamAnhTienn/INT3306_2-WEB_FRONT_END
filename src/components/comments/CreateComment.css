@@ -20,11 +20,11 @@
   resize: vertical;
   transition: all 0.2s ease;
   background: var(--white, #ffffff);
+  border: 2px solid var(--border-light);
 }
 
 .create-comment-input:focus {
   border-color: var(--primary-500, #3b82f6);
-  border-width: 2px;
 }
 
 .create-comment-input::placeholder {
@@ -167,7 +167,7 @@
   padding: var(--space-2) var(--space-4);
   background: #111827;
   color: white;
-  border: 1px solid #111827;
+  border: 2px solid #111827;
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 700;
@@ -179,7 +179,6 @@
   background: #0f172a;
   border-color: #0f172a;
   transform: translateY(-1px);
-  border-width: 2px;
 }
 
 .btn-submit-comment:disabled {

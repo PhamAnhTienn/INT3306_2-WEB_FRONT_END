@@ -97,7 +97,7 @@
 .tag-selector-search-input {
   width: 100%;
   padding: var(--space-2) var(--space-10) var(--space-2) var(--space-8);
-  border: 1px solid #e2e8f0;
+  border: 2px solid #e2e8f0;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: #2d3748;
@@ -108,7 +108,6 @@
 
 .tag-selector-search-input:focus {
   border-color: #667eea;
-  border-width: 2px;
 }
 
 .tag-selector-search-input::placeholder {

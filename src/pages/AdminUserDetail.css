@@ -321,7 +321,7 @@
 .modal-body textarea {
   width: 100%;
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--border-light);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
 }
@@ -331,7 +331,6 @@
 .modal-body textarea:focus {
   outline: none;
   border-color: var(--primary-500);
-  border-width: 2px;
 }
 
 .modal-body textarea {

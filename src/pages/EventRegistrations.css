@@ -43,7 +43,7 @@
 
 .filter-select {
   padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--border-medium, #d1d5db);
+  border: 2px solid var(--border-medium, #d1d5db);
   border-radius: var(--radius-md);
   background: var(--white, #ffffff);
   color: var(--text-dark, #1f2937);
@@ -59,7 +59,6 @@
 .filter-select:focus {
   outline: none;
   border-color: var(--primary-500, #3b82f6);
-  border-width: 2px;
 }
 
 .filter-checkbox-group {
@@ -465,7 +464,7 @@
 .reject-reason-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid var(--border-medium, #d1d5db);
+  border: 2px solid var(--border-medium, #d1d5db);
   border-radius: 6px;
   font-size: 0.875rem;
   font-family: inherit;
@@ -478,7 +477,6 @@
 .reject-reason-input:focus {
   outline: none;
   border-color: var(--primary-500, #3b82f6);
-  border-width: 2px;
 }
 
 .reject-reason-input::placeholder {

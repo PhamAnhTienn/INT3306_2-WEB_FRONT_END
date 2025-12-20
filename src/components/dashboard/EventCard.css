@@ -34,7 +34,6 @@
 .event-card:hover {
   transform: translateY(-4px) translateZ(0);
   border-color: var(--primary-400);
-  border-width: 2px;
   z-index: 10;
 }
 

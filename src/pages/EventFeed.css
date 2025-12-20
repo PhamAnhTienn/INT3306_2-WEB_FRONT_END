@@ -482,11 +482,11 @@
   outline: none;
   font-size: 0.9375rem;
   transition: all 0.3s ease;
+  border: 2px solid var(--border-light);
 }
 
 .create-post-input-placeholder:hover {
   border-color: var(--primary-400);
-  border-width: 2px;
 }
 
 /* Registration Notice */
@@ -1087,13 +1087,11 @@
 .btn-cancel-registration-header:hover:not(:disabled) {
   background: var(--primary-500);
   transform: translateY(-2px);
-  border-width: 3px;
 }
 
 .btn-cancel-registration:active:not(:disabled),
 .btn-cancel-registration-header:active:not(:disabled) {
   transform: translateY(0);
-  border-width: 2px;
 }
 
 .btn-cancel-registration:disabled,

@@ -176,18 +176,18 @@
   padding: var(--space-3) var(--space-8);
   border-radius: var(--radius-md);
   font-weight: 600;
-  transition: all 0.3s;
+  transition: opacity 0.3s;
 }
 
-.btn-primary {
-  background: var(--primary-color);
-  color: var(--white);
+.header-actions .btn-primary {
+  transition: opacity 0.3s;
 }
 
-.btn-primary:hover {
-  background: #d12d3a;
-  transform: translateY(-2px);
-  border: 1px solid var(--primary-700);
+.header-actions .btn-primary:hover {
+  background: var(--primary-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.9;
 }
 
 @media (max-width: 992px) {

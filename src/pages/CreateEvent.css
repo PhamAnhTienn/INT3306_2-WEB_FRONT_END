@@ -96,12 +96,12 @@
   outline: none;
   transition: all 0.2s ease;
   font-family: inherit;
+  border: 2px solid var(--border-medium);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   border-color: var(--primary-500, #3b82f6);
-  border-width: 2px;
 }
 
 .form-group input.error,
@@ -111,7 +111,7 @@
 
 .form-group input.error:focus,
 .form-group textarea.error:focus {
-  border-width: 2px;
+  border-color: var(--error-600, #dc2626);
 }
 
 .form-group textarea {

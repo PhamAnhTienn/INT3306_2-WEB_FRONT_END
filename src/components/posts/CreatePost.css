@@ -179,7 +179,6 @@
   background: var(--primary-500);
   color: var(--white);
   border-color: var(--primary-600);
-  border-width: 2px;
   transform: translateY(-2px);
 }
 
@@ -243,7 +242,7 @@
   padding: var(--space-3) var(--space-8);
   background: var(--neutral-50);
   color: white;
-  border: 1px solid var(--primary-700);
+  border: 2px solid var(--primary-700);
   border-radius: var(--radius-md);
   font-size: 0.9375rem;
   font-weight: 700;
@@ -253,7 +252,6 @@
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-3px);
-  border-width: 2px;
   border-color: var(--primary-800);
 }
 

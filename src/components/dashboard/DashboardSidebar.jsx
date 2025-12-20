@@ -43,7 +43,7 @@ const DashboardSidebar = ({ userRole, activeItem, onNavigate }) => {
     <aside className="dashboard-sidebar">
       <div className="sidebar-header">
         <div className="sidebar-logo">
-          <img src="/logo.svg" alt="Logo" />
+          <img src="/logo.png" alt="Logo" />
           <span>Voluntarius</span>
         </div>
       </div>

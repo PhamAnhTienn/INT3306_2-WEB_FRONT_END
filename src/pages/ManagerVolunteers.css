@@ -38,7 +38,7 @@
 .event-select {
   width: 100%;
   padding: var(--space-3) var(--space-4);
-  border: 1px solid #E5E7EB;
+  border: 2px solid #E5E7EB;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   color: #1F2937;
@@ -50,7 +50,6 @@
 .event-select:focus {
   outline: none;
   border-color: #FF8A00;
-  border-width: 2px;
 }
 
 .no-events-message {
@@ -140,7 +139,7 @@
 .search-box input {
   width: 100%;
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
-  border: 1px solid #E5E7EB;
+  border: 2px solid #E5E7EB;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   background: #FFFFFF;
@@ -150,7 +149,6 @@
 .search-box input:focus {
   outline: none;
   border-color: #FF8A00;
-  border-width: 2px;
 }
 
 .search-icon {
@@ -169,7 +167,7 @@
 .filter-box select {
   width: 100%;
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-10);
-  border: 1px solid #E5E7EB;
+  border: 2px solid #E5E7EB;
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   background: #FFFFFF;
@@ -181,7 +179,6 @@
 .filter-box select:focus {
   outline: none;
   border-color: #FF8A00;
-  border-width: 2px;
 }
 
 .filter-icon {

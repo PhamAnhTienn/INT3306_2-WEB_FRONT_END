@@ -268,14 +268,13 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: var(--space-5);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(0, 0, 0, 0.05);
   border-radius: var(--radius-md);
   transition: all 0.15s ease;
 }
 
 .pending-event-item:hover {
   border-color: rgba(121, 40, 202, 0.3);
-  border-width: 2px;
 }
 
 .pending-event-info {

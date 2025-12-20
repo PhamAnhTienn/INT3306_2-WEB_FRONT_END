@@ -5,7 +5,7 @@
   padding: var(--space-2) var(--space-4);
   background: var(--primary-500);
   color: white;
-  border: 1px solid var(--primary-600);
+  border: 2px solid var(--primary-600);
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 500;
@@ -15,7 +15,6 @@
 
 .role-switch-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  border-width: 2px;
   background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
 }
 
