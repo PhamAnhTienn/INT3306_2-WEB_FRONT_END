@@ -79,9 +79,11 @@ export const approveRegistration = async (eventId, registrationId) => {
 /**
  * Reject a registration
  */
-export const rejectRegistration = async (eventId, registrationId) => {
+export const rejectRegistration = async (eventId, registrationId, reason = null) => {
   try {
-    const response = await api.post(`/registrations/events/${eventId}/${registrationId}/rejected`);
+    const response = await api.post(`/registrations/events/${eventId}/${registrationId}/rejected`, {
+      reason: reason
+    });
     return response.data;
   } catch (error) {
     console.error(`Error rejecting registration ${registrationId}:`, error);

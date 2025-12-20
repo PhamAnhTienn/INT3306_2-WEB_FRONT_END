@@ -266,9 +266,10 @@ const Events = () => {
       return;
     }
 
-    // Check if already registered
-    if (event.registrationStatus) {
-      alert('You have already registered for this event.');
+    // Check if already registered - only block if status is REJECTED
+    // Allow re-registration for CANCELLED, PENDING, APPROVED, WAITING
+    if (event.registrationStatus === 'REJECTED') {
+      alert('Your registration for this event was rejected. You cannot register again.');
       return;
     }
 
@@ -659,6 +660,30 @@ const Events = () => {
                             <button className="event-rejected-button" disabled>
                               <FaTimes />
                               Rejected
+                            </button>
+                          )}
+                          {event.registrationStatus === 'CANCELLED' && (
+                            // Allow re-registration after cancellation
+                            <button 
+                              className="event-register-button"
+                              onClick={() => {
+                                const evtIdNum = Number(event.eventId);
+                                console.log('Register button clicked for cancelled event:', evtIdNum);
+                                handleRegisterEvent(evtIdNum);
+                              }}
+                              disabled={registering.has(Number(event.eventId))}
+                            >
+                              {registering.has(Number(event.eventId)) ? (
+                                <>
+                                  <FaSpinner className="spinning" />
+                                  Registering...
+                                </>
+                              ) : (
+                                <>
+                                  <FaSignInAlt />
+                                  Register Again
+                                </>
+                              )}
                             </button>
                           )}
                         </>

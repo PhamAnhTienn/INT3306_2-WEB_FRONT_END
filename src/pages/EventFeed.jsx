@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaEllipsisV, FaComment, FaLock, FaClock, FaUserTimes, FaUserCheck, FaExclamationTriangle, FaQrcode, FaUpload, FaSpinner, FaCheckCircle } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaMapMarkerAlt, FaUsers, FaEllipsisV, FaComment, FaLock, FaClock, FaUserTimes, FaUserCheck, FaExclamationTriangle, FaQrcode, FaUpload, FaSpinner, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import CreatePost from '../components/posts/CreatePost';
 import LikeButton from '../components/posts/LikeButton';
@@ -32,6 +32,7 @@ const EventFeed = () => {
   const [editingPost, setEditingPost] = useState(null);
   const [uploadingQR, setUploadingQR] = useState(false);
   const [qrUploadSuccess, setQrUploadSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [qrUploadError, setQrUploadError] = useState(null);
   const [cancelling, setCancelling] = useState(false);
 
@@ -228,9 +229,10 @@ const EventFeed = () => {
       return;
     }
 
-    // Check if already registered
-    if (userRegistrationStatus) {
-      alert('You have already registered for this event.');
+    // Check if already registered - only block if status is REJECTED
+    // Allow re-registration for CANCELLED, PENDING, APPROVED, WAITING
+    if (userRegistrationStatus === 'REJECTED') {
+      alert('Your registration for this event was rejected. You cannot register again.');
       return;
     }
 
@@ -323,23 +325,46 @@ const EventFeed = () => {
 
       // Upload QR code image - backend will automatically complete registration
       const response = await uploadEventQRCode(eventId, file);
-      if (response.success) {
+      
+      // Check if response is successful (handle both response.success and response.data.success)
+      const isSuccess = response?.success === true || (response?.data && response.data.success === true);
+      
+      if (isSuccess) {
+        // Set success state immediately
         setQrUploadSuccess(true);
+        setShowSuccessModal(true); // Show success modal
+        setQrUploadError(null); // Clear any previous errors
+        
         // Registration automatically updated to COMPLETED by backend
         setUserRegistrationStatus('COMPLETED');
-        // Refresh registration data to get updated status
-        const registrationResponse = await getRegistrationStatus(eventId);
-        if (registrationResponse.success && registrationResponse.data) {
-          setRegistrationData(registrationResponse.data);
-        }
-        // Refresh posts to ensure feed is accessible
-        await fetchPosts(0, true);
-        // Hide success message after 3 seconds
-        setTimeout(() => setQrUploadSuccess(false), 3000);
+        
+        // Refresh registration data to get updated status (non-blocking)
+        getRegistrationStatus(eventId).then(registrationResponse => {
+          if (registrationResponse.success && registrationResponse.data) {
+            setRegistrationData(registrationResponse.data);
+          }
+        }).catch(err => {
+          console.error('Error refreshing registration status:', err);
+        });
+        
+        // Refresh posts to ensure feed is accessible (non-blocking)
+        fetchPosts(0, true).catch(err => {
+          console.error('Error refreshing posts:', err);
+        });
+      } else {
+        // Backend returned success: false (e.g., cannot decode QR code)
+        const errorMessage = response?.message || response?.data?.message || 'Failed to upload QR code';
+        setQrUploadError(errorMessage);
+        setQrUploadSuccess(false);
+        // Auto-hide error message after 5 seconds
+        setTimeout(() => setQrUploadError(null), 5000);
       }
     } catch (err) {
       const message = err.response?.data?.message || err.message || 'Failed to upload QR code';
       setQrUploadError(message);
+      setQrUploadSuccess(false); // Clear any previous success messages
+      // Auto-hide error message after 5 seconds
+      setTimeout(() => setQrUploadError(null), 5000);
     } finally {
       setUploadingQR(false);
       // Reset file input
@@ -490,6 +515,14 @@ const EventFeed = () => {
                         <strong>Registered:</strong> {formatDate(registrationData.registeredAt)}
                       </p>
                     )}
+                    {registrationData?.rejectReason && (
+                      <div className="reject-reason-box">
+                        <p className="info-text">
+                          <strong>Reason:</strong>
+                        </p>
+                        <p className="reject-reason-text">{registrationData.rejectReason}</p>
+                      </div>
+                    )}
                   </div>
                   <div className="registration-actions">
                     <button 
@@ -540,6 +573,50 @@ const EventFeed = () => {
                         <>
                           <FaUserTimes />
                           Cancel Registration
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </>
+              ) : userRegistrationStatus === 'CANCELLED' ? (
+                // Cancelled - allow re-registration
+                <>
+                  <div className="restriction-icon cancelled">
+                    <FaUserTimes />
+                  </div>
+                  <h2>Registration Cancelled</h2>
+                  <p>Your registration for this event was cancelled. You can register again if you'd like to participate.</p>
+                  <div className="registration-info">
+                    <p className="info-text">
+                      <strong>Status:</strong> Cancelled
+                    </p>
+                    {registrationData?.registeredAt && (
+                      <p className="info-text">
+                        <strong>Registered:</strong> {formatDate(registrationData.registeredAt)}
+                      </p>
+                    )}
+                  </div>
+                  <div className="registration-actions">
+                    <button 
+                      className="btn-back-to-events"
+                      onClick={() => navigate('/my-events')}
+                    >
+                      Back to My Events
+                    </button>
+                    <button 
+                      className="btn-register-event"
+                      onClick={handleRegister}
+                      disabled={registering}
+                    >
+                      {registering ? (
+                        <>
+                          <FaSpinner className="spinning" />
+                          Registering...
+                        </>
+                      ) : (
+                        <>
+                          <FaSignInAlt />
+                          Register Again
                         </>
                       )}
                     </button>
@@ -644,8 +721,18 @@ const EventFeed = () => {
                   </>
                 )}
               </label>
+              {/* Inline success message - hidden when modal is shown */}
+              {qrUploadSuccess && !showSuccessModal && (
+                <div className="qr-upload-success">
+                  <FaCheckCircle />
+                  QR code uploaded successfully! Your registration has been marked as completed.
+                </div>
+              )}
               {qrUploadError && (
-                <div className="qr-upload-error">{qrUploadError}</div>
+                <div className="qr-upload-error">
+                  <FaTimesCircle />
+                  {qrUploadError}
+                </div>
               )}
             </div>
           )}
@@ -880,6 +967,42 @@ const EventFeed = () => {
           onClose={() => setEditingPost(null)}
           onUpdated={handlePostUpdated}
         />
+      )}
+
+      {/* QR Upload Success Modal */}
+      {showSuccessModal && (
+        <div className="modal-overlay" onClick={() => setShowSuccessModal(false)}>
+          <div className="modal-content qr-success-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-icon-success">
+                <FaCheckCircle />
+              </div>
+              <h3>Upload Successful!</h3>
+              <button
+                className="modal-close"
+                onClick={() => setShowSuccessModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <p className="success-message">
+                QR code uploaded successfully! Your registration has been marked as completed.
+              </p>
+              <p className="success-details">
+                You can now access the event feed and participate in discussions.
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn-close-modal"
+                onClick={() => setShowSuccessModal(false)}
+              >
+                Got it!
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </DashboardLayout>
   );

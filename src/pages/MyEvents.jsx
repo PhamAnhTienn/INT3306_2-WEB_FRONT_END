@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaUserTimes, FaSpinner } from 'react-icons/fa';
+import { FaSearch, FaMapMarkerAlt, FaCalendar, FaUser, FaUsers, FaClock, FaTimes, FaFileAlt, FaSignInAlt, FaUserTimes, FaSpinner, FaInfoCircle } from 'react-icons/fa';
 import { getMyEvents, cancelRegistration, getRegistrationStatus } from '../services/events/eventsService';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import './Events.css';
@@ -20,7 +20,10 @@ const MyEvents = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [registrationStatuses, setRegistrationStatuses] = useState({});
+  const [registrationData, setRegistrationData] = useState({}); // Store full registration data including rejectReason
   const [cancelling, setCancelling] = useState(null);
+  const [showReasonModal, setShowReasonModal] = useState(false);
+  const [selectedRejectReason, setSelectedRejectReason] = useState(null);
 
   const statusFilters = [
     { label: 'All', value: '' },
@@ -70,13 +73,15 @@ const MyEvents = () => {
         setTotalPages(totalPagesCalculated);
         setTotalElements(totalFiltered);
 
-        // Fetch registration statuses for all events
+        // Fetch registration statuses and data for all events
         const statusMap = {};
+        const dataMap = {};
         for (const event of paginatedEvents) {
           try {
             const regResponse = await getRegistrationStatus(event.eventId);
             if (regResponse.success && regResponse.data) {
               statusMap[event.eventId] = regResponse.data.status;
+              dataMap[event.eventId] = regResponse.data; // Store full registration data
             }
           } catch (err) {
             // If no registration found, status is null
@@ -84,6 +89,7 @@ const MyEvents = () => {
           }
         }
         setRegistrationStatuses(statusMap);
+        setRegistrationData(dataMap);
 
         // Reset to first page if current page exceeds total pages
         if (currentPage >= totalPagesCalculated && totalPagesCalculated > 0) {
@@ -323,9 +329,17 @@ const MyEvents = () => {
                   <div className="image-placeholder">
                     <FaCalendar className="placeholder-icon" />
                   </div>
-                  <span className={`event-status-badge ${getStatusColor(event.status)}`}>
-                    {event.status}
-                  </span>
+                  <div className="event-status-badges-container">
+                    <span className={`event-status-badge ${getStatusColor(event.status)}`}>
+                      {event.status}
+                    </span>
+                    {/* Show registration status badge if rejected */}
+                    {registrationStatuses[event.eventId] === 'REJECTED' && (
+                      <span className="event-status-badge registration-status-rejected">
+                        Registration Rejected
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Event Content */}
@@ -391,13 +405,27 @@ const MyEvents = () => {
                       <FaClock />
                       View Details
                     </button>
-                    <button 
-                      className="event-enter-button"
-                      onClick={() => navigate(`/volunteer/events/${event.eventId}/feed`)}
-                    >
-                      <FaSignInAlt />
-                      Enter Event
-                    </button>
+                    {registrationStatuses[event.eventId] === 'REJECTED' ? (
+                      <button 
+                        className="event-reason-button"
+                        onClick={() => {
+                          const reason = registrationData[event.eventId]?.rejectReason;
+                          setSelectedRejectReason(reason || 'No reason provided');
+                          setShowReasonModal(true);
+                        }}
+                      >
+                        <FaInfoCircle />
+                        Reason
+                      </button>
+                    ) : (
+                      <button 
+                        className="event-enter-button"
+                        onClick={() => navigate(`/volunteer/events/${event.eventId}/feed`)}
+                      >
+                        <FaSignInAlt />
+                        Enter Event
+                      </button>
+                    )}
                     {/* Show Cancel Registration button if user has registered */}
                     {registrationStatuses[event.eventId] && registrationStatuses[event.eventId] !== 'REJECTED' && (
                       <button 
@@ -588,6 +616,46 @@ const MyEvents = () => {
               {/* Modal Footer */}
               <div className="modal-footer">
                 <button className="modal-action-button secondary" onClick={handleCloseModal}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Reason Modal */}
+        {showReasonModal && (
+          <div className="modal-overlay" onClick={() => setShowReasonModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Rejection Reason</h3>
+                <button
+                  className="modal-close"
+                  onClick={() => {
+                    setShowReasonModal(false);
+                    setSelectedRejectReason(null);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                {selectedRejectReason && selectedRejectReason !== 'No reason provided' ? (
+                  <div className="reject-reason-display">
+                    <p className="reject-reason-text">{selectedRejectReason}</p>
+                  </div>
+                ) : (
+                  <p className="no-reason-text">No reason provided by the event manager.</p>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn-close-modal"
+                  onClick={() => {
+                    setShowReasonModal(false);
+                    setSelectedRejectReason(null);
+                  }}
+                >
                   Close
                 </button>
               </div>
